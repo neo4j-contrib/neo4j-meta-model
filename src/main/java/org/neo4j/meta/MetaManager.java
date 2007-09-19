@@ -2,6 +2,7 @@ package org.neo4j.meta;
 
 import java.util.Collection;
 import java.util.Collections;
+
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.EmbeddedNeo;
 import org.neo4j.api.core.Node;

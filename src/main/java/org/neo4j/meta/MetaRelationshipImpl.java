@@ -2,7 +2,7 @@ package org.neo4j.meta;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
-import com.windh.util.neo.Link;
+import org.neo4j.util.Link;
 
 public class MetaRelationshipImpl extends MetaNodeWrapper implements
     MetaRelationship

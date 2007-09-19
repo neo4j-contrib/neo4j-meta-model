@@ -3,7 +3,7 @@ package org.neo4j.meta;
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.RelationshipType;
-import com.windh.util.neo.LinkImpl;
+import org.neo4j.util.LinkImpl;
 
 public class MetaLinkImpl<T extends MetaNodeWrapper> extends LinkImpl<T>
 {

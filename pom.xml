@@ -37,7 +37,7 @@
 		<dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo-utils</artifactId>
-            <version>1.0-b6-SNAPSHOT</version>
+            <version>new-neo-api-SNAPSHOT</version>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
