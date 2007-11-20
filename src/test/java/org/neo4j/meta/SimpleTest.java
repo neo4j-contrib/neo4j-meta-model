@@ -6,14 +6,15 @@ import junit.framework.TestCase;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.EmbeddedNeo;
+import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Transaction;
 
 public class SimpleTest extends TestCase
 {
-	private EmbeddedNeo embeddedNeo = null;
+	private NeoService embeddedNeo = null;
 	private MetaManager metaManager = null;
 	
-	private EmbeddedNeo getNeo()
+	private NeoService getNeo()
 	{
 		return this.embeddedNeo;
 	}

@@ -4,16 +4,16 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.EmbeddedNeo;
+import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
 
 public class MetaManager
 {
-	private final EmbeddedNeo embeddedNeo;
+	private final NeoService embeddedNeo;
 	
-	public MetaManager( EmbeddedNeo embeddedNeo )
+	public MetaManager( NeoService embeddedNeo )
 	{
 		Transaction tx = Transaction.begin();
 		try
@@ -47,7 +47,7 @@ public class MetaManager
 		}		
 	}
 	
-	EmbeddedNeo getNeo()
+	NeoService getNeo()
 	{
 		return this.embeddedNeo;
 	}

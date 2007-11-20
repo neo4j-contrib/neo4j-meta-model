@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.EmbeddedNeo;
+import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Transaction;
 
 // TODO: actually, we should probably split up the Meta* interfaces so that
@@ -15,11 +16,11 @@ import org.neo4j.api.core.Transaction;
 // Yea.
 public class Main
 {
-	private static EmbeddedNeo embeddedNeoInstance = null;
+	private static NeoService embeddedNeoInstance = null;
 	private static MetaManager metaManager = null;
 	private static AtomicBoolean shutdownInitiated = new AtomicBoolean( false );
 
-	private static EmbeddedNeo getNeo()
+	private static NeoService getNeo()
 	{
 		return embeddedNeoInstance;
 	}
