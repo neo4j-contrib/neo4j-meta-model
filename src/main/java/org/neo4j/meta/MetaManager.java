@@ -19,7 +19,6 @@ public class MetaManager
 		try
 		{	
 			this.embeddedNeo = embeddedNeo;
-			ensureRelationshipTypes();
 			ensureMetaNodeSpace();	
 			tx.success();
 		}
@@ -27,11 +26,6 @@ public class MetaManager
 		{
 			tx.finish();
 		}
-	}
-	
-	private void ensureRelationshipTypes()
-	{
-		getNeo().registerRelationshipTypes( MetaRelTypes.values() );
 	}
 	
 	private void ensureMetaNodeSpace()

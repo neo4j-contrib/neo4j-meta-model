@@ -31,7 +31,7 @@ public class Main
 
 	private static void initialize()
 	{
-		embeddedNeoInstance = new EmbeddedNeo( MetaRelTypes.class, "var" );
+		embeddedNeoInstance = new EmbeddedNeo( "var" );
 		metaManager = new MetaManager( getNeo() );
 		Map<String, Serializable> shellConfig = Collections.emptyMap();
 		getNeo().enableRemoteShell( shellConfig );

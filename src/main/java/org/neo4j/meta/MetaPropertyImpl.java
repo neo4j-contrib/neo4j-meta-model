@@ -12,11 +12,11 @@ public final class MetaPropertyImpl extends MetaNodeWrapper
 	private static final String PROPERTY_KEY_KEY = "key"; // heh :P
 	private static final String PROPERTY_KEY_VALUE_TYPE = "value_type";
 	
-	private static Map<String, Class> primitiveNameToClassMap;
+	private static Map<String, Class<?>> primitiveNameToClassMap;
 	
 	static
 	{
-		Map primitiveMap = new HashMap<String, Class>();
+		Map<String, Class<?>> primitiveMap = new HashMap<String, Class<?>>();
 		primitiveMap.put( "boolean", boolean.class );
 		primitiveMap.put( "byte", byte.class );
 		primitiveMap.put( "short", short.class );
@@ -63,14 +63,14 @@ public final class MetaPropertyImpl extends MetaNodeWrapper
 		}
 	}
 
-	public Class getValueType()
+	public Class<?> getValueType()
 	{
 		Transaction tx = Transaction.begin();
 		try
 		{
 			String propertyValue = ( String) getUnderlyingNode().getProperty(
 				PROPERTY_KEY_VALUE_TYPE, null );
-			Class valueType = findClassOrNull( propertyValue );
+			Class<?> valueType = findClassOrNull( propertyValue );
 			if ( valueType == null )
 			{
 				valueType = primitiveNameToClassMap.get( propertyValue );
@@ -84,7 +84,7 @@ public final class MetaPropertyImpl extends MetaNodeWrapper
 		}
 	}
 	
-	private Class findClassOrNull( String className )
+	private Class<?> findClassOrNull( String className )
 	{
 		try
 		{
@@ -96,7 +96,7 @@ public final class MetaPropertyImpl extends MetaNodeWrapper
 		}
 	}
 
-	public void setValueType( Class valueTypeOrNullIfItDoesntMatter )
+	public void setValueType( Class<?> valueTypeOrNullIfItDoesntMatter )
 	{
 		Transaction tx = Transaction.begin();
 		try
@@ -133,7 +133,7 @@ public final class MetaPropertyImpl extends MetaNodeWrapper
 		}
 	}
 	
-	private boolean isSupportedNeoPropertyType( Class type )
+	private boolean isSupportedNeoPropertyType( Class<?> type )
 	{
 		return type.isPrimitive() ||
 			type.equals( Boolean.class ) ||

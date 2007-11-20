@@ -1,13 +1,12 @@
 package org.neo4j.meta;
 
 import java.util.Arrays;
+
 import junit.framework.TestCase;
+
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.EmbeddedNeo;
 import org.neo4j.api.core.Transaction;
-import org.neo4j.meta.MetaManager;
-import org.neo4j.meta.MetaRelTypes;
-import org.neo4j.meta.NodeType;
 
 public class SimpleTest extends TestCase
 {
@@ -44,7 +43,7 @@ public class SimpleTest extends TestCase
 	@Override
 	public void setUp()
 	{
-		this.embeddedNeo = new EmbeddedNeo( MetaRelTypes.class, "var" );
+		this.embeddedNeo = new EmbeddedNeo( "var" );
 		this.metaManager = new MetaManager( getNeo() );
 	}
 	
@@ -182,7 +181,8 @@ public class SimpleTest extends TestCase
 		}		
 	}
 	
-	private void doPropertyValueTypeTest( NodeType nodeType, Class valueClass )
+	private void doPropertyValueTypeTest( NodeType nodeType,
+		Class<?> valueClass )
 	{
 		String propertyKey = "UnitTestPropertyFor" + valueClass.getName(); 
 		MetaProperty property = nodeType.addRequiredProperty( propertyKey );
