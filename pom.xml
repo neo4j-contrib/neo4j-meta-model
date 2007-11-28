@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.neo4j</groupId>
 	<artifactId>neometa</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.2-SNAPSHOT</version>
 	<name>A meta model experiment for Neo</name>
 	<description>An experimental meta model for Neo.</description>
 	
@@ -27,17 +27,17 @@
 		<dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo</artifactId>
-            <version>1.0-b6</version>
+            <version>1.0-rc1-SNAPSHOT</version>
         </dependency>
 		<dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>shell</artifactId>
-            <version>1.0-b6</version>
+            <version>1.0-rc1-SNAPSHOT</version>
         </dependency>        
 		<dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo-utils</artifactId>
-            <version>new-neo-api-SNAPSHOT</version>
+            <version>1.0-rc-SNAPSHOT</version>
         </dependency>
 		<dependency>
 			<groupId>junit</groupId>
