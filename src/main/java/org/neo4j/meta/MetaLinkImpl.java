@@ -12,7 +12,8 @@ public class MetaLinkImpl<T extends MetaNodeWrapper> extends LinkImpl<T>
 	public MetaLinkImpl( MetaManager metaManager, Node underlyingNode,
 		RelationshipType type, Direction direction, Class<T> wrapperClass )
 	{		
-		super( underlyingNode, type, wrapperClass, direction );
+		super( metaManager.getNeo(), underlyingNode, type,
+			wrapperClass, direction );
 		this.metaManager = metaManager;
 	}
 	
