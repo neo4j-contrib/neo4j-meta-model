@@ -9,7 +9,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.neo4j</groupId>
-	<artifactId>neometa</artifactId>
+	<artifactId>neo-meta</artifactId>
 	<version>0.2-SNAPSHOT</version>
 	<name>A meta model experiment for Neo</name>
 	<description>An experimental meta model for Neo.</description>
