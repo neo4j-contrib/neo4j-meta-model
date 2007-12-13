@@ -2,8 +2,10 @@ package org.neo4j.meta;
 
 import java.util.Collection;
 import java.util.Collections;
+
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
+import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.ReturnableEvaluator;
 import org.neo4j.api.core.StopEvaluator;
 import org.neo4j.api.core.Transaction;
@@ -16,6 +18,7 @@ public final class NodeTypeImpl extends MetaNodeWrapper implements NodeType
 	private static final String PROPERTY_KEY_VERSION = "version";
 	private static final String PROPERTY_KEY_NAME = "name";
 	private static final String PROPERTY_KEY_CAPTION = "neoshell.caption";
+	private static final String PROPERTY_KEY_NUMBER_OF_INSTANCES = "count";
 	
 	public NodeTypeImpl( Node underlyingNode, MetaManager metaManager )
 	{
@@ -333,6 +336,104 @@ public final class NodeTypeImpl extends MetaNodeWrapper implements NodeType
 		{
 			getMetaManager().nodeTypeSet().remove( this );
 			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	private Relationship findInstanceRelationship( MetaInstance instance )
+	{
+		Node node = instance.getMetaNode();
+		for ( Relationship rel : node.getRelationships(
+			MetaRelTypes.META_INSTANCE_OF, Direction.OUTGOING ) )
+		{
+			if ( rel.getOtherNode( node ).equals( getUnderlyingNode() ) )
+			{
+				return rel;
+			}
+		}
+		return null;
+	}
+	
+	public void addInstance( MetaInstance instance )
+	{
+		Transaction tx = Transaction.begin();
+		try
+		{
+			if ( findInstanceRelationship( instance ) != null )
+			{
+				throw new IllegalArgumentException( instance +
+					" already instance of " + this );
+			}
+			Node node = instance.getMetaNode();
+			node.createRelationshipTo( getUnderlyingNode(),
+				MetaRelTypes.META_INSTANCE_OF );
+			changeNumberOfInstances( 1 );
+			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	private void changeNumberOfInstances( int delta )
+	{
+		this.getMetaManager().getNeoUtil().getLockManager().getWriteLock(
+			this.getUnderlyingNode() );
+		try
+		{
+			int value = ( Integer ) getUnderlyingNode().getProperty(
+				PROPERTY_KEY_NUMBER_OF_INSTANCES, 0 );
+			value += delta;
+			assert value >= 0;
+			getUnderlyingNode().setProperty(
+				PROPERTY_KEY_NUMBER_OF_INSTANCES, value );
+		}
+		finally
+		{
+			this.getMetaManager().getNeoUtil().getLockManager().
+				releaseWriteLock( this.getUnderlyingNode() );
+		}
+	}
+	
+	public void removeInstance( MetaInstance instance )
+	{
+		Transaction tx = Transaction.begin();
+		try
+		{
+			Relationship rel = findInstanceRelationship( instance );
+			if ( rel == null )
+			{
+				throw new IllegalArgumentException( instance +
+					" isn't instance of " + this );
+			}
+			rel.delete();
+			changeNumberOfInstances( -1 );
+			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	public int getNumberOfInstances()
+	{
+		return ( Integer ) getMetaManager().getNeoUtil().getProperty(
+			getUnderlyingNode(), PROPERTY_KEY_NUMBER_OF_INSTANCES, 0 );
+	}
+	
+	public boolean hasInstance( MetaInstance instance )
+	{
+		Transaction tx = Transaction.begin();
+		try
+		{
+			boolean result = findInstanceRelationship( instance ) != null;
+			tx.success();
+			return result;
 		}
 		finally
 		{

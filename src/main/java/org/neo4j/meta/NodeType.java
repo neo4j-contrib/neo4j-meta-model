@@ -136,4 +136,26 @@ public interface NodeType
 	 * are attached to this very node type (not to its super types).
 	 */
 	public void delete();
+	
+	/**
+	 * Make {@code instance} and instance of this NodeType.
+	 * @param instance the instance to add.
+	 */
+	public void addInstance( MetaInstance instance );
+	
+	/**
+	 * Make {@code instance} not and instance of this NodeType anymore.
+	 * @param instance the instance to remove.
+	 */
+	public void removeInstance( MetaInstance instance );
+	
+	/**
+	 * @param whether or not {@code instance} is an instance of this NodeType.
+	 */
+	public boolean hasInstance( MetaInstance instance );
+	
+	/**
+	 * @return the number of instances of this NodeType.
+	 */
+	public int getNumberOfInstances();
 }

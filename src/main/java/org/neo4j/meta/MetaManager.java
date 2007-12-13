@@ -8,10 +8,12 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
+import org.neo4j.util.NeoUtil;
 
 public class MetaManager
 {
 	private final NeoService embeddedNeo;
+	private final NeoUtil neoUtil;
 	
 	public MetaManager( NeoService embeddedNeo )
 	{
@@ -19,6 +21,7 @@ public class MetaManager
 		try
 		{	
 			this.embeddedNeo = embeddedNeo;
+			this.neoUtil = new NeoUtil( embeddedNeo );
 			ensureMetaNodeSpace();	
 			tx.success();
 		}
@@ -50,6 +53,11 @@ public class MetaManager
 	NeoService getNeo()
 	{
 		return this.embeddedNeo;
+	}
+	
+	NeoUtil getNeoUtil()
+	{
+		return this.neoUtil;
 	}
 	
 	private Node getMetaRoot()
