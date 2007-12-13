@@ -345,7 +345,7 @@ public final class NodeTypeImpl extends MetaNodeWrapper implements NodeType
 	
 	private Relationship findInstanceRelationship( MetaInstance instance )
 	{
-		Node node = instance.getMetaNode();
+		Node node = instance.getUnderlyingNode();
 		for ( Relationship rel : node.getRelationships(
 			MetaRelTypes.META_INSTANCE_OF, Direction.OUTGOING ) )
 		{
@@ -367,7 +367,7 @@ public final class NodeTypeImpl extends MetaNodeWrapper implements NodeType
 				throw new IllegalArgumentException( instance +
 					" already instance of " + this );
 			}
-			Node node = instance.getMetaNode();
+			Node node = instance.getUnderlyingNode();
 			node.createRelationshipTo( getUnderlyingNode(),
 				MetaRelTypes.META_INSTANCE_OF );
 			changeNumberOfInstances( 1 );
