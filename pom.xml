@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<parent>
+		<groupId>org.neo4j</groupId>
+		<artifactId>parent-pom</artifactId>
+		<version>1</version>
+		<relativePath>../../../pom.xml</relativePath>    		
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.neo4j</groupId>
+	<artifactId>neo-meta-new</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	<name>A meta model experiment for Neo</name>
+	<description>An experimental meta model for Neo.</description>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+                        
+	<dependencies>
+		<dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo</artifactId>
+            <version>1.0-rc1-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>shell</artifactId>
+            <version>1.0-rc1-SNAPSHOT</version>
+        </dependency>        
+		<dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo-utils</artifactId>
+            <version>1.0-rc1-SNAPSHOT</version>
+        </dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
