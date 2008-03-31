@@ -1,5 +1,7 @@
 package org.neo4j.neometa.structure;
 
+import java.text.ParseException;
+
 import org.neo4j.api.core.Transaction;
 
 public abstract class PropertyRange
@@ -48,5 +50,8 @@ public abstract class PropertyRange
 		}
 	}
 	
-//	public abstract Object getRealObjectFromPlainLiteral( String literal );
+	public abstract Object rdfLiteralToJavaObject( String value )
+		throws ParseException;
+	
+	public abstract String javaObjectToRdfLiteral( Object value );
 }

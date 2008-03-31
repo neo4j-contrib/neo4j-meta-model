@@ -1,7 +1,5 @@
 package org.neo4j.neometa.model;
 
-import java.util.Collection;
-
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
@@ -46,15 +44,5 @@ public class TestOOModel extends MetaTestCase
 		assertCollection( model.getMetaClasses(), orgClass, userClass );
 		assertCollection( orgClass.getProperties(), orgName, orgParent );
 		assertCollection( userClass.getProperties(), userName, userOrg );
-	}
-	
-	private static <T extends MetaObject<?>> void assertCollection(
-		Collection<T> collection, T... items )
-	{
-		assertEquals( items.length, collection.size() );
-		for ( T item : items )
-		{
-			assertTrue( collection.contains( item ) );
-		}
 	}
 }

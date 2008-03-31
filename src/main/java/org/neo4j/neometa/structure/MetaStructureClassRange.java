@@ -68,4 +68,16 @@ public class MetaStructureClassRange extends PropertyRange
 			tx.finish();
 		}
 	}
+
+	@Override
+	public Object rdfLiteralToJavaObject( String value )
+	{
+		throw new UnsupportedOperationException( "Should never be called" );
+	}
+	
+	@Override
+	public String javaObjectToRdfLiteral( Object value )
+	{
+		throw new UnsupportedOperationException( "Should never be called" );
+	}
 }

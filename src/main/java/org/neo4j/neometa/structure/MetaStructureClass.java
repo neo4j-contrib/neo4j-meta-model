@@ -45,4 +45,9 @@ public class MetaStructureClass extends MetaStructureThing
 			MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
 			Direction.OUTGOING, meta(), MetaStructureProperty.class );
 	}
+	
+	public Collection<Node> getInstances()
+	{
+		return new MetaStructureInstanceCollection( node(), meta() );
+	}
 }

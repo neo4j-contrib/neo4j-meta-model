@@ -1,9 +1,11 @@
 package org.neo4j.neometa;
 
-import org.neo4j.api.core.EmbeddedNeo;
-import org.neo4j.api.core.NeoService;
+import java.util.Collection;
 
 import junit.framework.TestCase;
+
+import org.neo4j.api.core.EmbeddedNeo;
+import org.neo4j.api.core.NeoService;
 
 public abstract class MetaTestCase extends TestCase
 {
@@ -35,5 +37,14 @@ public abstract class MetaTestCase extends TestCase
 	protected NeoService neo()
 	{
 		return neo;
+	}
+
+	protected <T> void assertCollection( Collection<T> collection, T... items )
+	{
+		assertEquals( items.length, collection.size() );
+		for ( T item : items )
+		{
+			assertTrue( collection.contains( item ) );
+		}
 	}
 }

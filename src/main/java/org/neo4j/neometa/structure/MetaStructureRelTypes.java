@@ -11,4 +11,5 @@ public enum MetaStructureRelTypes implements RelationshipType
 	META_CLASS_HAS_PROPERTY,
 	META_IS_SUBCLASS_OF,
 	META_IS_SUBPROPERTY_OF,
+	META_INSTANCE_OF,
 }

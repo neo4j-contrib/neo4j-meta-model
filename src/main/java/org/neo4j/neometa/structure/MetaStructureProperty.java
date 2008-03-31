@@ -8,6 +8,10 @@ import org.neo4j.api.core.RelationshipType;
 
 public class MetaStructureProperty extends MetaStructureThing
 {
+	private static final String KEY_MIN_CARDINALITY = "min_cardinality";
+	private static final String KEY_MAX_CARDINALITY = "max_cardinality";
+	private static final String KEY_COLLECTION_CLASS = "collection_class";
+	
 	public MetaStructureProperty( MetaStructure meta, Node node )
 	{
 		super( meta, node );
@@ -54,5 +58,61 @@ public class MetaStructureProperty extends MetaStructureThing
 	public PropertyRange getRange()
 	{
 		return PropertyRange.loadRange( this );
+	}
+	
+	private void setOrRemoteProperty( String key, Object value )
+	{
+		if ( value == null )
+		{
+			removeProperty( key );
+		}
+		else
+		{
+			setProperty( key, value );
+		}
+	}
+	
+	public void setMinCardinality( Integer cardinalityOrNull )
+	{
+		setOrRemoteProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
+	}
+	
+	public Integer getMinCardinality()
+	{
+		return ( Integer ) getProperty( KEY_MIN_CARDINALITY, null );
+	}
+	
+	public void setMaxCardinality( Integer cardinalityOrNull )
+	{
+		setOrRemoteProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
+	}
+	
+	public Integer getMaxCardinality()
+	{
+		return ( Integer ) getProperty( KEY_MAX_CARDINALITY, null );
+	}
+	
+	public void setCollectionBehaviourClass(
+		Class<? extends Collection<?>> collectionClassOrNull )
+	{
+		setOrRemoteProperty( KEY_COLLECTION_CLASS,
+			collectionClassOrNull == null ? null :
+			collectionClassOrNull.getName() );
+	}
+	
+	public Class<? extends Collection<?>> getCollectionBehaviourClass()
+	{
+		try
+		{
+			String className = ( String ) getProperty( KEY_COLLECTION_CLASS,
+				null );
+			// Yep generics warning, but what're you going to do?
+			return ( Class<? extends Collection<?>> ) Class.forName(
+				className ); 
+		}
+		catch ( Exception e )
+		{
+			throw new RuntimeException( e );
+		}
 	}
 }

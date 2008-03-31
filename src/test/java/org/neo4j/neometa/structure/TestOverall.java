@@ -86,5 +86,17 @@ public class TestOverall extends MetaTestCase
 		assertTrue( userClass.isSubOf( personClass ) );
 		assertTrue( userClass.isSubOf( thingClass ) );
 		assertFalse( userClass.isSubOf( phoneClass ) );
+		
+		Node person1 = neo().createNode();
+		Node person2 = neo().createNode();
+		assertCollection( personClass.getInstances() );
+		personClass.getInstances().add( person1 );
+		assertCollection( personClass.getInstances(), person1 );
+		personClass.getInstances().add( person2 );
+		assertCollection( personClass.getInstances(), person1, person2 );
+		
+		personClass.getInstances().remove( person2 );
+		assertCollection( personClass.getInstances(), person1 );
+		neo().getNodeById( person2.getId() );
 	}
 }
