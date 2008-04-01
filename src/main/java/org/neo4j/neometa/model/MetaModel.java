@@ -9,10 +9,18 @@ import org.neo4j.neometa.structure.MetaStructure;
 import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureRelTypes;
 
+/**
+ * An object oriented API to the {@link MetaStructure} interface where
+ * properties isn't entities of their own.
+ */
 public class MetaModel
 {
 	private MetaStructure meta;
 	
+	/**
+	 * @param neo the {@link NeoService} to use in this model.
+	 * @param rootNode the {@link Node} which is the root of this model.
+	 */
 	public MetaModel( NeoService neo, Node rootNode )
 	{
 		this.meta = new MetaStructure( neo, rootNode );
@@ -23,6 +31,14 @@ public class MetaModel
 		return this.meta;
 	}
 	
+	/**
+	 * Returns (and optionally creates) a {@link MetaClass} instance
+	 * with the given {@code name}.
+	 * @param name the name of the class.
+	 * @param allowCreate if {@code true} and no class be the given {@code name}
+	 * exists then it is created.
+	 * @return the {@link MetaClass} with the given {@code name}.
+	 */
 	public MetaClass getMetaClass( String name, boolean allowCreate )
 	{
 		MetaStructureClass cls = meta().getGlobalNamespace().getMetaClass(
@@ -34,6 +50,9 @@ public class MetaModel
 		return new MetaClass( this, cls );
 	}
 	
+	/**
+	 * @return a modifiable collection of all the classes in this meta model. 
+	 */
 	public Collection<MetaClass> getMetaClasses()
 	{
 		return new MetaObjectCollection<MetaClass>(

@@ -1,17 +1,28 @@
 package org.neo4j.neometa.structure;
 
+import java.util.Collection;
+
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.util.NeoRelationshipSet;
 
+/**
+ * An implementation of a {@link Collection} which handles {@link Node}s
+ * representing instance which complies to a {@link MetaStructureClass}.
+ */
 public class MetaStructureInstanceCollection extends NeoRelationshipSet<Node>
 {
 	private static final String KEY_COUNT = "instance_count";
 	
 	private MetaStructure meta;
 	
+	/**
+	 * 
+	 * @param node the {@link Node} which holds the relationships.
+	 * @param meta the {@link MetaStructure} instance.
+	 */
 	public MetaStructureInstanceCollection( Node node, MetaStructure meta )
 	{
 		super( node, MetaStructureRelTypes.META_INSTANCE_OF,

@@ -8,12 +8,21 @@ import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.util.NeoUtil;
 
+/**
+ * The access point of a meta model. Is given a root node where all the
+ * namespaces, properties and classes are stored/read underneath.
+ */
 public class MetaStructure
 {
 	private NeoService neo;
 	private NeoUtil neoUtil;
 	private Node rootNode;
 	
+	/**
+	 * @param neo the {@link NeoService} used for this meta model.
+	 * @param rootNode the root {@link Node} where all other constructs
+	 * will be connected with.
+	 */
 	public MetaStructure( NeoService neo, Node rootNode )
 	{
 		this.neo = neo;
@@ -21,6 +30,9 @@ public class MetaStructure
 		this.neoUtil = new NeoUtil( neo );
 	}
 	
+	/**
+	 * @return the {@link NeoService} given in the constructor.
+	 */
 	public NeoService neo()
 	{
 		return this.neo;
@@ -36,6 +48,15 @@ public class MetaStructure
 		return this.rootNode;
 	}
 	
+	/**
+	 * Returns (and optionally creates) a {@link MetaStructureNamespace}
+	 * instance (with underlying {@link Node}).
+	 * @param name the name for the namespace.
+	 * @param allowCreate if {@code true} and no namespace by the given
+	 * {@code name} exists then it is created.
+	 * @return the {@link MetaStructureNamespace} in this namespace with the
+	 * given {@code name}.
+	 */
 	public MetaStructureNamespace getNamespace( String name,
 		boolean allowCreate )
 	{
@@ -44,6 +65,11 @@ public class MetaStructure
 			MetaStructureNamespace.class );
 	}
 	
+	/**
+	 * @return the global namespace (without a name) which always exists.
+	 * It's actually created on demand the first time. A call to
+	 * {@link MetaStructureNamespace#getName()} will fail for this namespace.
+	 */
 	public MetaStructureNamespace getGlobalNamespace()
 	{
 		return findOrCreateInCollection( getNamespaces(), null, true,
@@ -102,6 +128,10 @@ public class MetaStructure
 		}
 	}
 	
+	/**
+	 * @return a modifiable collection of all {@link MetaStructureNamespace}
+	 * instances for this meta model.
+	 */
 	public Collection<MetaStructureNamespace> getNamespaces()
 	{
 		return new MetaStructureObjectCollection<MetaStructureNamespace>(

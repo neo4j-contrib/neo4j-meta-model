@@ -7,7 +7,7 @@ import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureProperty;
 import org.neo4j.neometa.structure.MetaStructureThing;
 
-public class MetaClassMapping
+class MetaClassMapping
 {
 	private static Map<Class<? extends MetaObject<?>>,
 		Class<? extends MetaStructureThing>> mapping =
@@ -19,7 +19,7 @@ public class MetaClassMapping
 		mapping.put( MetaProperty.class, MetaStructureProperty.class );
 	}
 	
-	public static Class<? extends MetaStructureThing> getMetaStructureClass(
+	static Class<? extends MetaStructureThing> getMetaStructureClass(
 		Class<? extends MetaObject<?>> metaClass )
 	{
 		return mapping.get( metaClass );

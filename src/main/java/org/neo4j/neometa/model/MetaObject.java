@@ -29,6 +29,9 @@ abstract class MetaObject<T extends MetaStructureThing>
 		return this.metaThing;
 	}
 	
+	/**
+	 * @return the name of this object.
+	 */
 	public String getName()
 	{
 		return getThing().getName();

@@ -6,8 +6,15 @@ import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.RelationshipType;
 
+/**
+ * Represents a class in the meta model.
+ */
 public class MetaStructureClass extends MetaStructureThing
 {
+	/**
+	 * @param meta the {@link MetaStructure} instance.
+	 * @param node the {@link Node} to wrap.
+	 */
 	public MetaStructureClass( MetaStructure meta, Node node )
 	{
 		super( meta, node );
@@ -39,6 +46,9 @@ public class MetaStructureClass extends MetaStructureThing
 		return MetaStructureRelTypes.META_IS_SUBCLASS_OF;
 	}
 	
+	/**
+	 * @return a modifiable collection of all properties related to this class.
+	 */
 	public Collection<MetaStructureProperty> getProperties()
 	{
 		return new MetaStructureObjectCollection<MetaStructureProperty>( node(),
@@ -46,6 +56,9 @@ public class MetaStructureClass extends MetaStructureThing
 			Direction.OUTGOING, meta(), MetaStructureProperty.class );
 	}
 	
+	/**
+	 * @return a modifiable collection of instances of this class.
+	 */
 	public Collection<Node> getInstances()
 	{
 		return new MetaStructureInstanceCollection( node(), meta() );

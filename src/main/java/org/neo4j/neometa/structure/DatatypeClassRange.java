@@ -1,19 +1,31 @@
 package org.neo4j.neometa.structure;
 
-
+/**
+ * Represents a {@link PropertyRange} where the values are of a data type,
+ * f.ex. a string, a number, a date or something similar.
+ */
 public class DatatypeClassRange extends SimpleStringPropertyRange
 {
 	private Class<?> rangeClass;
 	
+	/**
+	 * @param rangeClass the expected value type.
+	 */
 	public DatatypeClassRange( Class<?> rangeClass )
 	{
 		this.rangeClass = rangeClass;
 	}
 	
+	/**
+	 * Used internally.
+	 */
 	public DatatypeClassRange()
 	{
 	}
 	
+	/**
+	 * @return the value type.
+	 */
 	public Class<?> getRangeClass()
 	{
 		return this.rangeClass;

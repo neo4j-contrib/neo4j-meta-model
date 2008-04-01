@@ -44,4 +44,10 @@ class MetaObjectCollection<T extends MetaObject<? extends MetaStructureThing>>
 			throw new RuntimeException( e );
 		}
 	}
+	
+	@Override
+	protected void removeItem( Relationship relationship )
+	{
+		throw new UnsupportedOperationException( "Not yet" );
+	}
 }

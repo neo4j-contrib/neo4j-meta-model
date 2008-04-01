@@ -1,5 +1,9 @@
 package org.neo4j.neometa.structure;
 
+/**
+ * Common functionality for {@link PropertyRange} implementations where
+ * only one string needs to be stored.
+ */
 public abstract class SimpleStringPropertyRange extends PropertyRange
 {
 	private static final String KEY_RANGE_STRING = "range_string";

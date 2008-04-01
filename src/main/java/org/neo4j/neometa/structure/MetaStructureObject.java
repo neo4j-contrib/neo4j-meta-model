@@ -3,6 +3,10 @@ package org.neo4j.neometa.structure;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 
+/**
+ * A super class for basically all meta structure objects which wraps a
+ * {@link Node}.
+ */
 public class MetaStructureObject
 {
 	private static final String KEY_NAME = "name";
@@ -21,11 +25,17 @@ public class MetaStructureObject
 		return this.meta;
 	}
 	
+	/**
+	 * @return the {@link NeoService} instance used with this instance.
+	 */
 	public NeoService neo()
 	{
 		return meta().neo();
 	}
 	
+	/**
+	 * @return the {@link Node} which this object wraps.
+	 */
 	public Node node()
 	{
 		return this.node;
@@ -56,6 +66,9 @@ public class MetaStructureObject
 		setProperty( KEY_NAME, name );
 	}
 	
+	/**
+	 * @return the name set for this object.
+	 */
 	public String getName()
 	{
 		return ( String ) getProperty( KEY_NAME, null );

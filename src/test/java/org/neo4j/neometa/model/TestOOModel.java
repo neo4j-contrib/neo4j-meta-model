@@ -5,8 +5,14 @@ import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
 import org.neo4j.util.EntireGraphDeletor;
 
+/**
+ * Tests the meta model through the object oriented {@link MetaModel} API.
+ */
 public class TestOOModel extends MetaTestCase
 {
+	/**
+	 * Some basic tests.
+	 */
 	public void testSome()
 	{
 		Transaction tx = neo().beginTx();

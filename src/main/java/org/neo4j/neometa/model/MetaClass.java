@@ -7,6 +7,9 @@ import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureProperty;
 import org.neo4j.neometa.structure.MetaStructureRelTypes;
 
+/**
+ * Represents a class in the model.
+ */
 public class MetaClass extends MetaObject<MetaStructureClass>
 {
 	MetaClass( MetaModel model, MetaStructureClass metaClass )
@@ -14,13 +17,22 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 		super( model, metaClass );
 	}
 	
-	public Collection<MetaClass> getChildren()
+	/**
+	 * @return a modifiable collection of the extending classes to this class.
+	 */
+	public Collection<MetaClass> getExtendingClasses()
 	{
 		return new MetaObjectCollection<MetaClass>( getThing().node(),
 			MetaStructureRelTypes.META_IS_SUBCLASS_OF, Direction.INCOMING,
 			model(), MetaClass.class );
 	}
 	
+	/**
+	 * @param name the name of the property.
+	 * @param allowCreate if {@code true} and no property by the given
+	 * {@code name} exists then it is created.
+	 * @return the {@link MetaProperty} by the name {@code name} for this class.
+	 */
 	public MetaProperty getProperty( String name, boolean allowCreate )
 	{
 		MetaStructureProperty metaProperty = model().meta().getNamespace(
@@ -30,6 +42,10 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 			metaProperty );
 	}
 	
+	/**
+	 * @return a modifiable collection of all the properties defined for this
+	 * class.
+	 */
 	public Collection<MetaProperty> getProperties()
 	{
 		return new MetaObjectCollection<MetaProperty>( getThing().node(),

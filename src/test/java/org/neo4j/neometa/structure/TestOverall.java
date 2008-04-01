@@ -5,10 +5,16 @@ import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
 import org.neo4j.util.EntireGraphDeletor;
 
+/**
+ * Tests the meta structure.
+ */
 public class TestOverall extends MetaTestCase
 {
 	private Transaction tx;
 	
+	/**
+	 * Some basic tests.
+	 */
 	public void testSome()
 	{
 		tx = neo().beginTx();

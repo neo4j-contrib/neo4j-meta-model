@@ -8,20 +8,33 @@ import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
 
+/**
+ * An implementation of {@link PropertyRange} for values which are instances
+ * of {@link MetaStructureClass}.
+ */
 public class MetaStructureClassRange extends PropertyRange
 {
 	private Set<MetaStructureClass> rangeClasses;
 	
+	/**
+	 * @param rangeClasses the classes the value has to comply to.
+	 */
 	public MetaStructureClassRange( MetaStructureClass... rangeClasses )
 	{
 		this.rangeClasses = new HashSet<MetaStructureClass>(
 			Arrays.asList( rangeClasses ) );
 	}
 	
+	/**
+	 * Internal usage.
+	 */
 	public MetaStructureClassRange()
 	{
 	}
 	
+	/**
+	 * @return the set classes.
+	 */
 	public MetaStructureClass[] getRangeClasses()
 	{
 		return this.rangeClasses.toArray(

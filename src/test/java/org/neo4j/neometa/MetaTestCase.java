@@ -7,6 +7,9 @@ import junit.framework.TestCase;
 import org.neo4j.api.core.EmbeddedNeo;
 import org.neo4j.api.core.NeoService;
 
+/**
+ * Base class for the meta model tests.
+ */
 public abstract class MetaTestCase extends TestCase
 {
 	private static NeoService neo;
