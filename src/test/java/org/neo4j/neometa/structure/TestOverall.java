@@ -1,18 +1,17 @@
 package org.neo4j.neometa.structure;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
+import org.neo4j.util.EntireGraphDeletor;
 
 public class TestOverall extends MetaTestCase
 {
+	private Transaction tx;
+	
 	public void testSome()
 	{
-		Transaction tx = neo().beginTx();
+		tx = neo().beginTx();
 		try
 		{
 			txTestSome();
@@ -102,26 +101,6 @@ public class TestOverall extends MetaTestCase
 		personClass.getInstances().remove( person2 );
 		assertCollection( personClass.getInstances(), person1 );
 		neo().getNodeById( person2.getId() );
-		removeNodeAndThoseConnectedWith( new HashSet<Node>(),
-			new HashSet<Relationship>(), rootNode );
-	}
-	
-	private void removeNodeAndThoseConnectedWith( Collection<Node> deletedNodes,
-		Collection<Relationship> deletedRels, Node node )
-	{
-		for ( Relationship rel : node.getRelationships() )
-		{
-			Node sub = rel.getOtherNode( node );
-			if ( deletedRels.add( rel ) )
-			{
-				rel.delete();
-			}
-			if ( deletedNodes.add( sub ) )
-			{
-				removeNodeAndThoseConnectedWith( deletedNodes, deletedRels,
-					sub );
-			}
-		}
-		node.delete();
+		new EntireGraphDeletor().delete( rootNode );
 	}
 }
