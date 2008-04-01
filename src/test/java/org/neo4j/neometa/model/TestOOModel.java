@@ -3,6 +3,7 @@ package org.neo4j.neometa.model;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
+import org.neo4j.util.EntireGraphDeletor;
 
 public class TestOOModel extends MetaTestCase
 {
@@ -44,5 +45,7 @@ public class TestOOModel extends MetaTestCase
 		assertCollection( model.getMetaClasses(), orgClass, userClass );
 		assertCollection( orgClass.getProperties(), orgName, orgParent );
 		assertCollection( userClass.getProperties(), userName, userOrg );
+		
+		new EntireGraphDeletor().delete( rootNode );
 	}
 }
