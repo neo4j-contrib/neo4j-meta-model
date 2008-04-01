@@ -47,8 +47,17 @@ public class TestOOModel extends MetaTestCase
 			userClass.getProperty( "home_organisation", true );
 		userOrg.setMetaClassValueType( orgClass );
 		
+		MetaClass guestUserClass = model.getMetaClass( "GuestUser", true );
+		userClass.getExtendingClasses().add( guestUserClass );
+		assertTrue( userClass.getExtendingClasses().contains(
+			guestUserClass ) );
+		assertEquals( guestUserClass, model.getMetaClass(
+			"GuestUser", false ) );
+		assertFalse( guestUserClass.equals( orgClass ) );
+		
 		// Verify
-		assertCollection( model.getMetaClasses(), orgClass, userClass );
+		assertCollection( model.getMetaClasses(), orgClass, userClass,
+			guestUserClass );
 		assertCollection( orgClass.getProperties(), orgName, orgParent );
 		assertCollection( userClass.getProperties(), userName, userOrg );
 		

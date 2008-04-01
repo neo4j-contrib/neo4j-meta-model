@@ -36,4 +36,17 @@ abstract class MetaObject<T extends MetaStructureThing>
 	{
 		return getThing().getName();
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		return getThing().hashCode();
+	}
+	
+	@Override
+	public boolean equals( Object o )
+	{
+		return o != null && getThing().equals(
+			( ( MetaObject ) o ).getThing() );
+	}
 }
