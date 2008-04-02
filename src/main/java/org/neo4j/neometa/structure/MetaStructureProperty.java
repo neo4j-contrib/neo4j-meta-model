@@ -82,18 +82,6 @@ public class MetaStructureProperty extends MetaStructureThing
 		return PropertyRange.loadRange( this );
 	}
 	
-	private void setOrRemoteProperty( String key, Object value )
-	{
-		if ( value == null )
-		{
-			removeProperty( key );
-		}
-		else
-		{
-			setProperty( key, value );
-		}
-	}
-	
 	/**
 	 * Sets the minimum cardinality of this property. {@code null} means
 	 * no restriction.

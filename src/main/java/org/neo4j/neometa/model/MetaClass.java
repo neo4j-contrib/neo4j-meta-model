@@ -2,6 +2,7 @@ package org.neo4j.neometa.model;
 
 import java.util.Collection;
 
+import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureProperty;
 
@@ -41,14 +42,24 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public MetaProperty getDeclaredProperty( String name, boolean allowCreate )
 	{
-		MetaStructureProperty metaProperty = model().meta().getNamespace(
-			getName(), true ).getMetaProperty( name, allowCreate );
-		if ( allowCreate )
+		Transaction tx = model().meta().neo().beginTx();
+		try
 		{
-			getThing().getDirectProperties().add( metaProperty );
+			MetaStructureProperty metaProperty = model().meta().getNamespace(
+				getName(), true ).getMetaProperty( name, allowCreate );
+			if ( allowCreate )
+			{
+				getThing().getDirectProperties().add( metaProperty );
+			}
+			MetaProperty result = metaProperty == null ? null :
+				new MetaProperty( model(), metaProperty );
+			tx.success();
+			return result;
 		}
-		return metaProperty == null ? null : new MetaProperty( model(),
-			metaProperty );
+		finally
+		{
+			tx.finish();
+		}
 	}
 	
 	/**
@@ -70,24 +81,33 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public MetaProperty getProperty( String name, boolean allowCreate )
 	{
-		MetaProperty result = getDeclaredProperty( name, false );
-		if ( result == null )
+		Transaction tx = model().meta().neo().beginTx();
+		try
 		{
-			for ( MetaClass cls : getDirectSuperClasses() )
+			MetaProperty result = getDeclaredProperty( name, false );
+			if ( result == null )
 			{
-				MetaProperty property = cls.getProperty( name, false );
-				if ( property != null )
+				for ( MetaClass cls : getDirectSuperClasses() )
 				{
-					result = property;
-					break;
+					MetaProperty property = cls.getProperty( name, false );
+					if ( property != null )
+					{
+						result = property;
+						break;
+					}
 				}
 			}
+			if ( result == null && allowCreate )
+			{
+				result = getDeclaredProperty( name, allowCreate );
+			}
+			tx.success();
+			return result;
 		}
-		if ( result == null && allowCreate )
+		finally
 		{
-			result = getDeclaredProperty( name, allowCreate );
+			tx.finish();
 		}
-		return result;
 	}
 	
 	/**

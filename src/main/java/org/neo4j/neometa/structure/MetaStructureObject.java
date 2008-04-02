@@ -61,6 +61,18 @@ public class MetaStructureObject
 		return meta().neoUtil().removeProperty( node(), key );
 	}
 	
+	protected void setOrRemoteProperty( String key, Object value )
+	{
+		if ( value == null )
+		{
+			removeProperty( key );
+		}
+		else
+		{
+			setProperty( key, value );
+		}
+	}
+	
 	void setName( String name )
 	{
 		setProperty( KEY_NAME, name );
