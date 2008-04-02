@@ -2,11 +2,9 @@ package org.neo4j.neometa.model;
 
 import java.util.Collection;
 
-import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.neometa.structure.MetaStructure;
 import org.neo4j.neometa.structure.MetaStructureClass;
-import org.neo4j.neometa.structure.MetaStructureRelTypes;
 
 /**
  * An object oriented API to the {@link MetaStructure} interface where
@@ -53,9 +51,7 @@ public class MetaModel
 	 */
 	public Collection<MetaClass> getMetaClasses()
 	{
-		return new MetaObjectCollection<MetaClass>(
-			meta.getGlobalNamespace().node(),
-			MetaStructureRelTypes.META_CLASS, Direction.OUTGOING, this,
-			MetaClass.class );
+		return new MetaObjectCollection.MetaClassCollection( this,
+			meta().getGlobalNamespace().getMetaClasses() );
 	}
 }

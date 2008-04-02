@@ -2,10 +2,8 @@ package org.neo4j.neometa.model;
 
 import java.util.Collection;
 
-import org.neo4j.api.core.Direction;
 import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureProperty;
-import org.neo4j.neometa.structure.MetaStructureRelTypes;
 
 /**
  * Represents a class in the model.
@@ -22,9 +20,8 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public Collection<MetaClass> getExtendingClasses()
 	{
-		return new MetaObjectCollection<MetaClass>( getThing().node(),
-			MetaStructureRelTypes.META_IS_SUBCLASS_OF, Direction.INCOMING,
-			model(), MetaClass.class );
+		return new MetaObjectCollection.MetaClassCollection( model(),
+			getThing().getDirectSubs() );
 	}
 	
 	/**
@@ -48,8 +45,7 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public Collection<MetaProperty> getProperties()
 	{
-		return new MetaObjectCollection<MetaProperty>( getThing().node(),
-			MetaStructureRelTypes.META_CLASS_HAS_PROPERTY, Direction.OUTGOING,
-			model(), MetaProperty.class );
+		return new MetaObjectCollection.MetaPropertyCollection( model(),
+			getThing().getProperties() );
 	}
 }

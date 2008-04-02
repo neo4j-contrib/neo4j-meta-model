@@ -22,9 +22,6 @@ import org.neo4j.api.core.Traverser;
  */
 public abstract class MetaStructureThing extends MetaStructureObject
 {
-	private static final String LABEL_KEY = "label";
-	private static final String COMMENT_KEY = "comment";
-	
 	MetaStructureThing( MetaStructure meta, Node node )
 	{
 		super( meta, node );
@@ -77,37 +74,40 @@ public abstract class MetaStructureThing extends MetaStructureObject
 		}
 	}
 	
-	/**
-	 * Sets the label of this thing.
-	 * @param label the label.
-	 */
-	public void setLabel( String label )
+	private String additionalPropertyKey( String key )
 	{
-		setProperty( LABEL_KEY, label );
+		return "additional." + key;
 	}
 	
 	/**
-	 * @return the label of this thing.
+	 * Sets an additional property for this thing, f.ex. a label or a comment.
+	 * @param key the property key.
+	 * @param value the property value.
 	 */
-	public String getLabel()
+	public void setAdditionalProperty( String key, String value )
 	{
-		return ( String ) getProperty( LABEL_KEY, null );
+		setProperty( additionalPropertyKey( key ), value );
 	}
 	
 	/**
-	 * Sets the comment of this thing.
-	 * @param comment
+	 * Removes an additional property from this thing, f.ex. a label or
+	 * a comment.
+	 * @param key the property key.
 	 */
-	public void setComment( String comment )
+	public void removeAdditionalProperty( String key )
 	{
-		setProperty( COMMENT_KEY, comment );
+		removeProperty( additionalPropertyKey( key ) );
 	}
-	
+
 	/**
-	 * @return the comment of this thing.
+	 * Returns an additional property from this thing, f.ex. a label or
+	 * a comment.
+	 * @param key the property key.
+	 * @return the property value for property {@code key} or
+	 * {@code null} if no value exists for {@code key}.
 	 */
-	public String getComment()
+	public String getAdditionalProperty( String key )
 	{
-		return ( String ) getProperty( COMMENT_KEY, null );
+		return ( String ) getProperty( additionalPropertyKey( key ), null );
 	}
 }

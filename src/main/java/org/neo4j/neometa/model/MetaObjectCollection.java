@@ -1,53 +1,65 @@
 package org.neo4j.neometa.model;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.RelationshipType;
-import org.neo4j.neometa.structure.MetaStructure;
-import org.neo4j.neometa.structure.MetaStructureThing;
-import org.neo4j.util.NeoRelationshipSet;
+import java.util.Collection;
 
-class MetaObjectCollection<T extends MetaObject<? extends MetaStructureThing>>
-	extends NeoRelationshipSet<T>
+import org.neo4j.neometa.structure.MetaStructureClass;
+import org.neo4j.neometa.structure.MetaStructureProperty;
+import org.neo4j.neometa.structure.MetaStructureThing;
+import org.neo4j.util.CollectionWrapper;
+
+abstract class MetaObjectCollection<T extends MetaObject<U>,
+	U extends MetaStructureThing> extends CollectionWrapper<T, U>
 {
 	private MetaModel model;
-	private Class<T> metaClass;
 	
-	MetaObjectCollection( Node node, RelationshipType type,
-		Direction direction, MetaModel model, Class<T> metaClass )
+	MetaObjectCollection( MetaModel model, Collection<U> collection )
 	{
-		super( node, type, direction );
+		super( collection );
 		this.model = model;
-		this.metaClass = metaClass;
+	}
+	
+	protected MetaModel model()
+	{
+		return model;
 	}
 	
 	@Override
-	protected Node getNodeFromItem( Object item )
+	protected U objectToUnderlyingObject( T object )
 	{
-		return ( ( MetaObject<?> ) item ).getThing().node();
+		return object.getThing();
 	}
-	
-	@Override
-	protected T newObject( Node node, Relationship rel )
+
+	static class MetaClassCollection
+		extends MetaObjectCollection<MetaClass, MetaStructureClass>
 	{
-		try
+		MetaClassCollection( MetaModel model,
+			Collection<MetaStructureClass> collection )
 		{
-			MetaStructureThing thing = MetaClassMapping.getMetaStructureClass(
-				metaClass ).getConstructor( MetaStructure.class,
-					Node.class ).newInstance( model.meta(), node );
-			return metaClass.getConstructor( MetaModel.class,
-				MetaStructureThing.class ).newInstance( model, thing );
+			super( model, collection );
 		}
-		catch ( Exception e )
-		{
-			throw new RuntimeException( e );
-		}
+		
+		@Override
+        protected MetaClass underlyingObjectToObject(
+        	MetaStructureClass object )
+        {
+			return new MetaClass( model(), object );
+        }
 	}
-	
-	@Override
-	protected void removeItem( Relationship relationship )
+
+	static class MetaPropertyCollection
+		extends MetaObjectCollection<MetaProperty, MetaStructureProperty>
 	{
-		throw new UnsupportedOperationException( "Not yet" );
+		MetaPropertyCollection( MetaModel model,
+			Collection<MetaStructureProperty> collection )
+		{
+			super( model, collection );
+		}
+		
+		@Override
+		protected MetaProperty underlyingObjectToObject(
+			MetaStructureProperty object )
+		{
+			return new MetaProperty( model(), object );
+		}
 	}
 }

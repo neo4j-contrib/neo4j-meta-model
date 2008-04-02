@@ -138,7 +138,7 @@ public class MetaStructureProperty extends MetaStructureThing
 	 * @param collectionClassOrNull
 	 */
 	public void setCollectionBehaviourClass(
-		Class<? extends Collection<?>> collectionClassOrNull )
+		Class<? extends Collection> collectionClassOrNull )
 	{
 		setOrRemoteProperty( KEY_COLLECTION_CLASS,
 			collectionClassOrNull == null ? null :
