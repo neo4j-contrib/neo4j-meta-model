@@ -88,6 +88,9 @@ public class TestOverall extends MetaTestCase
 		MetaStructureClass userClass =
 			namespace.getMetaClass( "http://test#User", true );
 		personClass.getDirectSubs().add( userClass );
+		assertCollection( userClass.getDirectProperties() );
+		assertCollection( userClass.getAllProperties(), givenNameProperty );
+		
 		assertTrue( personClass.isSubOf( thingClass ) );
 		assertTrue( userClass.isSubOf( personClass ) );
 		assertTrue( userClass.isSubOf( thingClass ) );
