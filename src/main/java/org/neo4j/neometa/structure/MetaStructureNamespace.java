@@ -72,4 +72,11 @@ public class MetaStructureNamespace extends MetaStructureObject
 			MetaStructureRelTypes.META_PROPERTY, Direction.OUTGOING, meta(),
 			MetaStructureProperty.class );
 	}
+	
+	@Override
+	public String toString()
+	{
+		String name = ( String ) getProperty( KEY_NAME, "GLOBAL" );
+		return getClass().getSimpleName() + "[" + name + "]";
+	}
 }

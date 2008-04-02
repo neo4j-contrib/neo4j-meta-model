@@ -16,9 +16,18 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	}
 	
 	/**
-	 * @return a modifiable collection of the extending classes to this class.
+	 * @return a modifiable collection of the superclasses to this class.
 	 */
-	public Collection<MetaClass> getExtendingClasses()
+	public Collection<MetaClass> getDirectSuperClasses()
+	{
+		return new MetaObjectCollection.MetaClassCollection( model(),
+			getThing().getDirectSupers() );
+	}
+	
+	/**
+	 * @return a modifiable collection of the subclasses to this class.
+	 */
+	public Collection<MetaClass> getDirectSubClasses()
 	{
 		return new MetaObjectCollection.MetaClassCollection( model(),
 			getThing().getDirectSubs() );
@@ -30,22 +39,64 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 * {@code name} exists then it is created.
 	 * @return the {@link MetaProperty} by the name {@code name} for this class.
 	 */
-	public MetaProperty getProperty( String name, boolean allowCreate )
+	public MetaProperty getDeclaredProperty( String name, boolean allowCreate )
 	{
 		MetaStructureProperty metaProperty = model().meta().getNamespace(
 			getName(), true ).getMetaProperty( name, allowCreate );
-		getThing().getProperties().add( metaProperty );
+		if ( allowCreate )
+		{
+			getThing().getDirectProperties().add( metaProperty );
+		}
 		return metaProperty == null ? null : new MetaProperty( model(),
 			metaProperty );
 	}
 	
 	/**
-	 * @return a modifiable collection of all the properties defined for this
+	 * @return a modifiable collection of all declared properties for this
 	 * class.
+	 */
+	public Collection<MetaProperty> getDeclaredProperties()
+	{
+		return new MetaObjectCollection.MetaPropertyCollection( model(),
+			getThing().getDirectProperties() );
+	}
+	
+	/**
+	 * @param name the name of the property.
+	 * @param allowCreate if {@code true} and no property by the given
+	 * {@code name} exists then it is created.
+	 * @return the property (declared or inherited) for this class, or
+	 * {@code null} if not found.
+	 */
+	public MetaProperty getProperty( String name, boolean allowCreate )
+	{
+		MetaProperty result = getDeclaredProperty( name, false );
+		if ( result == null )
+		{
+			for ( MetaClass cls : getDirectSuperClasses() )
+			{
+				MetaProperty property = cls.getProperty( name, false );
+				if ( property != null )
+				{
+					result = property;
+					break;
+				}
+			}
+		}
+		if ( result == null && allowCreate )
+		{
+			result = getDeclaredProperty( name, allowCreate );
+		}
+		return result;
+	}
+	
+	/**
+	 * @return an unmodifiable collection of all declared and
+	 * inherited properties for this class.
 	 */
 	public Collection<MetaProperty> getProperties()
 	{
 		return new MetaObjectCollection.MetaPropertyCollection( model(),
-			getThing().getProperties() );
+			getThing().getAllProperties() );
 	}
 }

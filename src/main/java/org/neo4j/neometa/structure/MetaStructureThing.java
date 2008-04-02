@@ -110,4 +110,10 @@ public abstract class MetaStructureThing extends MetaStructureObject
 	{
 		return ( String ) getProperty( additionalPropertyKey( key ), null );
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + getName() + "]";
+	}
 }

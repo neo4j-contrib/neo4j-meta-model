@@ -60,11 +60,11 @@ public class TestOverall extends MetaTestCase
 		MetaStructureProperty phoneTypeProperty =
 			namespace.getMetaProperty( "http://test#phoneType", true );
 		assertEquals( 1, namespace.getMetaProperties().size() );
-		phoneClass.getProperties().add( phoneTypeProperty );
+		phoneClass.getDirectProperties().add( phoneTypeProperty );
 		MetaStructureProperty phoneNumberProperty =
 			namespace.getMetaProperty( "http://test#phoneNumber", true );
 		assertEquals( 2, namespace.getMetaProperties().size() );
-		phoneClass.getProperties().add( phoneNumberProperty );
+		phoneClass.getDirectProperties().add( phoneNumberProperty );
 		
 		MetaStructureClass personClass =
 			namespace.getMetaClass( "http://test#Person", true );
@@ -83,7 +83,7 @@ public class TestOverall extends MetaTestCase
 			namespace.getMetaProperty( "http://test#phone", true );
 		phoneProperty.setRange( new MetaStructureClassRange( phoneClass ) );
 		
-		personClass.getProperties().add( givenNameProperty );
+		personClass.getDirectProperties().add( givenNameProperty );
 		
 		MetaStructureClass userClass =
 			namespace.getMetaClass( "http://test#User", true );

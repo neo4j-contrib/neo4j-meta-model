@@ -45,8 +45,8 @@ public class TestOOModel extends MetaTestCase
 		userOrg.setMetaClassValueType( orgClass );
 		
 		MetaClass guestUserClass = model.getMetaClass( "GuestUser", true );
-		userClass.getExtendingClasses().add( guestUserClass );
-		assertTrue( userClass.getExtendingClasses().contains(
+		userClass.getDirectSubClasses().add( guestUserClass );
+		assertTrue( userClass.getDirectSubClasses().contains(
 			guestUserClass ) );
 		assertEquals( guestUserClass, model.getMetaClass(
 			"GuestUser", false ) );

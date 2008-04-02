@@ -9,7 +9,7 @@ import org.neo4j.api.core.Node;
  */
 public class MetaStructureObject
 {
-	private static final String KEY_NAME = "name";
+	static final String KEY_NAME = "name";
 	
 	private MetaStructure meta;
 	private Node node;

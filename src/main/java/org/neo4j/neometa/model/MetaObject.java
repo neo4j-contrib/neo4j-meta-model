@@ -49,4 +49,10 @@ abstract class MetaObject<T extends MetaStructureThing>
 		return o != null && getThing().equals(
 			( ( MetaObject ) o ).getThing() );
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + getName() + "]";
+	}
 }
