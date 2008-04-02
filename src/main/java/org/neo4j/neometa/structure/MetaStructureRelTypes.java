@@ -50,5 +50,5 @@ public enum MetaStructureRelTypes implements RelationshipType
 	 * A node representing an object beeing an instance of a class -->
 	 * {@link MetaStructureClass} node.
 	 */
-	META_INSTANCE_OF,
+	META_IS_INSTANCE_OF,
 }

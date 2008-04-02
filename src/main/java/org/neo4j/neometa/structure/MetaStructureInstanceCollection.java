@@ -25,7 +25,7 @@ public class MetaStructureInstanceCollection extends NeoRelationshipSet<Node>
 	 */
 	public MetaStructureInstanceCollection( Node node, MetaStructure meta )
 	{
-		super( node, MetaStructureRelTypes.META_INSTANCE_OF,
+		super( node, MetaStructureRelTypes.META_IS_INSTANCE_OF,
 			Direction.INCOMING );
 		this.meta = meta;
 	}
