@@ -1,9 +1,7 @@
 package org.neo4j.neometa.model;
 
-import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
-import org.neo4j.util.EntireGraphDeletor;
 
 /**
  * Tests the meta model through the object oriented {@link MetaModel} API.
@@ -29,8 +27,7 @@ public class TestOOModel extends MetaTestCase
 	
 	private void txTestSome()
 	{
-		Node rootNode = neo().createNode();
-		MetaModel model = new MetaModel( neo(), rootNode );
+		MetaModel model = new MetaModel( neo() );
 		
 		// Model some of the daqapo model.
 		MetaClass orgClass =
@@ -60,7 +57,6 @@ public class TestOOModel extends MetaTestCase
 			guestUserClass );
 		assertCollection( orgClass.getProperties(), orgName, orgParent );
 		assertCollection( userClass.getProperties(), userName, userOrg );
-		
-		new EntireGraphDeletor().delete( rootNode );
+		deleteMetaModel();
 	}
 }

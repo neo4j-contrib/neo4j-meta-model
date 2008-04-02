@@ -16,17 +16,13 @@ public class MetaStructure
 {
 	private NeoService neo;
 	private NeoUtil neoUtil;
-	private Node rootNode;
 	
 	/**
 	 * @param neo the {@link NeoService} used for this meta model.
-	 * @param rootNode the root {@link Node} where all other constructs
-	 * will be connected with.
 	 */
-	public MetaStructure( NeoService neo, Node rootNode )
+	public MetaStructure( NeoService neo )
 	{
 		this.neo = neo;
-		this.rootNode = rootNode;
 		this.neoUtil = new NeoUtil( neo );
 	}
 	
@@ -45,7 +41,8 @@ public class MetaStructure
 	
 	protected Node rootNode()
 	{
-		return this.rootNode;
+		return neoUtil().getOrCreateSubReferenceNode(
+			MetaStructureRelTypes.REF_TO_META_SUBREF );
 	}
 	
 	/**
@@ -135,7 +132,7 @@ public class MetaStructure
 	public Collection<MetaStructureNamespace> getNamespaces()
 	{
 		return new MetaStructureObjectCollection<MetaStructureNamespace>(
-			rootNode, MetaStructureRelTypes.META_NAMESPACE, Direction.OUTGOING,
-			this, MetaStructureNamespace.class );
+			rootNode(), MetaStructureRelTypes.META_NAMESPACE,
+			Direction.OUTGOING, this, MetaStructureNamespace.class );
 	}
 }

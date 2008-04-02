@@ -8,6 +8,12 @@ import org.neo4j.api.core.RelationshipType;
 public enum MetaStructureRelTypes implements RelationshipType
 {
 	/**
+	 * Reference node --> The meta model subref node which is the root of
+	 * the entire meta model.
+	 */
+	REF_TO_META_SUBREF,
+	
+	/**
 	 * Meta model root node --> {@link MetaStructureNamespace} node.
 	 */
 	META_NAMESPACE,

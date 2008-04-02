@@ -3,7 +3,6 @@ package org.neo4j.neometa.structure;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
-import org.neo4j.util.EntireGraphDeletor;
 
 /**
  * Tests the meta structure.
@@ -31,9 +30,7 @@ public class TestOverall extends MetaTestCase
 	
 	private void txTestSome()
 	{
-		Node rootNode = neo().createNode();
-		MetaStructure structure = new MetaStructure( neo(), rootNode );
-		
+		MetaStructure structure = new MetaStructure( neo() );
 		assertEquals( 0, structure.getNamespaces().size() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
 		assertNull( namespace.getName() );
@@ -107,6 +104,6 @@ public class TestOverall extends MetaTestCase
 		personClass.getInstances().remove( person2 );
 		assertCollection( personClass.getInstances(), person1 );
 		neo().getNodeById( person2.getId() );
-		new EntireGraphDeletor().delete( rootNode );
+		deleteMetaModel();
 	}
 }

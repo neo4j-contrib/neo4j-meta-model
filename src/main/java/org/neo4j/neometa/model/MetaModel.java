@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
 import org.neo4j.neometa.structure.MetaStructure;
 import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureRelTypes;
@@ -19,11 +18,10 @@ public class MetaModel
 	
 	/**
 	 * @param neo the {@link NeoService} to use in this model.
-	 * @param rootNode the {@link Node} which is the root of this model.
 	 */
-	public MetaModel( NeoService neo, Node rootNode )
+	public MetaModel( NeoService neo )
 	{
-		this.meta = new MetaStructure( neo, rootNode );
+		this.meta = new MetaStructure( neo );
 	}
 	
 	protected MetaStructure meta()
