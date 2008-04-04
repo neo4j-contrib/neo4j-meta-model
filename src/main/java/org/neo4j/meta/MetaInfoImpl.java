@@ -24,8 +24,8 @@ class MetaInfoImpl implements MetaInfo
 	{
 		return new NodeWrapperRelationshipSet(
 			getNode(),
-			Direction.INCOMING,
 			MetaRelTypes.META_INSTANCE_OF,
+			Direction.INCOMING,
 			NodeTypeImpl.class );
 	}
 

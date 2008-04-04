@@ -4,9 +4,9 @@ import java.lang.reflect.Constructor;
 
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
-import org.neo4j.util.NodeWrapper;
+import org.neo4j.util.NodeWrapperImpl;
 
-public abstract class MetaNodeWrapper extends NodeWrapper
+public abstract class MetaNodeWrapper extends NodeWrapperImpl
 {
 	private MetaManager metaManager;
 	

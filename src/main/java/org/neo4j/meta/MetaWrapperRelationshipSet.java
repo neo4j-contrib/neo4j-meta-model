@@ -18,7 +18,7 @@ public class MetaWrapperRelationshipSet<T extends MetaNodeWrapper> extends
 		RelationshipType relationshipType, Direction direction, Class<T> type,
 		AssociationLevel associationLevel )
 	{
-		super( underlyingNode, direction, relationshipType, type );
+		super( underlyingNode, relationshipType, direction, type );
 		this.metaManager = metaManager;
 		this.associationLevel = associationLevel;
 	}
