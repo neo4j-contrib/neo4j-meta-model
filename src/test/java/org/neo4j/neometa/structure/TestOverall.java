@@ -1,5 +1,7 @@
 package org.neo4j.neometa.structure;
 
+import java.util.Set;
+
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
@@ -61,6 +63,15 @@ public class TestOverall extends MetaTestCase
 			namespace.getMetaProperty( "http://test#phoneType", true );
 		assertEquals( 1, namespace.getMetaProperties().size() );
 		phoneClass.getDirectProperties().add( phoneTypeProperty );
+		assertCollection( phoneTypeProperty.associatedMetaClasses(),
+			phoneClass );
+		assertNull( phoneTypeProperty.getMinCardinality() );
+		assertNull( phoneTypeProperty.getMaxCardinality() );
+		assertNull( phoneTypeProperty.getCollectionBehaviourClass() );
+		phoneTypeProperty.setMinCardinality( 0 );
+		phoneTypeProperty.setMaxCardinality( 1 );
+		assertEquals( 0, ( int ) phoneTypeProperty.getMinCardinality() );
+		assertEquals( 1, ( int ) phoneTypeProperty.getMaxCardinality() );
 		MetaStructureProperty phoneNumberProperty =
 			namespace.getMetaProperty( "http://test#phoneNumber", true );
 		assertEquals( 2, namespace.getMetaProperties().size() );
@@ -82,6 +93,15 @@ public class TestOverall extends MetaTestCase
 		MetaStructureProperty phoneProperty =
 			namespace.getMetaProperty( "http://test#phone", true );
 		phoneProperty.setRange( new MetaStructureClassRange( phoneClass ) );
+		assertEquals( phoneProperty.getName(), ( ( MetaStructureClassRange )
+			phoneProperty.getRange() ).getRelationshipTypeToUse().name() );
+		phoneProperty.setMinCardinality( 0 );
+		phoneProperty.setMaxCardinality( 3 );
+		assertEquals( 3, ( int ) phoneProperty.getMaxCardinality() );
+		phoneProperty.setMaxCardinality( null );
+		assertNull( phoneProperty.getMaxCardinality() );
+		phoneProperty.setCollectionBehaviourClass( Set.class );
+		assertEquals( Set.class, phoneProperty.getCollectionBehaviourClass() );
 		
 		personClass.getDirectProperties().add( givenNameProperty );
 		

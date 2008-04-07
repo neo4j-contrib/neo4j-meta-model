@@ -14,13 +14,26 @@ public abstract class PropertyRange
 {
 	static final String KEY_RANGE_TYPE = "range_type";
 	
-	protected void store( MetaStructureProperty property )
+	private MetaStructureProperty owner;
+	
+	protected MetaStructureProperty getOwner()
 	{
-		Transaction tx = property.neo().beginTx();
+		return this.owner;
+	}
+	
+	protected void store( MetaStructureProperty owner )
+	{
+		// MP: This isn't very good, should be in the constructor, but we can't
+		// really trust the developer to supply gthe correct property instance.
+		// So we do this internally when the MetaStructureProperty#setRange
+		// method is called. Possible cause of bugs/errors.
+		this.owner = owner;
+		
+		Transaction tx = owner.neo().beginTx();
 		try
 		{
-			property.node().setProperty( KEY_RANGE_TYPE, getClass().getName() );
-			internalStore( property );
+			owner.node().setProperty( KEY_RANGE_TYPE, getClass().getName() );
+			internalStore( owner );
 			tx.success();
 		}
 		finally
@@ -29,20 +42,21 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected abstract void internalStore( MetaStructureProperty property );
+	protected abstract void internalStore( MetaStructureProperty owner );
 	
-	protected abstract void internalLoad( MetaStructureProperty property );
+	protected abstract void internalLoad( MetaStructureProperty owner );
 	
-	protected static PropertyRange loadRange( MetaStructureProperty property )
+	protected static PropertyRange loadRange( MetaStructureProperty owner )
 	{
-		Transaction tx = property.neo().beginTx();
+		Transaction tx = owner.neo().beginTx();
 		try
 		{
-			String rangeType = ( String ) property.node().getProperty(
+			String rangeType = ( String ) owner.node().getProperty(
 				KEY_RANGE_TYPE );
 			Class<?> cls = Class.forName( rangeType );
 			PropertyRange result = ( PropertyRange ) cls.newInstance();
-			result.internalLoad( property );
+			result.owner = owner;
+			result.internalLoad( owner );
 			tx.success();
 			return result;
 		}

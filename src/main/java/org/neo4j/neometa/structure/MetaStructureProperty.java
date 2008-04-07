@@ -144,8 +144,8 @@ public class MetaStructureProperty extends MetaStructureThing
 			String className = ( String ) getProperty( KEY_COLLECTION_CLASS,
 				null );
 			// Yep generics warning, but what're you going to do?
-			return ( Class<? extends Collection<?>> ) Class.forName(
-				className ); 
+			return className == null ? null :
+				( Class<? extends Collection<?>> ) Class.forName( className ); 
 		}
 		catch ( Exception e )
 		{

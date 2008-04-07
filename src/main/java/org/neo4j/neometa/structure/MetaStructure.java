@@ -16,6 +16,7 @@ public class MetaStructure
 {
 	private NeoService neo;
 	private NeoUtil neoUtil;
+	private DynamicMetaRelTypes dynamicRelTypes = new DynamicMetaRelTypes();
 	
 	/**
 	 * @param neo the {@link NeoService} used for this meta model.
@@ -24,6 +25,7 @@ public class MetaStructure
 	{
 		this.neo = neo;
 		this.neoUtil = new NeoUtil( neo );
+		this.dynamicRelTypes = new DynamicMetaRelTypes();
 	}
 	
 	/**
@@ -43,6 +45,11 @@ public class MetaStructure
 	{
 		return neoUtil().getOrCreateSubReferenceNode(
 			MetaStructureRelTypes.REF_TO_META_SUBREF );
+	}
+	
+	protected DynamicMetaRelTypes dynamicRelTypes()
+	{
+		return this.dynamicRelTypes;
 	}
 	
 	/**

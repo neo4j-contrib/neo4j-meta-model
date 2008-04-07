@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Relationship;
+import org.neo4j.api.core.RelationshipType;
 import org.neo4j.api.core.Transaction;
 
 /**
@@ -39,6 +40,17 @@ public class MetaStructureClassRange extends PropertyRange
 	{
 		return this.rangeClasses.toArray(
 			new MetaStructureClass[ rangeClasses.size() ] );
+	}
+	
+	/**
+	 * TODO Explain better!
+	 * @return the {@link RelationshipType} which should be created between
+	 * a meta instance and the other meta instance.
+	 */
+	public RelationshipType getRelationshipTypeToUse()
+	{
+		return getOwner().meta().dynamicRelTypes().getOrCreateType(
+			getOwner().getName() );
 	}
 	
 	@Override
