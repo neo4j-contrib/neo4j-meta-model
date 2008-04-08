@@ -14,8 +14,8 @@ import org.neo4j.api.core.RelationshipType;
  */
 public class MetaStructureProperty extends MetaStructureThing
 {
-	private static final String KEY_MIN_CARDINALITY = "min_cardinality";
-	private static final String KEY_MAX_CARDINALITY = "max_cardinality";
+//	private static final String KEY_MIN_CARDINALITY = "min_cardinality";
+//	private static final String KEY_MAX_CARDINALITY = "max_cardinality";
 	private static final String KEY_COLLECTION_CLASS = "collection_class";
 	
 	/**
@@ -88,38 +88,38 @@ public class MetaStructureProperty extends MetaStructureThing
 	 * no restriction.
 	 * @param cardinalityOrNull the minimum cardinality to set.
 	 */
-	public void setMinCardinality( Integer cardinalityOrNull )
-	{
-		setOrRemoteProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
-	}
+//	public void setMinCardinality( Integer cardinalityOrNull )
+//	{
+//		setOrRemoteProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
+//	}
 	
 	/**
 	 * @return the mimimum cardinality set for this property. Can return
 	 * {@code null} which means no restriction.
 	 */
-	public Integer getMinCardinality()
-	{
-		return ( Integer ) getProperty( KEY_MIN_CARDINALITY, null );
-	}
+//	public Integer getMinCardinality()
+//	{
+//		return ( Integer ) getProperty( KEY_MIN_CARDINALITY, null );
+//	}
 	
 	/**
 	 * Sets the maximum cardinality of this property. {@code null} means
 	 * no restriction.
 	 * @param cardinalityOrNull the maximum cardinality to set.
 	 */
-	public void setMaxCardinality( Integer cardinalityOrNull )
-	{
-		setOrRemoteProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
-	}
+//	public void setMaxCardinality( Integer cardinalityOrNull )
+//	{
+//		setOrRemoteProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
+//	}
 	
 	/**
 	 * @return the maximum cardinality set for this property. Can return
 	 * {@code null} which means no restriction.
 	 */
-	public Integer getMaxCardinality()
-	{
-		return ( Integer ) getProperty( KEY_MAX_CARDINALITY, null );
-	}
+//	public Integer getMaxCardinality()
+//	{
+//		return ( Integer ) getProperty( KEY_MAX_CARDINALITY, null );
+//	}
 	
 	/**
 	 * If cardinality is >1 then this will decide the rules of the collection.

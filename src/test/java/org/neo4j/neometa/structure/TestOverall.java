@@ -69,13 +69,13 @@ public class TestOverall extends MetaTestCase
 		phoneClass.getDirectProperties().add( phoneTypeProperty );
 		assertCollection( phoneTypeProperty.associatedMetaClasses(),
 			phoneClass );
-		assertNull( phoneTypeProperty.getMinCardinality() );
-		assertNull( phoneTypeProperty.getMaxCardinality() );
+//		assertNull( phoneTypeProperty.getMinCardinality() );
+//		assertNull( phoneTypeProperty.getMaxCardinality() );
 		assertNull( phoneTypeProperty.getCollectionBehaviourClass() );
-		phoneTypeProperty.setMinCardinality( 0 );
-		phoneTypeProperty.setMaxCardinality( 1 );
-		assertEquals( 0, ( int ) phoneTypeProperty.getMinCardinality() );
-		assertEquals( 1, ( int ) phoneTypeProperty.getMaxCardinality() );
+//		phoneTypeProperty.setMinCardinality( 0 );
+//		phoneTypeProperty.setMaxCardinality( 1 );
+//		assertEquals( 0, ( int ) phoneTypeProperty.getMinCardinality() );
+//		assertEquals( 1, ( int ) phoneTypeProperty.getMaxCardinality() );
 		
 		MetaStructureProperty phoneNumberProperty =
 			namespace.getMetaProperty( "http://test#phoneNumber", true );
@@ -100,11 +100,11 @@ public class TestOverall extends MetaTestCase
 		phoneProperty.setRange( new MetaStructureClassRange( phoneClass ) );
 		assertEquals( phoneProperty.getName(), ( ( MetaStructureClassRange )
 			phoneProperty.getRange() ).getRelationshipTypeToUse().name() );
-		phoneProperty.setMinCardinality( 0 );
-		phoneProperty.setMaxCardinality( 3 );
-		assertEquals( 3, ( int ) phoneProperty.getMaxCardinality() );
-		phoneProperty.setMaxCardinality( null );
-		assertNull( phoneProperty.getMaxCardinality() );
+//		phoneProperty.setMinCardinality( 0 );
+//		phoneProperty.setMaxCardinality( 3 );
+//		assertEquals( 3, ( int ) phoneProperty.getMaxCardinality() );
+//		phoneProperty.setMaxCardinality( null );
+//		assertNull( phoneProperty.getMaxCardinality() );
 		phoneProperty.setCollectionBehaviourClass( Set.class );
 		assertEquals( Set.class, phoneProperty.getCollectionBehaviourClass() );
 		
