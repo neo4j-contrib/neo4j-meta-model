@@ -105,4 +105,18 @@ public class MetaStructureClassRange extends PropertyRange
 	{
 		throw new UnsupportedOperationException( "Should never be called" );
 	}
+	
+	@Override
+	public boolean isDatatype()
+	{
+		return false;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + StringUtil.join( ", ",
+			rangeClasses.toArray(
+				new MetaStructureClass[ rangeClasses.size() ] ) ) + "]";
+	}
 }

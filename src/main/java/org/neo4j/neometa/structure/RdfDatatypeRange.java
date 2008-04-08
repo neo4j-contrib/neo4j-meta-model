@@ -63,4 +63,10 @@ public class RdfDatatypeRange extends SimpleStringPropertyRange
 	{
 		return getConverter().convertToString( value );
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + getRdfDatatype() + "]";
+	}
 }

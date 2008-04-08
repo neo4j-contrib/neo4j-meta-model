@@ -27,4 +27,10 @@ public abstract class SimpleStringPropertyRange extends PropertyRange
 		fromStringRepresentation( property,
 			( String ) property.node().getProperty( KEY_RANGE_STRING ) );
 	}
+	
+	@Override
+	public boolean isDatatype()
+	{
+		return true;
+	}
 }

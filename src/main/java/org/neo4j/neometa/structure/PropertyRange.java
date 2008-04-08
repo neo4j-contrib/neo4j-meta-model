@@ -88,4 +88,10 @@ public abstract class PropertyRange
 	 * @return the string representation of {@code value}.
 	 */
 	public abstract String javaObjectToRdfLiteral( Object value );
+	
+	/**
+	 * @return wether the expected value of this property range is a datatype,
+	 * i.e. plain fundamental values.
+	 */
+	public abstract boolean isDatatype();
 }

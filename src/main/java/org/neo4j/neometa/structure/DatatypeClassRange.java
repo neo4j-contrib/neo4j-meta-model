@@ -79,4 +79,10 @@ public class DatatypeClassRange extends SimpleStringPropertyRange
 	{
 		return value.toString();
 	}
+	
+	@Override
+	public String toString()
+	{
+		return getClass().getSimpleName() + "[" + rangeClass.getName() + "]";
+	}
 }

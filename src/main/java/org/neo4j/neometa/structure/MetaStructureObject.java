@@ -2,6 +2,9 @@ package org.neo4j.neometa.structure;
 
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
+import org.neo4j.api.core.Relationship;
+import org.neo4j.api.core.RelationshipType;
+import org.neo4j.api.core.Transaction;
 
 /**
  * A super class for basically all meta structure objects which wraps a
@@ -73,6 +76,34 @@ public class MetaStructureObject
 		}
 	}
 	
+	protected void setSingleRelationshipOrNull( Node node,
+		RelationshipType type )
+	{
+		Transaction tx = neo().beginTx();
+		try
+		{
+			Relationship relationship = getSingleRelationshipOrNull( type );
+			if ( relationship != null )
+			{
+				relationship.delete();
+			}
+			if ( node != null )
+			{
+				node().createRelationshipTo( node, type );
+			}
+			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	protected Relationship getSingleRelationshipOrNull( RelationshipType type )
+	{
+		return meta().neoUtil().getSingleRelationship( node(), type );
+	}
+
 	void setName( String name )
 	{
 		setProperty( KEY_NAME, name );

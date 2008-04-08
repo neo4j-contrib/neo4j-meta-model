@@ -61,6 +61,10 @@ public class TestOverall extends MetaTestCase
 		thingClass.getDirectSubs().add( phoneClass );
 		MetaStructureProperty phoneTypeProperty =
 			namespace.getMetaProperty( "http://test#phoneType", true );
+		phoneTypeProperty.setRange( new DataRange(
+			RdfUtil.NS_XML_SCHEMA + "string", "home", "work", "cell" ) );
+		assertCollection( ( ( DataRange ) phoneTypeProperty.getRange() ).
+			getValues(), "home", "work", "cell" );
 		assertEquals( 1, namespace.getMetaProperties().size() );
 		phoneClass.getDirectProperties().add( phoneTypeProperty );
 		assertCollection( phoneTypeProperty.associatedMetaClasses(),
@@ -72,6 +76,7 @@ public class TestOverall extends MetaTestCase
 		phoneTypeProperty.setMaxCardinality( 1 );
 		assertEquals( 0, ( int ) phoneTypeProperty.getMinCardinality() );
 		assertEquals( 1, ( int ) phoneTypeProperty.getMaxCardinality() );
+		
 		MetaStructureProperty phoneNumberProperty =
 			namespace.getMetaProperty( "http://test#phoneNumber", true );
 		assertEquals( 2, namespace.getMetaProperties().size() );
@@ -127,6 +132,45 @@ public class TestOverall extends MetaTestCase
 		personClass.getInstances().remove( person2 );
 		assertCollection( personClass.getInstances(), person1 );
 		neo().getNodeById( person2.getId() );
+		deleteMetaModel();
+	}
+	
+	/**
+	 * Tests extended functionality, like OWL constructs.
+	 */
+	public void testExtended()
+	{
+		tx = neo().beginTx();
+		try
+		{
+			txTestExtended();
+			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	private void txTestExtended()
+	{
+		MetaStructure structure = new MetaStructure( neo() );
+		MetaStructureNamespace namespace = structure.getGlobalNamespace();
+		MetaStructureProperty maker = namespace.getMetaProperty(
+			"http://test.org/test#maker", true );
+		MetaStructureProperty madeBy = namespace.getMetaProperty(
+			"http://test.org/test#madeBy", true );
+		assertNull( maker.getInverseOf() );
+		assertNull( madeBy.getInverseOf() );
+		maker.setInverseOf( madeBy );
+		assertEquals( maker, madeBy.getInverseOf() );
+		assertEquals( madeBy, maker.getInverseOf() );
+		madeBy.setInverseOf( maker );
+		assertEquals( maker, madeBy.getInverseOf() );
+		assertEquals( madeBy, maker.getInverseOf() );
+		maker.setInverseOf( null );
+		assertNull( maker.getInverseOf() );
+		assertNull( madeBy.getInverseOf() );
 		deleteMetaModel();
 	}
 }

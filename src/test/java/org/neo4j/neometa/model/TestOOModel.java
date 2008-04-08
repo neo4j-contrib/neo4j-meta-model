@@ -34,14 +34,18 @@ public class TestOOModel extends MetaTestCase
 			model.getMetaClass( "OrganisationalUnit", true );
 		MetaProperty orgName = orgClass.getProperty( "name", true );
 		orgName.setFundamentalValueType( String.class );
+		assertEquals( orgClass, orgName.getOwner() );
 		MetaProperty orgParent = orgClass.getProperty( "parent", true );
 		orgParent.setMetaClassValueType( orgClass );
+		assertCollection( orgClass.getDeclaredProperties(),
+			orgName, orgParent );
+		assertCollection( orgClass.getProperties(), orgName, orgParent );
 		
 		MetaClass userClass = model.getMetaClass( "User", true );
 		MetaProperty userName = userClass.getProperty( "name", true );
 		userName.setFundamentalValueType( String.class );
 		MetaProperty userOrg =
-			userClass.getProperty( "home_organisation", true );
+			userClass.getDeclaredProperty( "home_organisation", true );
 		userOrg.setMetaClassValueType( orgClass );
 		
 		MetaClass guestUserClass = model.getMetaClass( "GuestUser", true );
@@ -51,6 +55,7 @@ public class TestOOModel extends MetaTestCase
 		assertEquals( guestUserClass, model.getMetaClass(
 			"GuestUser", false ) );
 		assertFalse( guestUserClass.equals( orgClass ) );
+		assertCollection( guestUserClass.getDirectSuperClasses(), userClass );
 		
 		// Verify
 		assertCollection( model.getMetaClasses(), orgClass, userClass,

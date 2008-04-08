@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
+import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 
 /**
@@ -151,5 +152,28 @@ public class MetaStructureProperty extends MetaStructureThing
 		{
 			throw new RuntimeException( e );
 		}
+	}
+	
+	/**
+	 * Sets the owl:inverseOf construct.
+	 * @param propertyOrNull the property which is the inverse of this property,
+	 * or {@code null} if no inverse.
+	 */
+	public void setInverseOf( MetaStructureProperty propertyOrNull )
+	{
+		setSingleRelationshipOrNull( propertyOrNull == null ? null :
+			propertyOrNull.node(), MetaStructureRelTypes.META_IS_INVERSE_OF );
+	}
+	
+	/**
+	 * @return the owl:inverseOf property, or {@code null} if there's no
+	 * inverse.
+	 */
+	public MetaStructureProperty getInverseOf()
+	{
+		Relationship rel = getSingleRelationshipOrNull(
+			MetaStructureRelTypes.META_IS_INVERSE_OF );
+		return rel == null ? null : new MetaStructureProperty( meta(),
+			rel.getOtherNode( node() ) );
 	}
 }
