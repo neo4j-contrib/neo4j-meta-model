@@ -49,7 +49,8 @@ public abstract class MetaTestCase extends TestCase
 
 	protected <T> void assertCollection( Collection<T> collection, T... items )
 	{
-		assertEquals( items.length, collection.size() );
+		String collectionString = join( ", ", collection.toArray() );
+		assertEquals( collectionString, items.length, collection.size() );
 		for ( T item : items )
 		{
 			assertTrue( collection.contains( item ) );
@@ -63,5 +64,19 @@ public abstract class MetaTestCase extends TestCase
 		Node node = rel.getEndNode();
 		rel.delete();
 		new EntireGraphDeletor().delete( node );
+	}
+
+	protected <T> String join( String delimiter, T... items )
+	{
+		StringBuffer buffer = new StringBuffer();
+		for ( T item : items )
+		{
+			if ( buffer.length() > 0 )
+			{
+				buffer.append( delimiter );
+			}
+			buffer.append( item.toString() );
+		}
+		return buffer.toString();
 	}
 }

@@ -1,6 +1,7 @@
 package org.neo4j.neometa.structure;
 
-import java.util.Set;
+import java.util.Arrays;
+import java.util.List;
 
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
@@ -69,13 +70,6 @@ public class TestOverall extends MetaTestCase
 		phoneClass.getDirectProperties().add( phoneTypeProperty );
 		assertCollection( phoneTypeProperty.associatedMetaClasses(),
 			phoneClass );
-//		assertNull( phoneTypeProperty.getMinCardinality() );
-//		assertNull( phoneTypeProperty.getMaxCardinality() );
-		assertNull( phoneTypeProperty.getCollectionBehaviourClass() );
-//		phoneTypeProperty.setMinCardinality( 0 );
-//		phoneTypeProperty.setMaxCardinality( 1 );
-//		assertEquals( 0, ( int ) phoneTypeProperty.getMinCardinality() );
-//		assertEquals( 1, ( int ) phoneTypeProperty.getMaxCardinality() );
 		
 		MetaStructureProperty phoneNumberProperty =
 			namespace.getMetaProperty( "http://test#phoneNumber", true );
@@ -100,14 +94,7 @@ public class TestOverall extends MetaTestCase
 		phoneProperty.setRange( new MetaStructureClassRange( phoneClass ) );
 		assertEquals( phoneProperty.getName(), ( ( MetaStructureClassRange )
 			phoneProperty.getRange() ).getRelationshipTypeToUse().name() );
-//		phoneProperty.setMinCardinality( 0 );
-//		phoneProperty.setMaxCardinality( 3 );
-//		assertEquals( 3, ( int ) phoneProperty.getMaxCardinality() );
-//		phoneProperty.setMaxCardinality( null );
-//		assertNull( phoneProperty.getMaxCardinality() );
-		phoneProperty.setCollectionBehaviourClass( Set.class );
-		assertEquals( Set.class, phoneProperty.getCollectionBehaviourClass() );
-		
+		doTestRestrictable( structure, phoneProperty );
 		personClass.getDirectProperties().add( givenNameProperty );
 		
 		MetaStructureClass userClass =
@@ -172,5 +159,110 @@ public class TestOverall extends MetaTestCase
 		assertNull( maker.getInverseOf() );
 		assertNull( madeBy.getInverseOf() );
 		deleteMetaModel();
+	}
+
+	/**
+	 * Tests restrictions.
+	 */
+	public void testRestrictions()
+	{
+		tx = neo().beginTx();
+		try
+		{
+			txTestRestrictions();
+			tx.success();
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	private void txTestRestrictions()
+	{
+		MetaStructure structure = new MetaStructure( neo() );
+		MetaStructureNamespace namespace = structure.getGlobalNamespace();
+		MetaStructureClass thing = namespace.getMetaClass( "thing", true );
+		MetaStructureClass person = namespace.getMetaClass( "person", true );
+		MetaStructureClass user = namespace.getMetaClass( "user", true );
+		thing.getDirectSubs().add( person );
+		person.getDirectSubs().add( user );
+		
+		MetaStructureProperty name = namespace.getMetaProperty( "name", true );
+		MetaStructureProperty nickName =
+			namespace.getMetaProperty( "nickname", true );
+		nickName.getDirectSupers().add( name );
+		try
+		{
+			person.getRestriction( nickName, true );
+			fail( "Should've failed" );
+		}
+		catch ( Exception e )
+		{ // Good
+		}
+		assertCollection( thing.getDirectRestrictions() );
+		assertCollection( thing.getAllRestrictions() );
+		assertCollection( person.getDirectRestrictions() );
+		assertCollection( person.getAllRestrictions() );
+		assertCollection( user.getDirectRestrictions() );
+		assertCollection( user.getAllRestrictions() );
+		person.getDirectProperties().add( name );
+		MetaStructureRestriction personNameRestriction =
+			person.getRestriction( name, true );
+		assertNotNull( personNameRestriction );
+		assertCollection( person.getDirectRestrictions(),
+			personNameRestriction );
+		assertCollection( person.getAllRestrictions(),
+			personNameRestriction );
+		assertCollection( user.getDirectRestrictions() );
+		assertCollection( user.getAllRestrictions(), personNameRestriction );
+		MetaStructureRestriction userNameRestriction =
+			user.getRestriction( name, true );
+		assertNotNull( userNameRestriction );
+		assertCollection( user.getDirectRestrictions(), userNameRestriction );
+		assertCollection( user.getAllRestrictions(), personNameRestriction,
+			userNameRestriction );
+		MetaStructureRestriction userNickNameRestriction =
+			user.getRestriction( nickName, true );
+		assertNotNull( userNickNameRestriction );
+		assertCollection( user.getDirectRestrictions(), userNameRestriction,
+			userNickNameRestriction );
+		assertCollection( user.getAllRestrictions(), personNameRestriction,
+			userNameRestriction, userNickNameRestriction );
+		doTestRestrictable( structure, userNameRestriction );
+		deleteMetaModel();
+	}
+	
+	private void doTestRestrictable( MetaStructure structure,
+		MetaStructureRestrictable restrictable )
+	{
+		assertNull( restrictable.getMaxCardinality() );
+		assertNull( restrictable.getMinCardinality() );
+		restrictable.setMinCardinality( null );
+		restrictable.setMaxCardinality( 10 );
+		assertNull( restrictable.getMinCardinality() );
+		assertEquals( 10, ( int ) restrictable.getMaxCardinality() );
+		restrictable.setMinCardinality( 5 );
+		assertEquals( 5, ( int ) restrictable.getMinCardinality() );
+		assertNull( restrictable.getCollectionBehaviourClass() );
+		restrictable.setCollectionBehaviourClass( List.class );
+		assertEquals( List.class,
+			restrictable.getCollectionBehaviourClass() );
+		restrictable.setCollectionBehaviourClass( null );
+		assertNull( restrictable.getCollectionBehaviourClass() );
+		restrictable.setMinCardinality( null );
+		restrictable.setMaxCardinality( null );
+		assertNull( restrictable.getMaxCardinality() );
+		assertNull( restrictable.getMinCardinality() );
+		
+		restrictable.setRange(
+			new DatatypeClassRange( Float.class ) );
+		assertEquals( Float.class, ( ( DatatypeClassRange )
+			restrictable.getRange() ).getRangeClass() );
+		MetaStructureClass testClass = structure.getGlobalNamespace().
+			getMetaClass( "rangeTestClass", true );
+		restrictable.setRange( new MetaStructureClassRange( testClass ) );
+		assertCollection( Arrays.asList( ( ( MetaStructureClassRange )
+			restrictable.getRange() ).getRangeClasses() ), testClass );
 	}
 }

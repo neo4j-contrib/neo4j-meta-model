@@ -10,8 +10,11 @@ import org.neo4j.api.core.Transaction;
  * A super class for basically all meta structure objects which wraps a
  * {@link Node}.
  */
-public class MetaStructureObject
+public abstract class MetaStructureObject
 {
+	static final String KEY_MIN_CARDINALITY = "min_cardinality";
+	static final String KEY_MAX_CARDINALITY = "max_cardinality";
+	static final String KEY_COLLECTION_CLASS = "collection_class";
 	static final String KEY_NAME = "name";
 	
 	private MetaStructure meta;
@@ -23,7 +26,10 @@ public class MetaStructureObject
 		this.node = node;
 	}
 	
-	protected MetaStructure meta()
+	/**
+	 * @return the underlying {@link MetaStructure}.
+	 */
+	public MetaStructure meta()
 	{
 		return this.meta;
 	}
@@ -103,7 +109,7 @@ public class MetaStructureObject
 	{
 		return meta().neoUtil().getSingleRelationship( node(), type );
 	}
-
+	
 	void setName( String name )
 	{
 		setProperty( KEY_NAME, name );

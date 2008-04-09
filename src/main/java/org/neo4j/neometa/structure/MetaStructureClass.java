@@ -13,6 +13,7 @@ import org.neo4j.api.core.StopEvaluator;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.api.core.TraversalPosition;
 import org.neo4j.api.core.Traverser;
+import org.neo4j.util.OneOfRelTypesReturnableEvaluator;
 
 /**
  * Represents a class in the meta model.
@@ -92,6 +93,94 @@ public class MetaStructureClass extends MetaStructureThing
 				properties.add( new MetaStructureProperty( meta(), node ) );
 			}
 			return Collections.unmodifiableSet( properties );
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	/**
+	 * @param property the {@link MetaStructureProperty} to associate with.
+	 * @param allowCreate wether to allow creation of the restriction if
+	 * it doesn't exist.
+	 * @return the restriction for {@code property} or creates a new if
+	 * {@code allowCreate} is {@code true}.
+	 */
+	public MetaStructureRestriction getRestriction(
+		MetaStructureProperty property, boolean allowCreate )
+	{
+		Transaction tx = neo().beginTx();
+		try
+		{
+			Collection<MetaStructureRestriction> restrictions =
+				getDirectRestrictions();
+			for ( MetaStructureRestriction restriction : restrictions )
+			{
+				if ( restriction.getMetaProperty().equals( property ) )
+				{
+					return restriction;
+				}
+			}
+			if ( !allowCreate )
+			{
+				return null;
+			}
+			
+			if ( !getAllProperties().contains( property ) )
+			{
+				throw new RuntimeException( this + " isn't in the domain of " +
+					property + " add it first" );
+			}
+			Node node = neo().createNode();
+			MetaStructureRestriction result = new MetaStructureRestriction(
+				meta(), node );
+			restrictions.add( result );
+			node.createRelationshipTo( property.node(),
+				MetaStructureRelTypes.META_RESTRICTION_TO_PROPERTY );
+			tx.success();
+			return result;
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	/**
+	 * @return the restrictions for this class.
+	 */
+	public Collection<MetaStructureRestriction> getDirectRestrictions()
+	{
+		return new MetaStructureObjectCollection<MetaStructureRestriction>(
+			node(), MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
+			Direction.INCOMING, meta(), MetaStructureRestriction.class );
+	}
+	
+	/**
+	 * @return an unmodifiable collection of all direct restrictions as well
+	 * as restrictions for super classes.
+	 */
+	public Collection<MetaStructureRestriction> getAllRestrictions()
+	{
+		Transaction tx = neo().beginTx();
+		try
+		{
+			HashSet<MetaStructureRestriction> restrictions =
+				new HashSet<MetaStructureRestriction>();
+			for ( Node node : node().traverse( Traverser.Order.BREADTH_FIRST,
+				StopEvaluator.END_OF_NETWORK,
+				new OneOfRelTypesReturnableEvaluator(
+					MetaStructureRelTypes.META_RESTRICTION_TO_CLASS ),
+				MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
+					Direction.INCOMING,
+				MetaStructureRelTypes.META_IS_SUBCLASS_OF,
+					Direction.OUTGOING ) )
+			{
+				restrictions.add(
+					new MetaStructureRestriction( meta(), node ) );
+			}
+			return Collections.unmodifiableSet( restrictions );
 		}
 		finally
 		{

@@ -42,11 +42,11 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalLoad( MetaStructureProperty owner )
+	protected void internalLoad( MetaStructureRestrictable owner )
 	{
 		super.internalLoad( owner );
 		String[] dataArray = ( String[] )
-			owner.getProperty( KEY_DATA_ARRAY, new String[] {} );
+			owner.node().getProperty( KEY_DATA_ARRAY, new String[] {} );
 		this.values = new HashSet<Object>();
 		for ( String value : dataArray )
 		{
@@ -62,7 +62,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalStore( MetaStructureProperty owner )
+	protected void internalStore( MetaStructureRestrictable owner )
 	{
 		super.internalStore( owner );
 		String[] dataArray = new String[ this.values.size() ];
@@ -71,7 +71,14 @@ public class DataRange extends RdfDatatypeRange
 		{
 			dataArray[ i++ ] = javaObjectToRdfLiteral( value );
 		}
-		owner.setProperty( KEY_DATA_ARRAY, dataArray );
+		owner.node().setProperty( KEY_DATA_ARRAY, dataArray );
+	}
+	
+	@Override
+	protected void internalRemove( MetaStructureRestrictable owner )
+	{
+		super.internalRemove( owner );
+		owner.node().removeProperty( KEY_DATA_ARRAY );
 	}
 	
 	@Override

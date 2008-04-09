@@ -32,13 +32,13 @@ public class DatatypeClassRange extends SimpleStringPropertyRange
 	}
 	
 	@Override
-	protected String toStringRepresentation( MetaStructureProperty property )
+	protected String toStringRepresentation( MetaStructureRestrictable owner )
 	{
 		return this.rangeClass.getName();
 	}
 	
 	@Override
-	protected void fromStringRepresentation( MetaStructureProperty property,
+	protected void fromStringRepresentation( MetaStructureRestrictable owner,
 		String stringRepresentation )
 	{
 		try

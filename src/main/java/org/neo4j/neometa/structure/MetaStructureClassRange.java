@@ -7,7 +7,6 @@ import java.util.Set;
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
-import org.neo4j.api.core.Transaction;
 
 /**
  * An implementation of {@link PropertyRange} for values which are instances
@@ -54,43 +53,40 @@ public class MetaStructureClassRange extends PropertyRange
 	}
 	
 	@Override
-	protected void internalStore( MetaStructureProperty property )
+	protected void internalStore( MetaStructureRestrictable owner )
 	{
-		Transaction tx = property.neo().beginTx();
-		try
+		for ( MetaStructureClass cls : this.rangeClasses )
 		{
-			for ( MetaStructureClass cls : this.rangeClasses )
-			{
-				property.node().createRelationshipTo( cls.node(),
-					MetaStructureRelTypes.META_PROPERTY_HAS_RANGE );
-			}
-			tx.success();
+			owner.node().createRelationshipTo( cls.node(),
+				MetaStructureRelTypes.META_PROPERTY_HAS_RANGE );
 		}
-		finally
+	}
+	
+	private Iterable<Relationship> getRelationships(
+		MetaStructureRestrictable owner )
+	{
+		return owner.node().getRelationships(
+			MetaStructureRelTypes.META_PROPERTY_HAS_RANGE,
+			Direction.OUTGOING );
+	}
+	
+	@Override
+	protected void internalLoad( MetaStructureRestrictable owner )
+	{
+		this.rangeClasses = new HashSet<MetaStructureClass>();
+		for ( Relationship rel : getRelationships( owner ) )
 		{
-			tx.finish();
+			this.rangeClasses.add( new MetaStructureClass( owner.meta(),
+				rel.getEndNode() ) );
 		}
 	}
 	
 	@Override
-	protected void internalLoad( MetaStructureProperty property )
+	protected void internalRemove( MetaStructureRestrictable owner )
 	{
-		Transaction tx = property.neo().beginTx();
-		try
+		for ( Relationship rel : getRelationships( owner ) )
 		{
-			this.rangeClasses = new HashSet<MetaStructureClass>();
-			for ( Relationship rel : property.node().getRelationships(
-				MetaStructureRelTypes.META_PROPERTY_HAS_RANGE,
-				Direction.OUTGOING ) )
-			{
-				this.rangeClasses.add( new MetaStructureClass( property.meta(),
-					rel.getEndNode() ) );
-			}
-			tx.success();
-		}
-		finally
-		{
-			tx.finish();
+			rel.delete();
 		}
 	}
 

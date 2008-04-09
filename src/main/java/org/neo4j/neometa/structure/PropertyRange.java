@@ -14,14 +14,14 @@ public abstract class PropertyRange
 {
 	static final String KEY_RANGE_TYPE = "range_type";
 	
-	private MetaStructureProperty owner;
+	private MetaStructureRestrictable owner;
 	
-	protected MetaStructureProperty getOwner()
+	protected MetaStructureRestrictable getOwner()
 	{
 		return this.owner;
 	}
 	
-	protected void store( MetaStructureProperty owner )
+	protected void store( MetaStructureRestrictable owner )
 	{
 		// MP: This isn't very good, should be in the constructor, but we can't
 		// really trust the developer to supply gthe correct property instance.
@@ -29,9 +29,10 @@ public abstract class PropertyRange
 		// method is called. Possible cause of bugs/errors.
 		this.owner = owner;
 		
-		Transaction tx = owner.neo().beginTx();
+		Transaction tx = owner.meta().neo().beginTx();
 		try
 		{
+			removeRange( owner );
 			owner.node().setProperty( KEY_RANGE_TYPE, getClass().getName() );
 			internalStore( owner );
 			tx.success();
@@ -42,17 +43,33 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected abstract void internalStore( MetaStructureProperty owner );
-	
-	protected abstract void internalLoad( MetaStructureProperty owner );
-	
-	protected static PropertyRange loadRange( MetaStructureProperty owner )
+	protected static void removeRange( MetaStructureRestrictable owner )
 	{
-		Transaction tx = owner.neo().beginTx();
+		PropertyRange range = loadRange( owner );
+		if ( range != null )
+		{
+			owner.node().removeProperty( KEY_RANGE_TYPE );
+			range.internalRemove( owner );
+		}
+	}
+	
+	protected abstract void internalStore( MetaStructureRestrictable owner );
+	
+	protected abstract void internalRemove( MetaStructureRestrictable owner );
+	
+	protected abstract void internalLoad( MetaStructureRestrictable owner );
+	
+	protected static PropertyRange loadRange( MetaStructureRestrictable owner )
+	{
+		Transaction tx = owner.meta().neo().beginTx();
 		try
 		{
 			String rangeType = ( String ) owner.node().getProperty(
-				KEY_RANGE_TYPE );
+				KEY_RANGE_TYPE, null );
+			if ( rangeType == null )
+			{
+				return null;
+			}
 			Class<?> cls = Class.forName( rangeType );
 			PropertyRange result = ( PropertyRange ) cls.newInstance();
 			result.owner = owner;
@@ -63,6 +80,25 @@ public abstract class PropertyRange
 		catch ( Exception e )
 		{
 			throw new RuntimeException( e );
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	protected static void setOrRemoveRange( MetaStructureRestrictable owner,
+		PropertyRange range )
+	{
+		Transaction tx = owner.meta().neo().beginTx();
+		try
+		{
+			PropertyRange.removeRange( owner );
+			if ( range != null )
+			{
+				range.store( owner );
+			}
+			tx.success();
 		}
 		finally
 		{

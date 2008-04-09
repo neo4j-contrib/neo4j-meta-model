@@ -62,4 +62,14 @@ public enum MetaStructureRelTypes implements RelationshipType
 	 * The OWL construct owl:inverseOf between properties.
 	 */
 	META_IS_INVERSE_OF,
+	
+	/**
+	 * A {@link MetaStructureRestriction} to its {@link MetaStructureClass}.
+	 */
+	META_RESTRICTION_TO_CLASS,
+	
+	/**
+	 * A {@link MetaStructureRestriction} to its {@link MetaStructureProperty}.
+	 */
+	META_RESTRICTION_TO_PROPERTY,
 }

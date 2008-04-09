@@ -9,23 +9,29 @@ public abstract class SimpleStringPropertyRange extends PropertyRange
 	private static final String KEY_RANGE_STRING = "range_string";
 	
 	protected abstract String toStringRepresentation(
-		MetaStructureProperty property );
+		MetaStructureRestrictable owner );
 	
 	protected abstract void fromStringRepresentation(
-		MetaStructureProperty property, String stringRepresentation );
+		MetaStructureRestrictable owner, String stringRepresentation );
 	
 	@Override
-	protected void internalStore( MetaStructureProperty property )
+	protected void internalStore( MetaStructureRestrictable owner )
 	{
-		property.node().setProperty( KEY_RANGE_STRING,
-			toStringRepresentation( property ) );
+		owner.node().setProperty( KEY_RANGE_STRING,
+			toStringRepresentation( owner ) );
 	}
 	
 	@Override
-	protected void internalLoad( MetaStructureProperty property )
+	protected void internalLoad( MetaStructureRestrictable owner )
 	{
-		fromStringRepresentation( property,
-			( String ) property.node().getProperty( KEY_RANGE_STRING ) );
+		fromStringRepresentation( owner,
+			( String ) owner.node().getProperty( KEY_RANGE_STRING ) );
+	}
+	
+	@Override
+	protected void internalRemove( MetaStructureRestrictable owner )
+	{
+		owner.node().removeProperty( KEY_RANGE_STRING );
 	}
 	
 	@Override

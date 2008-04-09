@@ -35,13 +35,13 @@ public class RdfDatatypeRange extends SimpleStringPropertyRange
 	}
 	
 	@Override
-	protected String toStringRepresentation( MetaStructureProperty property )
+	protected String toStringRepresentation( MetaStructureRestrictable owner )
 	{
 		return this.datatype;
 	}
 	
 	@Override
-	protected void fromStringRepresentation( MetaStructureProperty property,
+	protected void fromStringRepresentation( MetaStructureRestrictable owner,
 		String stringRepresentation )
 	{
 		this.datatype = stringRepresentation;
