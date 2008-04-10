@@ -1,6 +1,5 @@
 package org.neo4j.neometa.model;
 
-import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
 
 /**
@@ -12,20 +11,6 @@ public class TestOOModel extends MetaTestCase
 	 * Some basic tests.
 	 */
 	public void testSome()
-	{
-		Transaction tx = neo().beginTx();
-		try
-		{
-			txTestSome();
-			tx.success();
-		}
-		finally
-		{
-			tx.finish();
-		}
-	}
-	
-	private void txTestSome()
 	{
 		MetaModel model = new MetaModel( neo() );
 		

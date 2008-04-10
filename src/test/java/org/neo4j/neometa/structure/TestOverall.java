@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.MetaTestCase;
 
 /**
@@ -12,26 +11,10 @@ import org.neo4j.neometa.MetaTestCase;
  */
 public class TestOverall extends MetaTestCase
 {
-	private Transaction tx;
-	
 	/**
 	 * Some basic tests.
 	 */
 	public void testSome()
-	{
-		tx = neo().beginTx();
-		try
-		{
-			txTestSome();
-			tx.success();
-		}
-		finally
-		{
-			tx.finish();
-		}
-	}
-	
-	private void txTestSome()
 	{
 		MetaStructure structure = new MetaStructure( neo() );
 		assertEquals( 0, structure.getNamespaces().size() );
@@ -127,20 +110,6 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testExtended()
 	{
-		tx = neo().beginTx();
-		try
-		{
-			txTestExtended();
-			tx.success();
-		}
-		finally
-		{
-			tx.finish();
-		}
-	}
-	
-	private void txTestExtended()
-	{
 		MetaStructure structure = new MetaStructure( neo() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
 		MetaStructureProperty maker = namespace.getMetaProperty(
@@ -165,20 +134,6 @@ public class TestOverall extends MetaTestCase
 	 * Tests restrictions.
 	 */
 	public void testRestrictions()
-	{
-		tx = neo().beginTx();
-		try
-		{
-			txTestRestrictions();
-			tx.success();
-		}
-		finally
-		{
-			tx.finish();
-		}
-	}
-	
-	private void txTestRestrictions()
 	{
 		MetaStructure structure = new MetaStructure( neo() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
@@ -264,5 +219,99 @@ public class TestOverall extends MetaTestCase
 		restrictable.setRange( new MetaStructureClassRange( testClass ) );
 		assertCollection( Arrays.asList( ( ( MetaStructureClassRange )
 			restrictable.getRange() ).getRangeClasses() ), testClass );
+	}
+	
+	/**
+	 * Tests the "lookup" functionality.
+	 */
+	public void testLookup()
+	{
+		MetaStructure meta = new MetaStructure( neo() );
+		MetaStructureNamespace namespace = meta.getGlobalNamespace();
+		
+		// The classes
+		MetaStructureClass thing = namespace.getMetaClass( "thing", true );
+		MetaStructureClass organism =
+			namespace.getMetaClass( "organism", true );
+		MetaStructureClass person = namespace.getMetaClass( "person", true );
+		MetaStructureClass user = namespace.getMetaClass( "user", true );
+		MetaStructureClass musicListener =
+			namespace.getMetaClass( "musicListener", true );
+		MetaStructureClass song = namespace.getMetaClass( "song", true );
+		
+		// Class hierarchy
+		organism.getDirectSupers().add( thing );
+		person.getDirectSupers().add( organism );
+		user.getDirectSupers().add( person );
+		musicListener.getDirectSupers().add( person );
+		
+		// Properties
+		MetaStructureProperty size = namespace.getMetaProperty( "size", true );
+		size.setRange( new DatatypeClassRange( Integer.class ) );
+		MetaStructureProperty age = namespace.getMetaProperty( "age", true );
+		age.setRange( new DatatypeClassRange( Integer.class ) );
+		MetaStructureProperty name = namespace.getMetaProperty( "name", true );
+		name.setRange( new DatatypeClassRange( String.class ) );
+		MetaStructureProperty nickName =
+			namespace.getMetaProperty( "nickname", true );
+		MetaStructureProperty login =
+			namespace.getMetaProperty( "login", true );
+		MetaStructureProperty likes =
+			namespace.getMetaProperty( "likes", true );
+		likes.setRange( new MetaStructureClassRange( thing ) );
+		
+		// Property hierarchy
+		login.getDirectSupers().add( name );
+		nickName.getDirectSupers().add( name );
+		
+		// Domains and properties
+		thing.getDirectProperties().add( size );
+		organism.getDirectProperties().add( age );
+		person.getDirectProperties().add( nickName );
+		person.getDirectProperties().add( likes );
+		user.getDirectProperties().add( login );
+		age.setCardinality( 1 );
+		
+		// Restrictions
+		organism.getRestriction( size, true ).setCardinality( 1 );
+		person.getRestriction( nickName, true ).setMinCardinality( 0 );
+		person.getRestriction( nickName, false ).setMaxCardinality( 5 );
+		user.getRestriction( login, true ).setCardinality( 1 );
+		musicListener.getRestriction( likes, true ).setRange(
+			new MetaStructureClassRange( song ) );
+		
+		// Verify
+		assertLookup( meta, size, MetaStructure.LOOKUP_MIN_CARDINALITY, null,
+			thing );
+		assertLookup( meta, size, MetaStructure.LOOKUP_MIN_CARDINALITY, 1,
+			organism );
+		assertLookup( meta, age, MetaStructure.LOOKUP_MAX_CARDINALITY, 1,
+			thing, organism, person, user, musicListener, song );
+		assertEquals( String.class, ( ( DatatypeClassRange ) meta.lookup(
+			nickName, MetaStructure.LOOKUP_PROPERTY_RANGE,
+			user ) ).getRangeClass() );
+		assertCollection( Arrays.asList( ( ( MetaStructureClassRange )
+			meta.lookup( likes, MetaStructure.LOOKUP_PROPERTY_RANGE,
+			musicListener ) ).getRangeClasses() ), song );
+		assertCollection( Arrays.asList( ( ( MetaStructureClassRange )
+			meta.lookup( likes, MetaStructure.LOOKUP_PROPERTY_RANGE,
+			person ) ).getRangeClasses() ), thing );
+		
+		deleteMetaModel();
+	}
+	
+	private <T> void assertLookup( MetaStructure meta,
+		MetaStructureProperty property, LookerUpper<T> finder, T expectedValue,
+		MetaStructureClass... classes )
+	{
+		T value = meta.lookup( property, finder, classes );
+		if ( expectedValue == null )
+		{
+			assertNull( value );
+		}
+		else
+		{
+			assertEquals( expectedValue, value );
+		}
 	}
 }

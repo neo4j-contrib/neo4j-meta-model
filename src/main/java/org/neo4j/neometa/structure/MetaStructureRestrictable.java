@@ -67,10 +67,11 @@ public interface MetaStructureRestrictable
 	
 	/**
 	 * @return the {@link PropertyRange} set with
-	 * {@link #setRange(PropertyRange)}.
+	 * {@link #setRange(PropertyRange)} or {@code null} if no range is
+	 * specifically set for this object.
 	 */
 	PropertyRange getRange();
-
+	
 	/**
 	 * If cardinality is >1 then this will decide the rules of the collection.
 	 * F.ex {@link Set} doesn't allow duplicates whereas {@link List} will.

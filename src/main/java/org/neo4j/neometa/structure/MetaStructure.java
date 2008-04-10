@@ -142,4 +142,71 @@ public class MetaStructure
 			rootNode(), MetaStructureRelTypes.META_NAMESPACE,
 			Direction.OUTGOING, this, MetaStructureNamespace.class );
 	}
+	
+	/**
+	 * Looks up a value from the meta model, considering restrictions and
+	 * hierarchy.
+	 * @param <T> the type of the returned value.
+	 * @param property the property to get a value from (also considering
+	 * restrictions).
+	 * @param finder the value finder for a specific value, f.ex.
+	 * minimum cardinality.
+	 * @param classes the classes to look in.
+	 * @return the found value or {@code null} if no value was found.
+	 */
+	public <T> T lookup( MetaStructureProperty property, LookerUpper<T> finder,
+		MetaStructureClass... classes )
+	{
+		// TODO Maybe add some form of caching here since this method will be
+		// HEAVILY used. It's the main way of looking things up in the meta
+		// model, f.ex. validation and conversion of values a.s.o.
+		
+		Transaction tx = neo().beginTx();
+		try
+		{
+			T result = LookupUtil.lookup( property, finder, classes );
+			tx.success();
+			return result;
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+	
+	/**
+	 * Looks up the min cardinality property.
+	 */
+	public static LookerUpper<Integer> LOOKUP_MIN_CARDINALITY =
+		new LookerUpper<Integer>()
+	{
+		public Integer get( MetaStructureRestrictable restrictable )
+		{
+			return restrictable.getMinCardinality();
+		}
+	};
+
+	/**
+	 * Looks up the max cardinality property.
+	 */
+	public static LookerUpper<Integer> LOOKUP_MAX_CARDINALITY =
+		new LookerUpper<Integer>()
+	{
+		public Integer get( MetaStructureRestrictable restrictable )
+		{
+			return restrictable.getMaxCardinality();
+		}
+	};
+
+	/**
+	 * Looks up the property range property.
+	 */
+	public static LookerUpper<PropertyRange> LOOKUP_PROPERTY_RANGE =
+		new LookerUpper<PropertyRange>()
+	{
+		public PropertyRange get( MetaStructureRestrictable restrictable )
+		{
+			return restrictable.getRange();
+		}
+	};
 }

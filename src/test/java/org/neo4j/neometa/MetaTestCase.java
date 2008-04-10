@@ -9,6 +9,7 @@ import org.neo4j.api.core.EmbeddedNeo;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
+import org.neo4j.api.core.Transaction;
 import org.neo4j.neometa.structure.MetaStructureRelTypes;
 import org.neo4j.util.EntireGraphDeletor;
 
@@ -18,6 +19,8 @@ import org.neo4j.util.EntireGraphDeletor;
 public abstract class MetaTestCase extends TestCase
 {
 	private static NeoService neo;
+	
+	private Transaction tx;
 	
 	@Override
 	protected void setUp() throws Exception
@@ -34,11 +37,14 @@ public abstract class MetaTestCase extends TestCase
 				}
 			} );
 		}
+		tx = neo().beginTx();
 	}
 	
 	@Override
 	protected void tearDown() throws Exception
 	{
+		tx.success();
+		tx.finish();
 		super.tearDown();
 	}
 	
