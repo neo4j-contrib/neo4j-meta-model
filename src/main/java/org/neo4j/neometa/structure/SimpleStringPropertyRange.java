@@ -6,7 +6,7 @@ package org.neo4j.neometa.structure;
  */
 public abstract class SimpleStringPropertyRange extends PropertyRange
 {
-	private static final String KEY_RANGE_STRING = "range_string";
+	private static final String KEY_RANGE_SPEC = "range_specification";
 	
 	protected abstract String toStringRepresentation(
 		MetaStructureRestrictable owner );
@@ -17,7 +17,7 @@ public abstract class SimpleStringPropertyRange extends PropertyRange
 	@Override
 	protected void internalStore( MetaStructureRestrictable owner )
 	{
-		owner.node().setProperty( KEY_RANGE_STRING,
+		owner.node().setProperty( KEY_RANGE_SPEC,
 			toStringRepresentation( owner ) );
 	}
 	
@@ -25,13 +25,13 @@ public abstract class SimpleStringPropertyRange extends PropertyRange
 	protected void internalLoad( MetaStructureRestrictable owner )
 	{
 		fromStringRepresentation( owner,
-			( String ) owner.node().getProperty( KEY_RANGE_STRING ) );
+			( String ) owner.node().getProperty( KEY_RANGE_SPEC ) );
 	}
 	
 	@Override
 	protected void internalRemove( MetaStructureRestrictable owner )
 	{
-		owner.node().removeProperty( KEY_RANGE_STRING );
+		owner.node().removeProperty( KEY_RANGE_SPEC );
 	}
 	
 	@Override

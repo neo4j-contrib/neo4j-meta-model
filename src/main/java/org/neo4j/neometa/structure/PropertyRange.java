@@ -12,7 +12,7 @@ import org.neo4j.api.core.Transaction;
  */
 public abstract class PropertyRange
 {
-	static final String KEY_RANGE_TYPE = "range_type";
+	static final String KEY_RANGE_IMPL = "range_implementation_class";
 	
 	private MetaStructureRestrictable owner;
 	
@@ -33,7 +33,7 @@ public abstract class PropertyRange
 		try
 		{
 			removeRange( owner );
-			owner.node().setProperty( KEY_RANGE_TYPE, getClass().getName() );
+			owner.node().setProperty( KEY_RANGE_IMPL, getClass().getName() );
 			internalStore( owner );
 			tx.success();
 		}
@@ -48,7 +48,7 @@ public abstract class PropertyRange
 		PropertyRange range = loadRange( owner );
 		if ( range != null )
 		{
-			owner.node().removeProperty( KEY_RANGE_TYPE );
+			owner.node().removeProperty( KEY_RANGE_IMPL );
 			range.internalRemove( owner );
 		}
 	}
@@ -65,7 +65,7 @@ public abstract class PropertyRange
 		try
 		{
 			String rangeType = ( String ) owner.node().getProperty(
-				KEY_RANGE_TYPE, null );
+				KEY_RANGE_IMPL, null );
 			if ( rangeType == null )
 			{
 				return null;
