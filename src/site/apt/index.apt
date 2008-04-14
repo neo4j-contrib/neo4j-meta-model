@@ -1,0 +1,150 @@
+Neo Meta Model
+
+	Neo meta model is a low level API for building and querying a meta model
+	in a neo store. The basic structures are classes and properties,
+	similar to {{{http://www.w3.org/TR/rdf-schema/}RDF schema}}.
+
+	The API is in <<org.neo4j.neometa.structure>> and contains everything to
+	build and query the meta model. There's also another API which uses that
+	package to present a more Java/OO-style view of the meta model in
+	<<org.neo4j.neometa.model>>.
+
+MetaStructure
+
+	In the <<org.neo4j.neometa.structure>> package you will find a
+	<<MetaStructure>> class which is the entry point into a meta model.
+	From that you can create classes and properties, set data range/expected
+	values on them. The top level in a neo meta model is the namespaces,
+	which solves the problem of classes and properties having the same name.
+	In RDF the namespaces are built into the actual class/property names
+	so no namespaces will be required except the global namespace. In a more
+	object oriented usage of the meta model there could be many colliding
+	property names and so namespaces are useful. The API in
+	<<org.neo4j.neometa.model>> uses namespaces to solve those problems.
+
+---
+    MetaStructure meta = new MetaStructure( neo );
+    MetaStructurNamespace namespace = meta.getGlobalNamespace();
+    
+    // Create a class, use ", true" for "create it if it doesn't exist".
+    MetaStructureClass personClass = namespace.getMetaClass(
+        "http://metaexample.org/meta#Person", true );
+        
+    // Create a property in a similar way.
+    MetaStructureProperty nameProperty = namespace.getMetaProperty(
+        "http://metaexample.org/meta#name", true );
+        
+    // Tell the meta model that persons can have name properties.
+    personClass.getDirectProperties().add( nameProperty );
+---
+
+Hierarchy
+
+	Just like in object oriented programming languages heiritage on classes
+	is supported, but also like RDF Schema/OWL heiratage on properties is
+	also supported.
+	
+---
+    MetaStructureClass thing = namespace.getMetaClass( "thing", true );
+    MetaStructureClass person = namespace.getMetaClass( "person" true );
+    thing.getDirectSubs().add( person );
+
+    MetaStructureProperty name = namespace.getMetaProperty( "name", true );
+    MetaStructureProperty nickName = namespace.getMetaClass( "nickName" true );
+    name.getDirectSubs().add( nickName );
+---
+
+Restrictions
+
+	A meta model property can have information about the values it may have.
+	F.ex. that it must be a string or number, but also how many values may
+	exist - the cardinality. In addition to that there are restrictions,
+	<<org.neo4j.neometa.structure.MetaStructureRestriction>> which may contain
+	the same information (data type and cardinality), but for a property AND
+	for a specific class. The concept derives from {{{http://www.w3.org/TR/2004/REC-owl-guide-20040210/#PropertyRestrictions}OWL}}.
+	
+---
+    MetaStructureClass artist = ...;
+    MetaStructureProperty plays = ...;
+    MetaStructureClass drummer = ...;
+    MetaStructureClass instrument = ...;
+    MetaStructureClass drums = ...;
+    
+    drummer.getDirectSupers().add( artist );
+    drums.getDirectSupers().add( instrument );
+    
+    plays.setRange( new MetaStructureClassRange( instrument ) );
+    MetaStructureRestriction playsRestriction =
+    	drummer.getRestriction( plays, true );
+    playsRestriction.setRange( new MetaStructureClassRange( drums ) );
+    playsRestriction.setCardinality( 1 );
+---
+
+    So it can generally be said that an Artist plays an Instrument, but
+    Drummers in particular plays the Drums. That is an example of a restriction
+    in the neo meta model.
+
+Property Range
+
+    Properties and restrictions may have a range. It means that values of that
+    property must follow some kind of rules. The meta model comes with a set
+    of rules that you can use, or you can write your own and use them the same
+    way as the built-in ones. Some examples:
+     * DatatypeClassRange: Regular java fundamentals, f.ex. String or Integer.
+     * MetaStructureClassRange: The value points to another object.
+     * RdfDatatypeRange: Handles data types which are regular RDF/XML types.
+     * DataRange: The value must match at least one in sa list of values. 
+
+---
+    MetaStructureClass person = ...;
+    MetaStructureProperty name = ...;
+    name.setRange( new DatatypeClassRange( String.class ) );
+    MetaStructureProperty knows = ...;
+    knows.setRange( new MetaStructureClassRange( person ) );
+---
+
+What is supported?
+
+    The neo meta model supports RDFS and some structures from OWL, here's a
+    list of supported constructs.
+    
+     * Class
+     
+       * rdfs:Class
+       
+       * owl:Class
+       
+       * rdfs:subClassOf
+       
+     * Property
+     
+       * rdf:Property
+       
+       * owl:DatatypeProperty
+       
+       * owl:ObjectProperty
+       
+       * owl:FunctionalProperty
+       
+       * owl:InverseFunctionalProperty
+       
+       * rdfs:subPropertyOf
+       
+       * rdfs:range
+       
+       * rdfs:domain
+       
+       * owl:inverseOf
+       
+     * Restriction
+     
+       * owl:Restriction
+       
+       * rdfs:range
+       
+       * owl:cardinality
+       
+       * owl:minCardinality
+       
+       * owl:maxCardinality
+       
