@@ -33,6 +33,7 @@
             <groupId>org.neo4j</groupId>
             <artifactId>shell</artifactId>
             <version>1.0-rc1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>        
 		<dependency>
             <groupId>org.neo4j</groupId>
