@@ -12,7 +12,7 @@ public class TestOOModel extends MetaTestCase
 	 */
 	public void testSome()
 	{
-		MetaModel model = new MetaModel( neo() );
+		MetaModel model = new MetaModelImpl( neo() );
 		
 		// Model some of the daqapo model.
 		MetaClass orgClass =

@@ -1,5 +1,6 @@
 package org.neo4j.neometa.model;
 
+import org.neo4j.api.core.NeoService;
 import org.neo4j.neometa.structure.MetaStructure;
 import org.neo4j.neometa.structure.MetaStructureThing;
 
@@ -21,7 +22,12 @@ abstract class MetaObject<T extends MetaStructureThing>
 	
 	protected MetaStructure meta()
 	{
-		return this.model.meta();
+		return ( ( MetaModelImpl ) this.model ).meta();
+	}
+	
+	protected NeoService neo()
+	{
+		return ( ( MetaModelImpl ) this.model ).neo();
 	}
 	
 	protected T getThing()
