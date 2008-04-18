@@ -31,8 +31,8 @@ public class MetaStructureNamespace extends MetaStructureObject
 	 */
 	public MetaStructureClass getMetaClass( String name, boolean allowCreate )
 	{
-		return meta().findOrCreateInCollection( getMetaClasses(), name,
-			allowCreate, MetaStructureClass.class );
+		return ( ( MetaStructureImpl ) meta() ).findOrCreateInCollection(
+			getMetaClasses(), name, allowCreate, MetaStructureClass.class );
 	}
 	
 	/**
@@ -58,8 +58,9 @@ public class MetaStructureNamespace extends MetaStructureObject
 	public MetaStructureProperty getMetaProperty( String name,
 		boolean allowCreate )
 	{
-		return meta().findOrCreateInCollection( getMetaProperties(), name,
-			allowCreate, MetaStructureProperty.class );
+		return ( ( MetaStructureImpl ) meta() ).findOrCreateInCollection(
+			getMetaProperties(), name, allowCreate,
+			MetaStructureProperty.class );
 	}
 	
 	/**

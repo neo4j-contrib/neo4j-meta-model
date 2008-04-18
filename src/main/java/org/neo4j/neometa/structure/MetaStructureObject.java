@@ -5,6 +5,7 @@ import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 import org.neo4j.api.core.Transaction;
+import org.neo4j.util.NeoUtil;
 
 /**
  * A super class for basically all meta structure objects which wraps a
@@ -39,7 +40,12 @@ public abstract class MetaStructureObject
 	 */
 	public NeoService neo()
 	{
-		return meta().neo();
+		return ( ( MetaStructureImpl ) meta() ).neo();
+	}
+	
+	protected NeoUtil neoUtil()
+	{
+		return ( ( MetaStructureImpl ) meta() ).neoUtil();
 	}
 	
 	/**
@@ -52,22 +58,22 @@ public abstract class MetaStructureObject
 	
 	protected void setProperty( String key, Object value )
 	{
-		meta().neoUtil().setProperty( node(), key, value );
+		neoUtil().setProperty( node(), key, value );
 	}
 	
 	protected Object getProperty( String key )
 	{
-		return meta().neoUtil().getProperty( node(), key );
+		return neoUtil().getProperty( node(), key );
 	}
 
 	protected Object getProperty( String key, Object defaultValue )
 	{
-		return meta().neoUtil().getProperty( node(), key, defaultValue );
+		return neoUtil().getProperty( node(), key, defaultValue );
 	}
 	
 	protected Object removeProperty( String key )
 	{
-		return meta().neoUtil().removeProperty( node(), key );
+		return neoUtil().removeProperty( node(), key );
 	}
 	
 	protected void setOrRemoteProperty( String key, Object value )
@@ -107,7 +113,7 @@ public abstract class MetaStructureObject
 	
 	protected Relationship getSingleRelationshipOrNull( RelationshipType type )
 	{
-		return meta().neoUtil().getSingleRelationship( node(), type );
+		return neoUtil().getSingleRelationship( node(), type );
 	}
 	
 	void setName( String name )

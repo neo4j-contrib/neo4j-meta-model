@@ -27,7 +27,7 @@ public class MetaStructureRestriction extends MetaStructureObject
 	public MetaStructureClass getMetaClass()
 	{
 		return new MetaStructureClass( meta(),
-			meta().neoUtil().getSingleOtherNode( node(),
+			neoUtil().getSingleOtherNode( node(),
 				MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
 				Direction.OUTGOING ) );
 	}
@@ -38,7 +38,7 @@ public class MetaStructureRestriction extends MetaStructureObject
 	public MetaStructureProperty getMetaProperty()
 	{
 		return new MetaStructureProperty( meta(),
-			meta().neoUtil().getSingleOtherNode( node(),
+			neoUtil().getSingleOtherNode( node(),
 				MetaStructureRelTypes.META_RESTRICTION_TO_PROPERTY,
 				Direction.OUTGOING ) );
 	}

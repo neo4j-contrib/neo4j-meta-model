@@ -42,7 +42,7 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public MetaProperty getDeclaredProperty( String name, boolean allowCreate )
 	{
-		Transaction tx = model().meta().neo().beginTx();
+		Transaction tx = model().neo().beginTx();
 		try
 		{
 			MetaStructureProperty metaProperty = model().meta().getNamespace(
@@ -81,7 +81,7 @@ public class MetaClass extends MetaObject<MetaStructureClass>
 	 */
 	public MetaProperty getProperty( String name, boolean allowCreate )
 	{
-		Transaction tx = model().meta().neo().beginTx();
+		Transaction tx = model().neo().beginTx();
 		try
 		{
 			MetaProperty result = getDeclaredProperty( name, false );

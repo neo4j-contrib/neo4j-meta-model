@@ -48,8 +48,8 @@ public class MetaStructureClassRange extends PropertyRange
 	 */
 	public RelationshipType getRelationshipTypeToUse()
 	{
-		return getOwner().meta().dynamicRelTypes().getOrCreateType(
-			getOwner().getName() );
+		return ( ( MetaStructureImpl ) getOwner().meta() ).dynamicRelTypes().
+			getOrCreateType( getOwner().getName() );
 	}
 	
 	@Override

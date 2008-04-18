@@ -16,7 +16,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testSome()
 	{
-		MetaStructure structure = new MetaStructure( neo() );
+		MetaStructure structure = new MetaStructureImpl( neo() );
 		assertEquals( 0, structure.getNamespaces().size() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
 		assertNull( namespace.getName() );
@@ -110,7 +110,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testExtended()
 	{
-		MetaStructure structure = new MetaStructure( neo() );
+		MetaStructure structure = new MetaStructureImpl( neo() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
 		MetaStructureProperty maker = namespace.getMetaProperty(
 			"http://test.org/test#maker", true );
@@ -135,7 +135,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testRestrictions()
 	{
-		MetaStructure structure = new MetaStructure( neo() );
+		MetaStructure structure = new MetaStructureImpl( neo() );
 		MetaStructureNamespace namespace = structure.getGlobalNamespace();
 		MetaStructureClass thing = namespace.getMetaClass( "thing", true );
 		MetaStructureClass person = namespace.getMetaClass( "person", true );
@@ -226,7 +226,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testLookup()
 	{
-		MetaStructure meta = new MetaStructure( neo() );
+		MetaStructure meta = new MetaStructureImpl( neo() );
 		MetaStructureNamespace namespace = meta.getGlobalNamespace();
 		
 		// The classes

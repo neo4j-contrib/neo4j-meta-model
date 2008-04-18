@@ -5,7 +5,7 @@ package org.neo4j.neometa.structure;
  * {@link MetaStructureRestrictable}.
  * @param <T> the type of the returned value.
  */
-interface LookerUpper<T>
+public interface LookerUpper<T>
 {
 	/**
 	 * @param restrictable the object to get the value from.

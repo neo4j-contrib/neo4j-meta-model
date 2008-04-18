@@ -2,6 +2,7 @@ package org.neo4j.neometa.structure;
 
 import java.text.ParseException;
 
+import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Transaction;
 
@@ -21,6 +22,11 @@ public abstract class PropertyRange
 		return this.owner;
 	}
 	
+	private static NeoService neo( MetaStructure meta )
+	{
+		return ( ( MetaStructureImpl ) meta ).neo();
+	}
+	
 	protected void store( MetaStructureRestrictable owner )
 	{
 		// MP: This isn't very good, should be in the constructor, but we can't
@@ -29,7 +35,7 @@ public abstract class PropertyRange
 		// method is called. Possible cause of bugs/errors.
 		this.owner = owner;
 		
-		Transaction tx = owner.meta().neo().beginTx();
+		Transaction tx = neo( owner.meta() ).beginTx();
 		try
 		{
 			removeRange( owner );
@@ -61,7 +67,7 @@ public abstract class PropertyRange
 	
 	protected static PropertyRange loadRange( MetaStructureRestrictable owner )
 	{
-		Transaction tx = owner.meta().neo().beginTx();
+		Transaction tx = neo( owner.meta() ).beginTx();
 		try
 		{
 			String rangeType = ( String ) owner.node().getProperty(
@@ -90,7 +96,7 @@ public abstract class PropertyRange
 	protected static void setOrRemoveRange( MetaStructureRestrictable owner,
 		PropertyRange range )
 	{
-		Transaction tx = owner.meta().neo().beginTx();
+		Transaction tx = neo( owner.meta() ).beginTx();
 		try
 		{
 			PropertyRange.removeRange( owner );

@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.neometa.structure.MetaStructure;
 import org.neo4j.neometa.structure.MetaStructureClass;
+import org.neo4j.neometa.structure.MetaStructureImpl;
 
 /**
  * An object oriented API to the {@link MetaStructure} interface where
@@ -19,12 +20,17 @@ public class MetaModel
 	 */
 	public MetaModel( NeoService neo )
 	{
-		this.meta = new MetaStructure( neo );
+		this.meta = new MetaStructureImpl( neo );
 	}
 	
 	protected MetaStructure meta()
 	{
 		return this.meta;
+	}
+	
+	protected NeoService neo()
+	{
+		return ( ( MetaStructureImpl ) meta() ).neo();
 	}
 	
 	/**
