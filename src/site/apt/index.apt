@@ -4,23 +4,24 @@ Neo Meta Model
 	in a neo store. The basic structures are classes and properties,
 	similar to {{{http://www.w3.org/TR/rdf-schema/}RDF schema}}.
 
-	The API is in <<org.neo4j.neometa.structure>> and contains everything to
-	build and query the meta model. There's also another API which uses that
-	package to present a more Java/OO-style view of the meta model in
-	<<org.neo4j.neometa.model>>.
+	The API is in package <<org.neo4j.neometa.structure>> and contains
+	everything to build and query the meta model. There's also another API
+	which uses that package to present a more Java/OO-style view of the
+	meta model in <<org.neo4j.neometa.model>>.
 
 MetaStructure
 
 	In the <<org.neo4j.neometa.structure>> package you will find a
-	<<MetaStructure>> class which is the entry point into a meta model.
-	From that you can create classes and properties, set data range/expected
-	values on them. The top level in a neo meta model is the namespaces,
-	which solves the problem of classes and properties having the same name.
-	In RDF the namespaces are built into the actual class/property names
-	so no namespaces will be required except the global namespace. In a more
-	object oriented usage of the meta model there could be many colliding
-	property names and so namespaces are useful. The API in
-	<<org.neo4j.neometa.model>> uses namespaces to solve those problems.
+	<<MetaStructure>> interface which is the entry point into a meta model.
+	From there you can create/get classes and properties, set data range,
+	expected values and cardinality on them. The top level in a neo meta model
+	is the namespaces, which solves the problem of classes and properties having
+	the same name. In RDF the namespaces are built into the actual
+	class/property names so no namespaces will be required except the global
+	namespace. In a more object oriented usage of the meta model there could be
+	many colliding property names and so namespaces are useful in that area
+	of usage. The API in <<org.neo4j.neometa.model>> uses namespaces to solve
+	those problems.
 
 ---
     MetaStructure meta = new MetaStructure( neo );
@@ -42,7 +43,7 @@ Hierarchy
 
 	Just like in object oriented programming languages heiritage on classes
 	is supported, but also like RDF Schema/OWL heiratage on properties is
-	also supported.
+	supported as well.
 	
 ---
     MetaStructureClass thing = namespace.getMetaClass( "thing", true );
@@ -56,9 +57,10 @@ Hierarchy
 
 Restrictions
 
-	A meta model property can have information about the values it may have.
-	F.ex. that it must be a string or number, but also how many values may
-	exist - the cardinality. In addition to that there are restrictions,
+	A meta model property can have information about cardinality, value type
+	and range which values of that property must apply to. F.ex. that it must
+	be a string or number, but also that there must be at least one value set.
+	In addition to that there are restrictions,
 	<<org.neo4j.neometa.structure.MetaStructureRestriction>> which may contain
 	the same information (data type and cardinality), but for a property AND
 	for a specific class. The concept derives from {{{http://www.w3.org/TR/2004/REC-owl-guide-20040210/#PropertyRestrictions}OWL}}.
@@ -90,10 +92,16 @@ Property Range
     property must follow some kind of rules. The meta model comes with a set
     of rules that you can use, or you can write your own and use them the same
     way as the built-in ones. Some examples:
+    
      * DatatypeClassRange: Regular java fundamentals, f.ex. String or Integer.
-     * MetaStructureClassRange: The value points to another object.
+     
+     * MetaStructureClassRange: The value points to another meta model class
+       which values must be instances of.
+       
      * RdfDatatypeRange: Handles data types which are regular RDF/XML types.
-     * DataRange: The value must match at least one in sa list of values. 
+     
+     * DataRange: The value must match at least one in a list of values. 
+
 
 ---
     MetaStructureClass person = ...;
