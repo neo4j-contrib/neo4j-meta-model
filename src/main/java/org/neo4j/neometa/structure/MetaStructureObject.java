@@ -16,7 +16,11 @@ public abstract class MetaStructureObject
 	static final String KEY_MIN_CARDINALITY = "min_cardinality";
 	static final String KEY_MAX_CARDINALITY = "max_cardinality";
 	static final String KEY_COLLECTION_CLASS = "collection_class";
-	static final String KEY_NAME = "name";
+	
+	/**
+	 * The node property for a meta structure objects name.
+	 */
+	public static final String KEY_NAME = "name";
 	
 	private MetaStructure meta;
 	private Node node;
