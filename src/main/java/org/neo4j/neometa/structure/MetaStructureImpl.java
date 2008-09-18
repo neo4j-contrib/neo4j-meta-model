@@ -1,10 +1,14 @@
 package org.neo4j.neometa.structure;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
+import org.neo4j.api.core.NotFoundException;
 import org.neo4j.api.core.Transaction;
 import org.neo4j.util.NeoUtil;
 
@@ -17,6 +21,10 @@ public class MetaStructureImpl implements MetaStructure
 	private NeoService neo;
 	private NeoUtil neoUtil;
 	private DynamicMetaRelTypes dynamicRelTypes = new DynamicMetaRelTypes();
+	
+	private Map<String, MetaStructureNamespace> namespaceCache =
+		Collections.synchronizedMap(
+			new HashMap<String, MetaStructureNamespace>() );
 	
 	/**
 	 * @param neo the {@link NeoService} used for this meta model.
@@ -57,22 +65,29 @@ public class MetaStructureImpl implements MetaStructure
 	{
 		assert name != null;
 		return findOrCreateInCollection( getNamespaces(), name, allowCreate,
-			MetaStructureNamespace.class );
+			MetaStructureNamespace.class, namespaceCache );
 	}
 	
 	public MetaStructureNamespace getGlobalNamespace()
 	{
 		return findOrCreateInCollection( getNamespaces(), null, true,
-			MetaStructureNamespace.class );
+			MetaStructureNamespace.class, namespaceCache );
 	}
 	
 	protected <T extends MetaStructureObject> T findOrCreateInCollection(
 		Collection<T> collection, String nameOrNullForGlobal,
-		boolean allowCreate, Class<T> theClass )
+		boolean allowCreate, Class<T> theClass, Map<String, T> cacheOrNull )
 	{
 		Transaction tx = neo().beginTx();
 		try
 		{
+			T foundItem = safeGetFromCache( cacheOrNull, nameOrNullForGlobal );
+			if ( foundItem != null )
+			{
+				tx.success();
+				return foundItem;
+			}
+			
 			for ( T item : collection )
 			{
 				String theName = item.getName();
@@ -80,13 +95,23 @@ public class MetaStructureImpl implements MetaStructure
 				{
 					if ( nameOrNullForGlobal == null && theName == null )
 					{
-						return item;
+						foundItem = item;
+						break;
 					}
 				}
 				else if ( theName.equals( nameOrNullForGlobal ) )
 				{
-					return item;
+					foundItem = item;
+					break;
 				}
+			}
+			if ( foundItem != null )
+			{
+				if ( cacheOrNull != null )
+				{
+					cacheOrNull.put( nameOrNullForGlobal, foundItem );
+				}
+				return foundItem;
 			}
 			
 			if ( !allowCreate )
@@ -118,10 +143,33 @@ public class MetaStructureImpl implements MetaStructure
 		}
 	}
 	
+	private <T extends MetaStructureObject> T safeGetFromCache(
+		Map<String, T> cacheOrNull, String key )
+	{
+		T result = null;
+		if ( cacheOrNull != null )
+		{
+			result = cacheOrNull.get( key );
+			if ( result != null )
+			{
+				try
+				{
+					neo().getNodeById( result.node().getId() );
+				}
+				catch ( NotFoundException e )
+				{
+					cacheOrNull.remove( result );
+					result = null;
+				}
+			}
+		}
+		return result;
+	}
+	
 	public Collection<MetaStructureNamespace> getNamespaces()
 	{
 		return new MetaStructureObjectCollection<MetaStructureNamespace>(
-			rootNode(), MetaStructureRelTypes.META_NAMESPACE,
+			neo(), rootNode(), MetaStructureRelTypes.META_NAMESPACE,
 			Direction.OUTGOING, this, MetaStructureNamespace.class );
 	}
 	

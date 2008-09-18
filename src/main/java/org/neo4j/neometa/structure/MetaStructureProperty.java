@@ -26,8 +26,8 @@ public class MetaStructureProperty extends MetaStructureThing
 	private Collection<MetaStructureProperty> hierarchyCollection(
 		Direction direction )
 	{
-		return new MetaStructureObjectCollection<MetaStructureProperty>( node(),
-			MetaStructureRelTypes.META_IS_SUBPROPERTY_OF, direction,
+		return new MetaStructureObjectCollection<MetaStructureProperty>( neo(),
+			node(), MetaStructureRelTypes.META_IS_SUBPROPERTY_OF, direction,
 			meta(), MetaStructureProperty.class );
 	}
 	
@@ -55,8 +55,8 @@ public class MetaStructureProperty extends MetaStructureThing
 	 */
 	public Collection<MetaStructureClass> associatedMetaClasses()
 	{
-		return new MetaStructureObjectCollection<MetaStructureClass>( node(),
-			MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
+		return new MetaStructureObjectCollection<MetaStructureClass>( neo(),
+			node(), MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
 			Direction.INCOMING, meta(), MetaStructureClass.class );
 	}
 

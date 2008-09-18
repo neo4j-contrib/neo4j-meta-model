@@ -1,6 +1,7 @@
 package org.neo4j.neometa.structure;
 
 import org.neo4j.api.core.Direction;
+import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
@@ -12,10 +13,11 @@ class MetaStructureObjectCollection<T extends MetaStructureObject>
 	private MetaStructure meta;
 	private Class<T> cls;
 	
-	MetaStructureObjectCollection( Node node, RelationshipType relType,
-		Direction direction, MetaStructure meta, Class<T> cls )
+	MetaStructureObjectCollection( NeoService neo, Node node,
+		RelationshipType relType, Direction direction,
+		MetaStructure meta, Class<T> cls )
 	{
-		super( node, relType, direction );
+		super( neo, node, relType, direction );
 		this.meta = meta;
 		this.cls = cls;
 	}

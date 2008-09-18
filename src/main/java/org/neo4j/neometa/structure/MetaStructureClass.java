@@ -32,9 +32,9 @@ public class MetaStructureClass extends MetaStructureThing
 	private Collection<MetaStructureClass> hierarchyCollection(
 		Direction direction )
 	{
-		return new MetaStructureObjectCollection<MetaStructureClass>( node(),
-			MetaStructureRelTypes.META_IS_SUBCLASS_OF, direction, meta(),
-			MetaStructureClass.class );
+		return new MetaStructureObjectCollection<MetaStructureClass>( neo(),
+			node(), MetaStructureRelTypes.META_IS_SUBCLASS_OF, direction,
+			meta(), MetaStructureClass.class );
 	}
 	
 	@Override
@@ -61,8 +61,8 @@ public class MetaStructureClass extends MetaStructureThing
 	 */
 	public Collection<MetaStructureProperty> getDirectProperties()
 	{
-		return new MetaStructureObjectCollection<MetaStructureProperty>( node(),
-			MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
+		return new MetaStructureObjectCollection<MetaStructureProperty>( neo(),
+			node(), MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
 			Direction.OUTGOING, meta(), MetaStructureProperty.class );
 	}
 	
@@ -153,7 +153,7 @@ public class MetaStructureClass extends MetaStructureThing
 	public Collection<MetaStructureRestriction> getDirectRestrictions()
 	{
 		return new MetaStructureObjectCollection<MetaStructureRestriction>(
-			node(), MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
+			neo(), node(), MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
 			Direction.INCOMING, meta(), MetaStructureRestriction.class );
 	}
 	
@@ -193,7 +193,7 @@ public class MetaStructureClass extends MetaStructureThing
 	 */
 	public Collection<Node> getInstances()
 	{
-		return new MetaStructureInstanceCollection( node(), meta() );
+		return new MetaStructureInstanceCollection( neo(), node(), meta() );
 	}
 	
 	private class AllPropertiesRE implements ReturnableEvaluator

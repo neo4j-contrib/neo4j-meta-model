@@ -1,6 +1,9 @@
 package org.neo4j.neometa.structure;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.Node;
@@ -11,6 +14,13 @@ import org.neo4j.api.core.Node;
  */
 public class MetaStructureNamespace extends MetaStructureObject
 {
+	private Map<String, MetaStructureClass> classCache =
+		Collections.synchronizedMap(
+			new HashMap<String, MetaStructureClass>() );
+	private Map<String, MetaStructureProperty> propertyCache =
+		Collections.synchronizedMap(
+			new HashMap<String, MetaStructureProperty>() );
+	
 	/**
 	 * @param meta the {@link MetaStructure} instance.
 	 * @param node the {@link Node} to wrap.
@@ -32,7 +42,8 @@ public class MetaStructureNamespace extends MetaStructureObject
 	public MetaStructureClass getMetaClass( String name, boolean allowCreate )
 	{
 		return ( ( MetaStructureImpl ) meta() ).findOrCreateInCollection(
-			getMetaClasses(), name, allowCreate, MetaStructureClass.class );
+			getMetaClasses(), name, allowCreate, MetaStructureClass.class,
+			classCache );
 	}
 	
 	/**
@@ -41,9 +52,9 @@ public class MetaStructureNamespace extends MetaStructureObject
 	 */
 	public Collection<MetaStructureClass> getMetaClasses()
 	{
-		return new MetaStructureObjectCollection<MetaStructureClass>( node(),
-			MetaStructureRelTypes.META_CLASS, Direction.OUTGOING, meta(),
-			MetaStructureClass.class );
+		return new MetaStructureObjectCollection<MetaStructureClass>( neo(),
+			node(), MetaStructureRelTypes.META_CLASS, Direction.OUTGOING,
+			meta(), MetaStructureClass.class );
 	}
 	
 	/**
@@ -60,7 +71,7 @@ public class MetaStructureNamespace extends MetaStructureObject
 	{
 		return ( ( MetaStructureImpl ) meta() ).findOrCreateInCollection(
 			getMetaProperties(), name, allowCreate,
-			MetaStructureProperty.class );
+			MetaStructureProperty.class, propertyCache );
 	}
 	
 	/**
@@ -69,9 +80,9 @@ public class MetaStructureNamespace extends MetaStructureObject
 	 */
 	public Collection<MetaStructureProperty> getMetaProperties()
 	{
-		return new MetaStructureObjectCollection<MetaStructureProperty>( node(),
-			MetaStructureRelTypes.META_PROPERTY, Direction.OUTGOING, meta(),
-			MetaStructureProperty.class );
+		return new MetaStructureObjectCollection<MetaStructureProperty>( neo(),
+			node(), MetaStructureRelTypes.META_PROPERTY, Direction.OUTGOING,
+			meta(), MetaStructureProperty.class );
 	}
 	
 	@Override
