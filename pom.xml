@@ -1,102 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project>
-	<parent>
-		<groupId>org.neo4j</groupId>
-		<artifactId>parent-pom</artifactId>
-		<version>4</version>
-		<relativePath>../../pom.xml</relativePath>    		
-	</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.neo4j</groupId>
+    <artifactId>parent-pom</artifactId>
+    <version>4</version>
+    <relativePath>../../pom.xml</relativePath>
+  </parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.neo4j</groupId>
-	<artifactId>neo-meta</artifactId>
-	<version>0.5-SNAPSHOT</version>
-	<name>A meta model experiment for Neo</name>
-	<description>An experimental meta model for Neo.</description>
-	<url>http://components.neo4j.org/${project.artifactId}/</url>
-	
-	<scm>
-		<connection>
-			scm:svn:https://svn.neo4j.org/components/${project.artifactId}/trunk/
-		</connection>
-		<url>https://trac.neo4j.org/browser/components/${project.artifactId}
-		</url>
-	</scm>
-	
-	<issueManagement>
-		<system>Trac</system>
-		<url>https://trac.neo4j.org/query?status=assigned&amp;status=new&amp;status=reopened&amp;component=${project.artifactId}</url>
-	</issueManagement>
-	
-	<licenses>
-		<license>
-			<name>GNU Affero General Public License, Version 3</name>
-			<url>https://svn.neo4j.org/components/${project.artifactId}/trunk/LICENSE.txt
-			</url>
-		</license>
-	</licenses>
-	
-	<developers>
-		<developer>
-			<id>tobias</id>
-			<name>Tobias Ivarsson</name>
-			<email>tobias.ivarsson [at] neotechnology.com</email>
-			<timezone>+1</timezone>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>mattias</id>
-			<name>Mattias Persson</name>
-			<email>mattias [at] neotechnology.com</email>
-			<timezone>+1</timezone>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-		<developer>
-			<id>johans</id>
-			<name>Johan Svensson</name>
-			<email>johan [at] neotechnology.com</email>
-			<timezone>+1</timezone>
-			<roles>
-				<role>Developer</role>
-			</roles>
-		</developer>
-	</developers>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
-                        
-	<dependencies>
-		<dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo</artifactId>
-            <version>1.0-b8-SNAPSHOT</version>
-        </dependency>
-		<dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>shell</artifactId>
-            <version>1.0-b8-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>        
-		<dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo-utils</artifactId>
-            <version>1.0-b8-SNAPSHOT</version>
-        </dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.1</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.neo4j</groupId>
+  <artifactId>neo-meta</artifactId>
+  <version>0.5-SNAPSHOT</version>
+  <name>A meta model experiment for Neo</name>
+  <description>An experimental meta model for Neo.</description>
+  <url>http://components.neo4j.org/${project.artifactId}/</url>
+
+  <scm>
+    <connection>
+      scm:svn:https://svn.neo4j.org/components/${project.artifactId}/trunk/
+        </connection>
+    <url>https://trac.neo4j.org/browser/components/${project.artifactId}
+        </url>
+  </scm>
+
+  <licenses>
+    <license>
+      <name>GNU Affero General Public License, Version 3</name>
+      <url>https://svn.neo4j.org/components/${project.artifactId}/trunk/LICENSE.txt
+            </url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>tobias</id>
+      <name>Tobias Ivarsson</name>
+      <email>tobias.ivarsson [at] neotechnology.com</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>mattias</id>
+      <name>Mattias Persson</name>
+      <email>mattias [at] neotechnology.com</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>johans</id>
+      <name>Johan Svensson</name>
+      <email>johan [at] neotechnology.com</email>
+      <timezone>+1</timezone>
+      <roles>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo</artifactId>
+      <version>1.0-b8-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>shell</artifactId>
+      <version>1.0-b8-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.neo4j</groupId>
+      <artifactId>neo-utils</artifactId>
+      <version>1.0-b8-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
