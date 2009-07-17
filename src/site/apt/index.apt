@@ -24,8 +24,8 @@ MetaStructure
 	those problems.
 
 ---
-    MetaStructure meta = new MetaStructure( neo );
-    MetaStructurNamespace namespace = meta.getGlobalNamespace();
+    MetaStructure meta = new MetaStructureImpl( neo );
+    MetaStructureNamespace namespace = meta.getGlobalNamespace();
     
     // Create a class, use ", true" for "create it if it doesn't exist".
     MetaStructureClass personClass = namespace.getMetaClass(
@@ -47,11 +47,11 @@ Hierarchy
 	
 ---
     MetaStructureClass thing = namespace.getMetaClass( "thing", true );
-    MetaStructureClass person = namespace.getMetaClass( "person" true );
+    MetaStructureClass person = namespace.getMetaClass( "person", true );
     thing.getDirectSubs().add( person );
 
     MetaStructureProperty name = namespace.getMetaProperty( "name", true );
-    MetaStructureProperty nickName = namespace.getMetaClass( "nickName" true );
+    MetaStructureProperty nickName = namespace.getMetaProperty( "nickName", true );
     name.getDirectSubs().add( nickName );
 ---
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 import org.neo4j.neometa.structure.MetaStructureClass;
 import org.neo4j.neometa.structure.MetaStructureProperty;
 import org.neo4j.neometa.structure.MetaStructureThing;
-import org.neo4j.util.CollectionWrapper;
+import org.neo4j.commons.iterator.CollectionWrapper;
 
 abstract class MetaObjectCollection<T extends MetaObject<U>,
 	U extends MetaStructureThing> extends CollectionWrapper<T, U>
