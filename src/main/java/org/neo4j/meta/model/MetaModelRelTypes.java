@@ -1,11 +1,11 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import org.neo4j.api.core.RelationshipType;
 
 /**
  * Contains all the meta-model relationship types.
  */
-public enum MetaStructureRelTypes implements RelationshipType
+public enum MetaModelRelTypes implements RelationshipType
 {
 	/**
 	 * Reference node --> The meta model subref node which is the root of

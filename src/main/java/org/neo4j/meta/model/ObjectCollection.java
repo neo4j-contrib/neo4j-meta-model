@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import org.neo4j.api.core.Direction;
 import org.neo4j.api.core.NeoService;
@@ -7,22 +7,22 @@ import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.RelationshipType;
 import org.neo4j.util.NeoRelationshipSet;
 
-class MetaStructureObjectCollection<T extends MetaStructureObject>
+class ObjectCollection<T extends MetaModelObject>
 	extends NeoRelationshipSet<T>
 {
-	private MetaStructure meta;
+	private MetaModel meta;
 	private Class<T> cls;
 	
-	MetaStructureObjectCollection( NeoService neo, Node node,
+	ObjectCollection( NeoService neo, Node node,
 		RelationshipType relType, Direction direction,
-		MetaStructure meta, Class<T> cls )
+		MetaModel meta, Class<T> cls )
 	{
 		super( neo, node, relType, direction );
 		this.meta = meta;
 		this.cls = cls;
 	}
 	
-	protected MetaStructure meta()
+	protected MetaModel meta()
 	{
 		return this.meta;
 	}
@@ -30,7 +30,7 @@ class MetaStructureObjectCollection<T extends MetaStructureObject>
 	@Override
 	protected Node getNodeFromItem( Object item )
 	{
-		return ( ( MetaStructureObject ) item ).node();
+		return ( ( MetaModelObject ) item ).node();
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ class MetaStructureObjectCollection<T extends MetaStructureObject>
 	{
 		try
 		{
-			return cls.getConstructor( MetaStructure.class,
+			return cls.getConstructor( MetaModel.class,
 				Node.class ).newInstance( meta(), node );
 		}
 		catch ( Exception e )

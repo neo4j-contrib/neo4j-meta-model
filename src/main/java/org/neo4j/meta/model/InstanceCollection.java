@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 
@@ -10,23 +10,23 @@ import org.neo4j.util.NeoRelationshipSet;
 
 /**
  * An implementation of a {@link Collection} which handles {@link Node}s
- * representing instance which complies to a {@link MetaStructureClass}.
+ * representing instance which complies to a {@link MetaModelClass}.
  */
-public class MetaStructureInstanceCollection extends NeoRelationshipSet<Node>
+public class InstanceCollection extends NeoRelationshipSet<Node>
 {
 	private static final String KEY_COUNT = "instance_count";
 	
-	private MetaStructure meta;
+	private MetaModel meta;
 	
 	/**
 	 * 
 	 * @param node the {@link Node} which holds the relationships.
-	 * @param meta the {@link MetaStructure} instance.
+	 * @param meta the {@link MetaModel} instance.
 	 */
-	public MetaStructureInstanceCollection( NeoService neo,
-		Node node, MetaStructure meta )
+	public InstanceCollection( NeoService neo,
+		Node node, MetaModel meta )
 	{
-		super( neo, node, MetaStructureRelTypes.META_IS_INSTANCE_OF,
+		super( neo, node, MetaModelRelTypes.META_IS_INSTANCE_OF,
 			Direction.INCOMING );
 		this.meta = meta;
 	}

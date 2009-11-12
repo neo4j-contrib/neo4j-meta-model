@@ -15,7 +15,7 @@
  *
  */
 
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.text.DateFormat;
 import java.text.FieldPosition;

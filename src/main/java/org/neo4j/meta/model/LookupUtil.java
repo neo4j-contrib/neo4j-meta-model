@@ -1,12 +1,12 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 abstract class LookupUtil
 {
-	static <T> T lookup( MetaStructureProperty property,
-		LookerUpper<T> finder, MetaStructureClass... inTheseClasses )
+	static <T> T lookup( MetaModelProperty property,
+		LookerUpper<T> finder, MetaModelClass... inTheseClasses )
 	{
 		T result = null;
-		for ( MetaStructureClass cls : inTheseClasses )
+		for ( MetaModelClass cls : inTheseClasses )
 		{
 			T value = tryLookupFromRestrictions( property, finder, cls );
 			if ( value != null )
@@ -24,14 +24,14 @@ abstract class LookupUtil
 	}
 	
 	private static <T> T tryLookupFromProperty(
-		MetaStructureProperty property, LookerUpper<T> finder )
+		MetaModelProperty property, LookerUpper<T> finder )
 	{
 		T value = finder.get( property );
 		if ( value != null )
 		{
 			return value;
 		}
-		for ( MetaStructureProperty superProperty : property.getDirectSupers() )
+		for ( MetaModelProperty superProperty : property.getDirectSupers() )
 		{
 			value = tryLookupFromProperty( superProperty, finder );
 			if ( value != null )
@@ -43,10 +43,10 @@ abstract class LookupUtil
 	}
 	
 	private static <T> T tryLookupFromRestrictions(
-		MetaStructureProperty property, LookerUpper<T> finder,
-		MetaStructureClass cls )
+		MetaModelProperty property, LookerUpper<T> finder,
+		MetaModelClass cls )
 	{
-		MetaStructureRestriction restriction = cls.getRestriction( property,
+		MetaModelRestriction restriction = cls.getRestriction( property,
 			false );
 		if ( restriction != null )
 		{
@@ -57,7 +57,7 @@ abstract class LookupUtil
 			}
 		}
 		
-		for ( MetaStructureClass superClass : cls.getDirectSupers() )
+		for ( MetaModelClass superClass : cls.getDirectSupers() )
 		{
 			T value =
 				tryLookupFromRestrictions( property, finder, superClass );

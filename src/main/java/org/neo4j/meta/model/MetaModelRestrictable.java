@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +9,7 @@ import org.neo4j.api.core.Node;
 /**
  * Common functionality for restrictions (f.ex. cardinality and values).
  */
-public interface MetaStructureRestrictable
+public interface MetaModelRestrictable
 {
 	/**
 	 * @return the underlying neo {@link Node}.
@@ -17,9 +17,9 @@ public interface MetaStructureRestrictable
 	Node node();
 	
 	/**
-	 * @return the underlying {@link MetaStructure}.
+	 * @return the underlying {@link MetaModel}.
 	 */
-	MetaStructure meta();
+	MetaModel meta();
 	
 	/**
 	 * @return the name of the object.
@@ -60,7 +60,7 @@ public interface MetaStructureRestrictable
 	
 	/**
 	 * Sets the range of the expected value(s) for this restriction. F.ex.
-	 * a string, a number or a an instance of a {@link MetaStructureClass}.
+	 * a string, a number or a an instance of a {@link MetaModelClass}.
 	 * @param range the property range.
 	 */
 	void setRange( PropertyRange range );

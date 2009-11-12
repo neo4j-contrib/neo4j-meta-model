@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 
@@ -17,12 +17,12 @@ import org.neo4j.api.core.Traverser;
 //		rdfs:idDefinedBy
 
 /**
- * The super class of {@link MetaStructureClass} and
- * {@link MetaStructureProperty}. It contains hierarchial functionality.
+ * The super class of {@link MetaModelClass} and
+ * {@link MetaModelProperty}. It contains hierarchial functionality.
  */
-public abstract class MetaStructureThing extends MetaStructureObject
+public abstract class MetaModelThing extends MetaModelObject
 {
-	MetaStructureThing( MetaStructure meta, Node node )
+	MetaModelThing( MetaModel meta, Node node )
 	{
 		super( meta, node );
 	}
@@ -31,24 +31,24 @@ public abstract class MetaStructureThing extends MetaStructureObject
 	 * @return a modifiable {@link Collection} of directly connected
 	 * (non-recursive) sub "things" (class or property).
 	 */
-	public abstract Collection<? extends MetaStructureThing> getDirectSubs();
+	public abstract Collection<? extends MetaModelThing> getDirectSubs();
 	
 	/**
 	 * @return a modifiable {@link Collection} of directly connected
 	 * (non-recursive) super "things" (class or property).
 	 */
-	public abstract Collection<? extends MetaStructureThing> getDirectSupers();
+	public abstract Collection<? extends MetaModelThing> getDirectSupers();
 	
 	protected abstract RelationshipType subRelationshipType();
 	
 	/**
-	 * @param <T> the type of {@link MetaStructureThing}, should match
+	 * @param <T> the type of {@link MetaModelThing}, should match
 	 * the type of this instance.
-	 * @param thing the {@link MetaStructureThing} to check against.
+	 * @param thing the {@link MetaModelThing} to check against.
 	 * @return {@code true} if this thing is a sub (class or property) of
 	 * {@code thing}.
 	 */
-	public <T extends MetaStructureThing> boolean isSubOf( T thing )
+	public <T extends MetaModelThing> boolean isSubOf( T thing )
 	{
 		Transaction tx = neo().beginTx();
 		try

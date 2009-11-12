@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.HashMap;
 import java.util.Map;

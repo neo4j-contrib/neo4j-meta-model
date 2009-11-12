@@ -1,8 +1,8 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 /**
  * A hook for retreiving a specific value from a
- * {@link MetaStructureRestrictable}.
+ * {@link MetaModelRestrictable}.
  * @param <T> the type of the returned value.
  */
 public interface LookerUpper<T>
@@ -11,5 +11,5 @@ public interface LookerUpper<T>
 	 * @param restrictable the object to get the value from.
 	 * @return the looked up value.
 	 */
-	T get( MetaStructureRestrictable restrictable );
+	T get( MetaModelRestrictable restrictable );
 }

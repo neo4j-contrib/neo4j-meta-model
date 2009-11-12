@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 /**
  * Represents a {@link PropertyRange} where the values are of a data type,
@@ -32,13 +32,13 @@ public class DatatypeClassRange extends SimpleStringPropertyRange
 	}
 	
 	@Override
-	protected String toStringRepresentation( MetaStructureRestrictable owner )
+	protected String toStringRepresentation( MetaModelRestrictable owner )
 	{
 		return this.rangeClass.getName();
 	}
 	
 	@Override
-	protected void fromStringRepresentation( MetaStructureRestrictable owner,
+	protected void fromStringRepresentation( MetaModelRestrictable owner,
 		String stringRepresentation )
 	{
 		try

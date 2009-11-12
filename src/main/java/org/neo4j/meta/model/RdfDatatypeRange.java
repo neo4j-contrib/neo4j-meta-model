@@ -1,8 +1,8 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.text.ParseException;
 
-import org.neo4j.neometa.structure.RdfUtil.ValueConverter;
+import org.neo4j.meta.model.RdfUtil.ValueConverter;
 
 /**
  * Handles datatypes commonly used in RDF/XML Schema.
@@ -35,13 +35,13 @@ public class RdfDatatypeRange extends SimpleStringPropertyRange
 	}
 	
 	@Override
-	protected String toStringRepresentation( MetaStructureRestrictable owner )
+	protected String toStringRepresentation( MetaModelRestrictable owner )
 	{
 		return this.datatype;
 	}
 	
 	@Override
-	protected void fromStringRepresentation( MetaStructureRestrictable owner,
+	protected void fromStringRepresentation( MetaModelRestrictable owner,
 		String stringRepresentation )
 	{
 		this.datatype = stringRepresentation;

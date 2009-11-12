@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -16,20 +16,20 @@ import org.neo4j.util.NeoUtil;
  * The access point of a meta model. Is given a root node where all the
  * namespaces, properties and classes are stored/read underneath.
  */
-public class MetaStructureImpl implements MetaStructure
+public class MetaModelImpl implements MetaModel
 {
 	private NeoService neo;
 	private NeoUtil neoUtil;
 	private DynamicMetaRelTypes dynamicRelTypes = new DynamicMetaRelTypes();
 	
-	private Map<String, MetaStructureNamespace> namespaceCache =
+	private Map<String, MetaModelNamespace> namespaceCache =
 		Collections.synchronizedMap(
-			new HashMap<String, MetaStructureNamespace>() );
+			new HashMap<String, MetaModelNamespace>() );
 	
 	/**
 	 * @param neo the {@link NeoService} used for this meta model.
 	 */
-	public MetaStructureImpl( NeoService neo )
+	public MetaModelImpl( NeoService neo )
 	{
 		this.neo = neo;
 		this.neoUtil = new NeoUtil( neo );
@@ -52,7 +52,7 @@ public class MetaStructureImpl implements MetaStructure
 	protected Node rootNode()
 	{
 		return neoUtil().getOrCreateSubReferenceNode(
-			MetaStructureRelTypes.REF_TO_META_SUBREF );
+			MetaModelRelTypes.REF_TO_META_SUBREF );
 	}
 	
 	protected DynamicMetaRelTypes dynamicRelTypes()
@@ -60,21 +60,21 @@ public class MetaStructureImpl implements MetaStructure
 		return this.dynamicRelTypes;
 	}
 	
-	public MetaStructureNamespace getNamespace( String name,
+	public MetaModelNamespace getNamespace( String name,
 		boolean allowCreate )
 	{
 		assert name != null;
 		return findOrCreateInCollection( getNamespaces(), name, allowCreate,
-			MetaStructureNamespace.class, namespaceCache );
+			MetaModelNamespace.class, namespaceCache );
 	}
 	
-	public MetaStructureNamespace getGlobalNamespace()
+	public MetaModelNamespace getGlobalNamespace()
 	{
 		return findOrCreateInCollection( getNamespaces(), null, true,
-			MetaStructureNamespace.class, namespaceCache );
+			MetaModelNamespace.class, namespaceCache );
 	}
 	
-	protected <T extends MetaStructureObject> T findOrCreateInCollection(
+	protected <T extends MetaModelObject> T findOrCreateInCollection(
 		Collection<T> collection, String nameOrNullForGlobal,
 		boolean allowCreate, Class<T> theClass, Map<String, T> cacheOrNull )
 	{
@@ -122,7 +122,7 @@ public class MetaStructureImpl implements MetaStructure
 			T item = null;
 			try
 			{
-				item = theClass.getConstructor( MetaStructure.class,
+				item = theClass.getConstructor( MetaModel.class,
 					Node.class ).newInstance( this, node );
 			}
 			catch ( Exception e )
@@ -143,7 +143,7 @@ public class MetaStructureImpl implements MetaStructure
 		}
 	}
 	
-	private <T extends MetaStructureObject> T safeGetFromCache(
+	private <T extends MetaModelObject> T safeGetFromCache(
 		Map<String, T> cacheOrNull, String key )
 	{
 		T result = null;
@@ -166,15 +166,15 @@ public class MetaStructureImpl implements MetaStructure
 		return result;
 	}
 	
-	public Collection<MetaStructureNamespace> getNamespaces()
+	public Collection<MetaModelNamespace> getNamespaces()
 	{
-		return new MetaStructureObjectCollection<MetaStructureNamespace>(
-			neo(), rootNode(), MetaStructureRelTypes.META_NAMESPACE,
-			Direction.OUTGOING, this, MetaStructureNamespace.class );
+		return new ObjectCollection<MetaModelNamespace>(
+			neo(), rootNode(), MetaModelRelTypes.META_NAMESPACE,
+			Direction.OUTGOING, this, MetaModelNamespace.class );
 	}
 	
-	public <T> T lookup( MetaStructureProperty property, LookerUpper<T> finder,
-		MetaStructureClass... classes )
+	public <T> T lookup( MetaModelProperty property, LookerUpper<T> finder,
+		MetaModelClass... classes )
 	{
 		// TODO Maybe add some form of caching here since this method will be
 		// HEAVILY used. It's the main way of looking things up in the meta

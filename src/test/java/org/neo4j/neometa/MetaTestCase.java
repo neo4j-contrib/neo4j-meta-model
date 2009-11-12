@@ -10,7 +10,7 @@ import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
 import org.neo4j.api.core.Relationship;
 import org.neo4j.api.core.Transaction;
-import org.neo4j.neometa.structure.MetaStructureRelTypes;
+import org.neo4j.meta.model.MetaModelRelTypes;
 import org.neo4j.util.EntireGraphDeletor;
 
 /**
@@ -66,7 +66,7 @@ public abstract class MetaTestCase extends TestCase
 	protected void deleteMetaModel()
 	{
 		Relationship rel = neo().getReferenceNode().getSingleRelationship(
-			MetaStructureRelTypes.REF_TO_META_SUBREF, Direction.OUTGOING );
+			MetaModelRelTypes.REF_TO_META_SUBREF, Direction.OUTGOING );
 		Node node = rel.getEndNode();
 		rel.delete();
 		new EntireGraphDeletor().delete( node );

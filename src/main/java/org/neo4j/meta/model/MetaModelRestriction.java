@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 
@@ -9,14 +9,14 @@ import org.neo4j.api.core.Transaction;
 /**
  * Represents a restriction a class has on a property.
  */
-public class MetaStructureRestriction extends MetaStructureObject
-	implements MetaStructureRestrictable
+public class MetaModelRestriction extends MetaModelObject
+	implements MetaModelRestrictable
 {
 	/**
-	 * @param meta the {@link MetaStructure} instance.
+	 * @param meta the {@link MetaModel} instance.
 	 * @param node the root node.
 	 */
-	public MetaStructureRestriction( MetaStructure meta, Node node )
+	public MetaModelRestriction( MetaModel meta, Node node )
 	{
 		super( meta, node );
 	}
@@ -24,22 +24,22 @@ public class MetaStructureRestriction extends MetaStructureObject
 	/**
 	 * @return the class which this restriction applies to.
 	 */
-	public MetaStructureClass getMetaClass()
+	public MetaModelClass getMetaClass()
 	{
-		return new MetaStructureClass( meta(),
+		return new MetaModelClass( meta(),
 			neoUtil().getSingleOtherNode( node(),
-				MetaStructureRelTypes.META_RESTRICTION_TO_CLASS,
+				MetaModelRelTypes.META_RESTRICTION_TO_CLASS,
 				Direction.OUTGOING ) );
 	}
 	
 	/**
 	 * @return the property which this restriction applies to.
 	 */
-	public MetaStructureProperty getMetaProperty()
+	public MetaModelProperty getMetaProperty()
 	{
-		return new MetaStructureProperty( meta(),
+		return new MetaModelProperty( meta(),
 			neoUtil().getSingleOtherNode( node(),
-				MetaStructureRelTypes.META_RESTRICTION_TO_PROPERTY,
+				MetaModelRelTypes.META_RESTRICTION_TO_PROPERTY,
 				Direction.OUTGOING ) );
 	}
 	

@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.text.ParseException;
 
@@ -8,26 +8,26 @@ import org.neo4j.api.core.Transaction;
 
 /**
  * The range of a property, i.e. a properties expected value type. F.ex. it
- * could be a String, an integer or a {@link MetaStructureClass} (which
+ * could be a String, an integer or a {@link MetaModelClass} (which
  * would refer to a {@link Node} which has a relationship to that class).
  */
 public abstract class PropertyRange
 {
 	static final String KEY_RANGE_IMPL = "range_implementation_class";
 	
-	private MetaStructureRestrictable owner;
+	private MetaModelRestrictable owner;
 	
-	protected MetaStructureRestrictable getOwner()
+	protected MetaModelRestrictable getOwner()
 	{
 		return this.owner;
 	}
 	
-	private static NeoService neo( MetaStructure meta )
+	private static NeoService neo( MetaModel meta )
 	{
-		return ( ( MetaStructureImpl ) meta ).neo();
+		return ( ( MetaModelImpl ) meta ).neo();
 	}
 	
-	protected void store( MetaStructureRestrictable owner )
+	protected void store( MetaModelRestrictable owner )
 	{
 		// MP: This isn't very good, should be in the constructor, but we can't
 		// really trust the developer to supply gthe correct property instance.
@@ -49,7 +49,7 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected static void removeRange( MetaStructureRestrictable owner )
+	protected static void removeRange( MetaModelRestrictable owner )
 	{
 		PropertyRange range = loadRange( owner );
 		if ( range != null )
@@ -59,13 +59,13 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected abstract void internalStore( MetaStructureRestrictable owner );
+	protected abstract void internalStore( MetaModelRestrictable owner );
 	
-	protected abstract void internalRemove( MetaStructureRestrictable owner );
+	protected abstract void internalRemove( MetaModelRestrictable owner );
 	
-	protected abstract void internalLoad( MetaStructureRestrictable owner );
+	protected abstract void internalLoad( MetaModelRestrictable owner );
 	
-	protected static PropertyRange loadRange( MetaStructureRestrictable owner )
+	protected static PropertyRange loadRange( MetaModelRestrictable owner )
 	{
 		Transaction tx = neo( owner.meta() ).beginTx();
 		try
@@ -93,7 +93,7 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected static void setOrRemoveRange( MetaStructureRestrictable owner,
+	protected static void setOrRemoveRange( MetaModelRestrictable owner,
 		PropertyRange range )
 	{
 		Transaction tx = neo( owner.meta() ).beginTx();

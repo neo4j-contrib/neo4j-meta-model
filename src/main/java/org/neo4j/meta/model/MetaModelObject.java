@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import org.neo4j.api.core.NeoService;
 import org.neo4j.api.core.Node;
@@ -11,7 +11,7 @@ import org.neo4j.util.NeoUtil;
  * A super class for basically all meta structure objects which wraps a
  * {@link Node}.
  */
-public abstract class MetaStructureObject
+public abstract class MetaModelObject
 {
 	static final String KEY_MIN_CARDINALITY = "min_cardinality";
 	static final String KEY_MAX_CARDINALITY = "max_cardinality";
@@ -22,19 +22,19 @@ public abstract class MetaStructureObject
 	 */
 	public static final String KEY_NAME = "name";
 	
-	private MetaStructure meta;
+	private MetaModel meta;
 	private Node node;
 	
-	MetaStructureObject( MetaStructure meta, Node node )
+	MetaModelObject( MetaModel meta, Node node )
 	{
 		this.meta = meta;
 		this.node = node;
 	}
 	
 	/**
-	 * @return the underlying {@link MetaStructure}.
+	 * @return the underlying {@link MetaModel}.
 	 */
-	public MetaStructure meta()
+	public MetaModel meta()
 	{
 		return this.meta;
 	}
@@ -44,12 +44,12 @@ public abstract class MetaStructureObject
 	 */
 	public NeoService neo()
 	{
-		return ( ( MetaStructureImpl ) meta() ).neo();
+		return ( ( MetaModelImpl ) meta() ).neo();
 	}
 	
 	protected NeoUtil neoUtil()
 	{
-		return ( ( MetaStructureImpl ) meta() ).neoUtil();
+		return ( ( MetaModelImpl ) meta() ).neoUtil();
 	}
 	
 	/**
@@ -143,6 +143,6 @@ public abstract class MetaStructureObject
 	public boolean equals( Object o )
 	{
 		return o != null && getClass().equals( o.getClass() ) && node().equals(
-			( ( MetaStructureObject ) o ).node() );
+			( ( MetaModelObject ) o ).node() );
 	}
 }

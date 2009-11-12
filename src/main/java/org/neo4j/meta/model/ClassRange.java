@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -10,35 +10,35 @@ import org.neo4j.api.core.RelationshipType;
 
 /**
  * An implementation of {@link PropertyRange} for values which are instances
- * of {@link MetaStructureClass}.
+ * of {@link MetaModelClass}.
  */
-public class MetaStructureClassRange extends PropertyRange
+public class ClassRange extends PropertyRange
 {
-	private Set<MetaStructureClass> rangeClasses;
+	private Set<MetaModelClass> rangeClasses;
 	
 	/**
 	 * @param rangeClasses the classes the value has to comply to.
 	 */
-	public MetaStructureClassRange( MetaStructureClass... rangeClasses )
+	public ClassRange( MetaModelClass... rangeClasses )
 	{
-		this.rangeClasses = new HashSet<MetaStructureClass>(
+		this.rangeClasses = new HashSet<MetaModelClass>(
 			Arrays.asList( rangeClasses ) );
 	}
 	
 	/**
 	 * Internal usage.
 	 */
-	public MetaStructureClassRange()
+	public ClassRange()
 	{
 	}
 	
 	/**
 	 * @return the set classes.
 	 */
-	public MetaStructureClass[] getRangeClasses()
+	public MetaModelClass[] getRangeClasses()
 	{
 		return this.rangeClasses.toArray(
-			new MetaStructureClass[ rangeClasses.size() ] );
+			new MetaModelClass[ rangeClasses.size() ] );
 	}
 	
 	/**
@@ -48,41 +48,41 @@ public class MetaStructureClassRange extends PropertyRange
 	 */
 	public RelationshipType getRelationshipTypeToUse()
 	{
-		return ( ( MetaStructureImpl ) getOwner().meta() ).dynamicRelTypes().
+		return ( ( MetaModelImpl ) getOwner().meta() ).dynamicRelTypes().
 			getOrCreateType( getOwner().getName() );
 	}
 	
 	@Override
-	protected void internalStore( MetaStructureRestrictable owner )
+	protected void internalStore( MetaModelRestrictable owner )
 	{
-		for ( MetaStructureClass cls : this.rangeClasses )
+		for ( MetaModelClass cls : this.rangeClasses )
 		{
 			owner.node().createRelationshipTo( cls.node(),
-				MetaStructureRelTypes.META_PROPERTY_HAS_RANGE );
+				MetaModelRelTypes.META_PROPERTY_HAS_RANGE );
 		}
 	}
 	
 	private Iterable<Relationship> getRelationships(
-		MetaStructureRestrictable owner )
+		MetaModelRestrictable owner )
 	{
 		return owner.node().getRelationships(
-			MetaStructureRelTypes.META_PROPERTY_HAS_RANGE,
+			MetaModelRelTypes.META_PROPERTY_HAS_RANGE,
 			Direction.OUTGOING );
 	}
 	
 	@Override
-	protected void internalLoad( MetaStructureRestrictable owner )
+	protected void internalLoad( MetaModelRestrictable owner )
 	{
-		this.rangeClasses = new HashSet<MetaStructureClass>();
+		this.rangeClasses = new HashSet<MetaModelClass>();
 		for ( Relationship rel : getRelationships( owner ) )
 		{
-			this.rangeClasses.add( new MetaStructureClass( owner.meta(),
+			this.rangeClasses.add( new MetaModelClass( owner.meta(),
 				rel.getEndNode() ) );
 		}
 	}
 	
 	@Override
-	protected void internalRemove( MetaStructureRestrictable owner )
+	protected void internalRemove( MetaModelRestrictable owner )
 	{
 		for ( Relationship rel : getRelationships( owner ) )
 		{
@@ -113,6 +113,6 @@ public class MetaStructureClassRange extends PropertyRange
 	{
 		return getClass().getSimpleName() + "[" + StringUtil.join( ", ",
 			rangeClasses.toArray(
-				new MetaStructureClass[ rangeClasses.size() ] ) ) + "]";
+				new MetaModelClass[ rangeClasses.size() ] ) ) + "]";
 	}
 }

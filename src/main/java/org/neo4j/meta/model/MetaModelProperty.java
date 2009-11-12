@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Collection;
 
@@ -11,34 +11,34 @@ import org.neo4j.api.core.Transaction;
 /**
  * Represents a property which may be in one or more class' domain.
  */
-public class MetaStructureProperty extends MetaStructureThing
-	implements MetaStructureRestrictable
+public class MetaModelProperty extends MetaModelThing
+	implements MetaModelRestrictable
 {
 	/**
-	 * @param meta the {@link MetaStructure} instance.
+	 * @param meta the {@link MetaModel} instance.
 	 * @param node the {@link Node} to wrap.
 	 */
-	public MetaStructureProperty( MetaStructure meta, Node node )
+	public MetaModelProperty( MetaModel meta, Node node )
 	{
 		super( meta, node );
 	}
 	
-	private Collection<MetaStructureProperty> hierarchyCollection(
+	private Collection<MetaModelProperty> hierarchyCollection(
 		Direction direction )
 	{
-		return new MetaStructureObjectCollection<MetaStructureProperty>( neo(),
-			node(), MetaStructureRelTypes.META_IS_SUBPROPERTY_OF, direction,
-			meta(), MetaStructureProperty.class );
+		return new ObjectCollection<MetaModelProperty>( neo(),
+			node(), MetaModelRelTypes.META_IS_SUBPROPERTY_OF, direction,
+			meta(), MetaModelProperty.class );
 	}
 	
 	@Override
-	public Collection<MetaStructureProperty> getDirectSubs()
+	public Collection<MetaModelProperty> getDirectSubs()
 	{
 		return hierarchyCollection( Direction.INCOMING );
 	}
 	
 	@Override
-	public Collection<MetaStructureProperty> getDirectSupers()
+	public Collection<MetaModelProperty> getDirectSupers()
 	{
 		return hierarchyCollection( Direction.OUTGOING );
 	}
@@ -46,18 +46,18 @@ public class MetaStructureProperty extends MetaStructureThing
 	@Override
 	protected RelationshipType subRelationshipType()
 	{
-		return MetaStructureRelTypes.META_IS_SUBPROPERTY_OF;
+		return MetaModelRelTypes.META_IS_SUBPROPERTY_OF;
 	}
 	
 	/**
-	 * @return a modifiable {@link Collection} of {@link MetaStructureClass}
+	 * @return a modifiable {@link Collection} of {@link MetaModelClass}
 	 * instances which this property has as domain.
 	 */
-	public Collection<MetaStructureClass> associatedMetaClasses()
+	public Collection<MetaModelClass> associatedMetaClasses()
 	{
-		return new MetaStructureObjectCollection<MetaStructureClass>( neo(),
-			node(), MetaStructureRelTypes.META_CLASS_HAS_PROPERTY,
-			Direction.INCOMING, meta(), MetaStructureClass.class );
+		return new ObjectCollection<MetaModelClass>( neo(),
+			node(), MetaModelRelTypes.META_CLASS_HAS_PROPERTY,
+			Direction.INCOMING, meta(), MetaModelClass.class );
 	}
 
 	public void setRange( PropertyRange range )
@@ -134,21 +134,21 @@ public class MetaStructureProperty extends MetaStructureThing
 	 * @param propertyOrNull the property which is the inverse of this property,
 	 * or {@code null} if no inverse.
 	 */
-	public void setInverseOf( MetaStructureProperty propertyOrNull )
+	public void setInverseOf( MetaModelProperty propertyOrNull )
 	{
 		setSingleRelationshipOrNull( propertyOrNull == null ? null :
-			propertyOrNull.node(), MetaStructureRelTypes.META_IS_INVERSE_OF );
+			propertyOrNull.node(), MetaModelRelTypes.META_IS_INVERSE_OF );
 	}
 	
 	/**
 	 * @return the owl:inverseOf property, or {@code null} if there's no
 	 * inverse.
 	 */
-	public MetaStructureProperty getInverseOf()
+	public MetaModelProperty getInverseOf()
 	{
 		Relationship rel = getSingleRelationshipOrNull(
-			MetaStructureRelTypes.META_IS_INVERSE_OF );
-		return rel == null ? null : new MetaStructureProperty( meta(),
+			MetaModelRelTypes.META_IS_INVERSE_OF );
+		return rel == null ? null : new MetaModelProperty( meta(),
 			rel.getOtherNode( node() ) );
 	}
 }

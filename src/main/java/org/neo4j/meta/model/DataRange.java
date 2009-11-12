@@ -1,4 +1,4 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.text.ParseException;
 import java.util.Arrays;
@@ -42,7 +42,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalLoad( MetaStructureRestrictable owner )
+	protected void internalLoad( MetaModelRestrictable owner )
 	{
 		super.internalLoad( owner );
 		String[] dataArray = ( String[] )
@@ -62,7 +62,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalStore( MetaStructureRestrictable owner )
+	protected void internalStore( MetaModelRestrictable owner )
 	{
 		super.internalStore( owner );
 		String[] dataArray = new String[ this.values.size() ];
@@ -75,7 +75,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalRemove( MetaStructureRestrictable owner )
+	protected void internalRemove( MetaModelRestrictable owner )
 	{
 		super.internalRemove( owner );
 		owner.node().removeProperty( KEY_DATA_ARRAY );
