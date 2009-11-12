@@ -17,7 +17,7 @@
   <url>http://components.neo4j.org/${project.artifactId}/</url>
 
   <properties>
-    <bundle.namespace>org.neo4j.neometa</bundle.namespace>
+    <bundle.namespace>org.neo4j.meta.model</bundle.namespace>
   </properties>
 
   <packaging>bundle</packaging>

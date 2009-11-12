@@ -14,47 +14,47 @@ public enum MetaModelRelTypes implements RelationshipType
 	REF_TO_META_SUBREF,
 	
 	/**
-	 * Meta model root node --> {@link MetaStructureNamespace} node.
+	 * Meta model root node --> {@link MetaModelNamespace} node.
 	 */
 	META_NAMESPACE,
 	
 	/**
-	 * {@link MetaStructureNamespace} node --> {@link MetaStructureClass} node.
+	 * {@link MetaModelNamespace} node --> {@link MetaModelClass} node.
 	 */
 	META_CLASS,
 	
 	/**
-	 * {@link MetaStructureNamespace} node -->
-	 * {@link MetaStructureProperty} node.
+	 * {@link MetaModelNamespace} node -->
+	 * {@link MetaModelProperty} node.
 	 */
 	META_PROPERTY,
 	
 	/**
-	 * {@link MetaStructureProperty} node --> {@link MetaStructureClass} node.
-	 * For property ranges which is a {@link MetaStructureClass}.
+	 * {@link MetaModelProperty} node --> {@link MetaModelClass} node.
+	 * For property ranges which is a {@link MetaModelClass}.
 	 */
 	META_PROPERTY_HAS_RANGE,
 	
 	/**
-	 * {@link MetaStructureClass} node --> {@link MetaStructureProperty} node.
+	 * {@link MetaModelClass} node --> {@link MetaModelProperty} node.
 	 * Tells that a property is in a class' domain.
 	 */
 	META_CLASS_HAS_PROPERTY,
 	
 	/**
-	 * {@link MetaStructureClass} node --> {@link MetaStructureClass} node.
+	 * {@link MetaModelClass} node --> {@link MetaModelClass} node.
 	 */
 	META_IS_SUBCLASS_OF,
 	
 	/**
-	 * {@link MetaStructureProperty} node -->
-	 * {@link MetaStructureProperty} node.
+	 * {@link MetaModelProperty} node -->
+	 * {@link MetaModelProperty} node.
 	 */
 	META_IS_SUBPROPERTY_OF,
 	
 	/**
 	 * A node representing an object beeing an instance of a class -->
-	 * {@link MetaStructureClass} node.
+	 * {@link MetaModelClass} node.
 	 */
 	META_IS_INSTANCE_OF,
 	
@@ -64,12 +64,12 @@ public enum MetaModelRelTypes implements RelationshipType
 	META_IS_INVERSE_OF,
 	
 	/**
-	 * A {@link MetaStructureRestriction} to its {@link MetaStructureClass}.
+	 * A {@link MetaModelRestriction} to its {@link MetaModelClass}.
 	 */
 	META_RESTRICTION_TO_CLASS,
 	
 	/**
-	 * A {@link MetaStructureRestriction} to its {@link MetaStructureProperty}.
+	 * A {@link MetaModelRestriction} to its {@link MetaModelProperty}.
 	 */
 	META_RESTRICTION_TO_PROPERTY,
 }
