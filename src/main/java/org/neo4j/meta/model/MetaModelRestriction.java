@@ -60,7 +60,7 @@ public class MetaModelRestriction extends MetaModelObject
 	
 	public Integer getMinCardinality()
 	{
-		return ( Integer ) getProperty( KEY_MIN_CARDINALITY, null );
+		return ( Integer ) node().getProperty( KEY_MIN_CARDINALITY, null );
 	}
 	
 	public void setMaxCardinality( Integer cardinalityOrNull )
@@ -70,7 +70,7 @@ public class MetaModelRestriction extends MetaModelObject
 	
 	public Integer getMaxCardinality()
 	{
-		return ( Integer ) getProperty( KEY_MAX_CARDINALITY, null );
+		return ( Integer ) node().getProperty( KEY_MAX_CARDINALITY, null );
 	}
 	
 	public void setCardinality( Integer cardinality )
@@ -100,8 +100,8 @@ public class MetaModelRestriction extends MetaModelObject
 	{
 		try
 		{
-			String className = ( String ) getProperty( KEY_COLLECTION_CLASS,
-				null );
+			String className = ( String ) node().getProperty(
+			    KEY_COLLECTION_CLASS, null );
 			// Yep generics warning, but what're you going to do?
 			return className == null ? null :
 				( Class<? extends Collection<?>> ) Class.forName( className ); 

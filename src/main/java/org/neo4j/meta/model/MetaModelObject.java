@@ -13,9 +13,10 @@ import org.neo4j.util.NeoUtil;
  */
 public abstract class MetaModelObject
 {
-	static final String KEY_MIN_CARDINALITY = "min_cardinality";
-	static final String KEY_MAX_CARDINALITY = "max_cardinality";
-	static final String KEY_COLLECTION_CLASS = "collection_class";
+	public static final String KEY_MIN_CARDINALITY = "min_cardinality";
+	public static final String KEY_MAX_CARDINALITY = "max_cardinality";
+	public static final String KEY_COLLECTION_CLASS = "collection_class";
+	public static final String KEY_FUNCTIONALITY = "functionality";
 	
 	/**
 	 * The node property for a meta structure objects name.
@@ -60,35 +61,15 @@ public abstract class MetaModelObject
 		return this.node;
 	}
 	
-	protected void setProperty( String key, Object value )
-	{
-		neoUtil().setProperty( node(), key, value );
-	}
-	
-	protected Object getProperty( String key )
-	{
-		return neoUtil().getProperty( node(), key );
-	}
-
-	protected Object getProperty( String key, Object defaultValue )
-	{
-		return neoUtil().getProperty( node(), key, defaultValue );
-	}
-	
-	protected Object removeProperty( String key )
-	{
-		return neoUtil().removeProperty( node(), key );
-	}
-	
 	protected void setOrRemoteProperty( String key, Object value )
 	{
 		if ( value == null )
 		{
-			removeProperty( key );
+			node().removeProperty( key );
 		}
 		else
 		{
-			setProperty( key, value );
+			node().setProperty( key, value );
 		}
 	}
 	
@@ -122,7 +103,7 @@ public abstract class MetaModelObject
 	
 	void setName( String name )
 	{
-		setProperty( KEY_NAME, name );
+		node().setProperty( KEY_NAME, name );
 	}
 	
 	/**
@@ -130,7 +111,7 @@ public abstract class MetaModelObject
 	 */
 	public String getName()
 	{
-		return ( String ) getProperty( KEY_NAME, null );
+		return ( String ) node().getProperty( KEY_NAME, null );
 	}
 	
 	@Override

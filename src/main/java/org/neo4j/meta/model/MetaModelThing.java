@@ -56,7 +56,7 @@ public abstract class MetaModelThing extends MetaModelObject
 			boolean found = false;
 			Node target = thing.node();
 			for ( Node node : node().traverse( Traverser.Order.BREADTH_FIRST,
-				StopEvaluator.END_OF_NETWORK, ReturnableEvaluator.ALL,
+				StopEvaluator.END_OF_GRAPH, ReturnableEvaluator.ALL,
 				subRelationshipType(), Direction.OUTGOING ) )
 			{
 				if ( node.equals( target ) )
@@ -84,9 +84,9 @@ public abstract class MetaModelThing extends MetaModelObject
 	 * @param key the property key.
 	 * @param value the property value.
 	 */
-	public void setAdditionalProperty( String key, String value )
+	public void setAdditionalProperty( String key, Object value )
 	{
-		setProperty( additionalPropertyKey( key ), value );
+		node().setProperty( additionalPropertyKey( key ), value );
 	}
 	
 	/**
@@ -96,7 +96,7 @@ public abstract class MetaModelThing extends MetaModelObject
 	 */
 	public void removeAdditionalProperty( String key )
 	{
-		removeProperty( additionalPropertyKey( key ) );
+		node().removeProperty( additionalPropertyKey( key ) );
 	}
 
 	/**
@@ -106,9 +106,17 @@ public abstract class MetaModelThing extends MetaModelObject
 	 * @return the property value for property {@code key} or
 	 * {@code null} if no value exists for {@code key}.
 	 */
-	public String getAdditionalProperty( String key )
+	public Object getAdditionalProperty( String key )
 	{
-		return ( String ) getProperty( additionalPropertyKey( key ), null );
+		return ( String ) node().getProperty(
+		    additionalPropertyKey( key ), null );
+	}
+	
+	public Object[] getAdditionalProperties( String key )
+	{
+	    Object value = getAdditionalProperty( key );
+	    return value != new Object[ 0 ] ?
+	        this.neoUtil().neoPropertyAsArray( key ) : null;
 	}
 	
 	@Override

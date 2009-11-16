@@ -78,7 +78,7 @@ public class MetaModelClass extends MetaModelThing
 			HashSet<MetaModelProperty> properties =
 				new HashSet<MetaModelProperty>();
 			for ( Node node : node().traverse( Traverser.Order.BREADTH_FIRST,
-				StopEvaluator.END_OF_NETWORK,
+				StopEvaluator.END_OF_GRAPH,
 				
 				// Maybe remove these three lines? They go for subproperties too
 				new AllPropertiesRE(),
@@ -102,7 +102,7 @@ public class MetaModelClass extends MetaModelThing
 	
 	/**
 	 * @param property the {@link MetaModelProperty} to associate with.
-	 * @param allowCreate wether to allow creation of the restriction if
+	 * @param allowCreate whether to allow creation of the restriction if
 	 * it doesn't exist.
 	 * @return the restriction for {@code property} or creates a new if
 	 * {@code allowCreate} is {@code true}.
@@ -169,7 +169,7 @@ public class MetaModelClass extends MetaModelThing
 			HashSet<MetaModelRestriction> restrictions =
 				new HashSet<MetaModelRestriction>();
 			for ( Node node : node().traverse( Traverser.Order.BREADTH_FIRST,
-				StopEvaluator.END_OF_NETWORK,
+				StopEvaluator.END_OF_GRAPH,
 				new OneOfRelTypesReturnableEvaluator(
 					MetaModelRelTypes.META_RESTRICTION_TO_CLASS ),
 				MetaModelRelTypes.META_RESTRICTION_TO_CLASS,

@@ -30,7 +30,7 @@ public abstract class PropertyRange
 	protected void store( MetaModelRestrictable owner )
 	{
 		// MP: This isn't very good, should be in the constructor, but we can't
-		// really trust the developer to supply gthe correct property instance.
+		// really trust the developer to supply the correct property instance.
 		// So we do this internally when the MetaStructureProperty#setRange
 		// method is called. Possible cause of bugs/errors.
 		this.owner = owner;

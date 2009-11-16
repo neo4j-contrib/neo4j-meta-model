@@ -88,7 +88,7 @@ public class MetaModelNamespace extends MetaModelObject
 	@Override
 	public String toString()
 	{
-		String name = ( String ) getProperty( KEY_NAME, "GLOBAL" );
+		String name = ( String ) node().getProperty( KEY_NAME, "GLOBAL" );
 		return getClass().getSimpleName() + "[" + name + "]";
 	}
 }
