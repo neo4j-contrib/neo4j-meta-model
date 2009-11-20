@@ -127,11 +127,11 @@ public class MetaModelClass extends MetaModelThing
 				return null;
 			}
 			
-			if ( !getAllProperties().contains( property ) )
-			{
-				throw new RuntimeException( this + " isn't in the domain of " +
-					property + " add it first" );
-			}
+//			if ( !getAllProperties().contains( property ) )
+//			{
+//				throw new RuntimeException( this + " isn't in the domain of " +
+//					property + " add it first" );
+//			}
 			Node node = neo().createNode();
 			MetaModelRestriction result = new MetaModelRestriction(
 				meta(), node );
