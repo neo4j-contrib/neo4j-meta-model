@@ -159,43 +159,42 @@ public class TestOverall extends MetaTestCase
 		MetaModelProperty nickName =
 			namespace.getMetaProperty( "nickname", true );
 		nickName.getDirectSupers().add( name );
-		try
-		{
-			person.getRestriction( nickName, true );
-			fail( "Should've failed" );
-		}
-		catch ( Exception e )
-		{ // Good
-		}
+		MetaModelRestriction personNickNameRestriction =
+		    person.getRestriction( nickName, true );
 		assertCollection( thing.getDirectRestrictions() );
 		assertCollection( thing.getAllRestrictions() );
-		assertCollection( person.getDirectRestrictions() );
-		assertCollection( person.getAllRestrictions() );
+		assertCollection( person.getDirectRestrictions(),
+		    personNickNameRestriction );
+		assertCollection( person.getAllRestrictions(),
+		    personNickNameRestriction );
 		assertCollection( user.getDirectRestrictions() );
-		assertCollection( user.getAllRestrictions() );
+		assertCollection( user.getAllRestrictions(),
+		    personNickNameRestriction );
 		person.getDirectProperties().add( name );
 		MetaModelRestriction personNameRestriction =
 			person.getRestriction( name, true );
 		assertNotNull( personNameRestriction );
 		assertCollection( person.getDirectRestrictions(),
-			personNameRestriction );
+			personNameRestriction, personNickNameRestriction );
 		assertCollection( person.getAllRestrictions(),
-			personNameRestriction );
+			personNameRestriction, personNickNameRestriction );
 		assertCollection( user.getDirectRestrictions() );
-		assertCollection( user.getAllRestrictions(), personNameRestriction );
+		assertCollection( user.getAllRestrictions(), personNameRestriction,
+		    personNickNameRestriction );
 		MetaModelRestriction userNameRestriction =
 			user.getRestriction( name, true );
 		assertNotNull( userNameRestriction );
 		assertCollection( user.getDirectRestrictions(), userNameRestriction );
 		assertCollection( user.getAllRestrictions(), personNameRestriction,
-			userNameRestriction );
+			userNameRestriction, personNickNameRestriction );
 		MetaModelRestriction userNickNameRestriction =
 			user.getRestriction( nickName, true );
 		assertNotNull( userNickNameRestriction );
 		assertCollection( user.getDirectRestrictions(), userNameRestriction,
 			userNickNameRestriction );
 		assertCollection( user.getAllRestrictions(), personNameRestriction,
-			userNameRestriction, userNickNameRestriction );
+			userNameRestriction, userNickNameRestriction,
+			personNickNameRestriction );
 		doTestRestrictable( structure, userNameRestriction );
 		deleteMetaModel();
 	}
