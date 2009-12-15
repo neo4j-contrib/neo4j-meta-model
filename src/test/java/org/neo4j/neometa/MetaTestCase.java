@@ -27,7 +27,7 @@ public abstract class MetaTestCase extends TestCase
 	{
 		if ( neo == null )
 		{
-			neo = new EmbeddedNeo( "var/test/neo" );
+			neo = new EmbeddedNeo( "target/var/neo" );
 			Runtime.getRuntime().addShutdownHook( new Thread()
 			{
 				@Override
