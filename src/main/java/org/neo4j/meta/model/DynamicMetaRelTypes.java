@@ -3,7 +3,7 @@ package org.neo4j.meta.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.neo4j.api.core.RelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * A utility for creating dynamic {@link RelationshipType}s.

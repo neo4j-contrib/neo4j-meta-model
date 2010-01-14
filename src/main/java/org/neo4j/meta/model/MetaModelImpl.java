@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.NotFoundException;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.NotFoundException;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.util.NeoUtil;
 
 /**
@@ -18,7 +18,7 @@ import org.neo4j.util.NeoUtil;
  */
 public class MetaModelImpl implements MetaModel
 {
-	private NeoService neo;
+	private GraphDatabaseService neo;
 	private NeoUtil neoUtil;
 	private DynamicMetaRelTypes dynamicRelTypes = new DynamicMetaRelTypes();
 	
@@ -27,9 +27,9 @@ public class MetaModelImpl implements MetaModel
 			new HashMap<String, MetaModelNamespace>() );
 	
 	/**
-	 * @param neo the {@link NeoService} used for this meta model.
+	 * @param neo the {@link GraphDatabaseService} used for this meta model.
 	 */
-	public MetaModelImpl( NeoService neo )
+	public MetaModelImpl( GraphDatabaseService neo )
 	{
 		this.neo = neo;
 		this.neoUtil = new NeoUtil( neo );
@@ -37,9 +37,9 @@ public class MetaModelImpl implements MetaModel
 	}
 	
 	/**
-	 * @return the {@link NeoService} given in the constructor.
+	 * @return the {@link GraphDatabaseService} given in the constructor.
 	 */
-	public NeoService neo()
+	public GraphDatabaseService neo()
 	{
 		return this.neo;
 	}

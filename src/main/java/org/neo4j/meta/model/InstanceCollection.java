@@ -2,10 +2,10 @@ package org.neo4j.meta.model;
 
 import java.util.Collection;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.util.NeoRelationshipSet;
 
 /**
@@ -23,7 +23,7 @@ public class InstanceCollection extends NeoRelationshipSet<Node>
 	 * @param node the {@link Node} which holds the relationships.
 	 * @param meta the {@link MetaModel} instance.
 	 */
-	public InstanceCollection( NeoService neo,
+	public InstanceCollection( GraphDatabaseService neo,
 		Node node, MetaModel meta )
 	{
 		super( neo, node, MetaModelRelTypes.META_IS_INSTANCE_OF,

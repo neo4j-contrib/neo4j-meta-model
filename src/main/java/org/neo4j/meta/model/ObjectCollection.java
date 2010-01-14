@@ -1,10 +1,10 @@
 package org.neo4j.meta.model;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.RelationshipType;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.util.NeoRelationshipSet;
 
 class ObjectCollection<T extends MetaModelObject>
@@ -13,7 +13,7 @@ class ObjectCollection<T extends MetaModelObject>
 	private MetaModel meta;
 	private Class<T> cls;
 	
-	ObjectCollection( NeoService neo, Node node,
+	ObjectCollection( GraphDatabaseService neo, Node node,
 		RelationshipType relType, Direction direction,
 		MetaModel meta, Class<T> cls )
 	{

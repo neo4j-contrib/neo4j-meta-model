@@ -2,9 +2,9 @@ package org.neo4j.meta.model;
 
 import java.text.ParseException;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * The range of a property, i.e. a properties expected value type. F.ex. it
@@ -22,7 +22,7 @@ public abstract class PropertyRange
 		return this.owner;
 	}
 	
-	private static NeoService neo( MetaModel meta )
+	private static GraphDatabaseService neo( MetaModel meta )
 	{
 		return ( ( MetaModelImpl ) meta ).neo();
 	}

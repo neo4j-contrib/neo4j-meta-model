@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.Node;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 
 /**
  * Represents a namespace in the meta model structure. A namespace is useful

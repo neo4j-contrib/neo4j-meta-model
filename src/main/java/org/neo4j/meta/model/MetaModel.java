@@ -2,7 +2,7 @@ package org.neo4j.meta.model;
 
 import java.util.Collection;
 
-import org.neo4j.api.core.Node;
+import org.neo4j.graphdb.Node;
 
 /**
  * The access point of a meta model. Is given a root node where all the

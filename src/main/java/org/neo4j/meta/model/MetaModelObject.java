@@ -1,10 +1,10 @@
 package org.neo4j.meta.model;
 
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.RelationshipType;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.util.NeoUtil;
 
 /**
@@ -41,9 +41,9 @@ public abstract class MetaModelObject
 	}
 	
 	/**
-	 * @return the {@link NeoService} instance used with this instance.
+	 * @return the {@link GraphDatabaseService} instance used with this instance.
 	 */
-	public NeoService neo()
+	public GraphDatabaseService neo()
 	{
 		return ( ( MetaModelImpl ) meta() ).neo();
 	}

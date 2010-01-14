@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.neo4j.api.core.Node;
+import org.neo4j.graphdb.Node;
 
 /**
  * Common functionality for restrictions (f.ex. cardinality and values).

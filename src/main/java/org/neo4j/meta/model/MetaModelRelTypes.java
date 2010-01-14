@@ -1,6 +1,6 @@
 package org.neo4j.meta.model;
 
-import org.neo4j.api.core.RelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Contains all the meta-model relationship types.

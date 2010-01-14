@@ -4,12 +4,12 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
-import org.neo4j.api.core.Direction;
-import org.neo4j.api.core.EmbeddedNeo;
-import org.neo4j.api.core.NeoService;
-import org.neo4j.api.core.Node;
-import org.neo4j.api.core.Relationship;
-import org.neo4j.api.core.Transaction;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.meta.model.MetaModelRelTypes;
 import org.neo4j.util.EntireGraphDeletor;
 
@@ -18,7 +18,7 @@ import org.neo4j.util.EntireGraphDeletor;
  */
 public abstract class MetaTestCase extends TestCase
 {
-	private static NeoService neo;
+	private static GraphDatabaseService neo;
 	
 	private Transaction tx;
 	
@@ -27,7 +27,7 @@ public abstract class MetaTestCase extends TestCase
 	{
 		if ( neo == null )
 		{
-			neo = new EmbeddedNeo( "target/var/neo" );
+			neo = new EmbeddedGraphDatabase( "target/var/neo" );
 			Runtime.getRuntime().addShutdownHook( new Thread()
 			{
 				@Override
@@ -48,7 +48,7 @@ public abstract class MetaTestCase extends TestCase
 		super.tearDown();
 	}
 	
-	protected NeoService neo()
+	protected GraphDatabaseService neo()
 	{
 		return neo;
 	}

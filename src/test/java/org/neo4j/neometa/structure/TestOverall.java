@@ -3,7 +3,7 @@ package org.neo4j.neometa.structure;
 import java.util.Arrays;
 import java.util.List;
 
-import org.neo4j.api.core.Node;
+import org.neo4j.graphdb.Node;
 import org.neo4j.meta.model.ClassRange;
 import org.neo4j.meta.model.DataRange;
 import org.neo4j.meta.model.DatatypeClassRange;
