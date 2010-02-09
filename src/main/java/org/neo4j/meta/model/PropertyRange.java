@@ -22,9 +22,9 @@ public abstract class PropertyRange
 		return this.owner;
 	}
 	
-	private static GraphDatabaseService neo( MetaModel meta )
+	private static GraphDatabaseService graphDb( MetaModel meta )
 	{
-		return ( ( MetaModelImpl ) meta ).neo();
+		return ( ( MetaModelImpl ) meta ).graphDb();
 	}
 	
 	protected void store( MetaModelRestrictable owner )
@@ -35,7 +35,7 @@ public abstract class PropertyRange
 		// method is called. Possible cause of bugs/errors.
 		this.owner = owner;
 		
-		Transaction tx = neo( owner.meta() ).beginTx();
+		Transaction tx = graphDb( owner.model() ).beginTx();
 		try
 		{
 			removeRange( owner );
@@ -67,7 +67,7 @@ public abstract class PropertyRange
 	
 	protected static PropertyRange loadRange( MetaModelRestrictable owner )
 	{
-		Transaction tx = neo( owner.meta() ).beginTx();
+		Transaction tx = graphDb( owner.model() ).beginTx();
 		try
 		{
 			String rangeType = ( String ) owner.node().getProperty(
@@ -96,7 +96,7 @@ public abstract class PropertyRange
 	protected static void setOrRemoveRange( MetaModelRestrictable owner,
 		PropertyRange range )
 	{
-		Transaction tx = neo( owner.meta() ).beginTx();
+		Transaction tx = graphDb( owner.model() ).beginTx();
 		try
 		{
 			PropertyRange.removeRange( owner );

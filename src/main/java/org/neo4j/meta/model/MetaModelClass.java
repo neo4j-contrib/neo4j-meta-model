@@ -21,20 +21,20 @@ import org.neo4j.util.OneOfRelTypesReturnableEvaluator;
 public class MetaModelClass extends MetaModelThing
 {
 	/**
-	 * @param meta the {@link MetaModel} instance.
+	 * @param model the {@link MetaModel} instance.
 	 * @param node the {@link Node} to wrap.
 	 */
-	public MetaModelClass( MetaModel meta, Node node )
+	public MetaModelClass( MetaModel model, Node node )
 	{
-		super( meta, node );
+		super( model, node );
 	}
 	
 	private Collection<MetaModelClass> hierarchyCollection(
 		Direction direction )
 	{
-		return new ObjectCollection<MetaModelClass>( neo(),
+		return new ObjectCollection<MetaModelClass>( graphDb(),
 			node(), MetaModelRelTypes.META_IS_SUBCLASS_OF, direction,
-			meta(), MetaModelClass.class );
+			model(), MetaModelClass.class );
 	}
 	
 	@Override
@@ -61,9 +61,9 @@ public class MetaModelClass extends MetaModelThing
 	 */
 	public Collection<MetaModelProperty> getDirectProperties()
 	{
-		return new ObjectCollection<MetaModelProperty>( neo(),
+		return new ObjectCollection<MetaModelProperty>( graphDb(),
 			node(), MetaModelRelTypes.META_CLASS_HAS_PROPERTY,
-			Direction.OUTGOING, meta(), MetaModelProperty.class );
+			Direction.OUTGOING, model(), MetaModelProperty.class );
 	}
 	
 	/**
@@ -72,7 +72,7 @@ public class MetaModelClass extends MetaModelThing
 	 */
 	public Collection<MetaModelProperty> getAllProperties()
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			HashSet<MetaModelProperty> properties =
@@ -90,7 +90,7 @@ public class MetaModelClass extends MetaModelThing
 				MetaModelRelTypes.META_IS_SUBCLASS_OF,
 					Direction.OUTGOING ) )
 			{
-				properties.add( new MetaModelProperty( meta(), node ) );
+				properties.add( new MetaModelProperty( model(), node ) );
 			}
 			return Collections.unmodifiableSet( properties );
 		}
@@ -110,7 +110,7 @@ public class MetaModelClass extends MetaModelThing
 	public MetaModelRestriction getRestriction(
 		MetaModelProperty property, boolean allowCreate )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			Collection<MetaModelRestriction> restrictions =
@@ -132,9 +132,9 @@ public class MetaModelClass extends MetaModelThing
 //				throw new RuntimeException( this + " isn't in the domain of " +
 //					property + " add it first" );
 //			}
-			Node node = neo().createNode();
+			Node node = graphDb().createNode();
 			MetaModelRestriction result = new MetaModelRestriction(
-				meta(), node );
+				model(), node );
 			restrictions.add( result );
 			node.createRelationshipTo( property.node(),
 				MetaModelRelTypes.META_RESTRICTION_TO_PROPERTY );
@@ -153,8 +153,8 @@ public class MetaModelClass extends MetaModelThing
 	public Collection<MetaModelRestriction> getDirectRestrictions()
 	{
 		return new ObjectCollection<MetaModelRestriction>(
-			neo(), node(), MetaModelRelTypes.META_RESTRICTION_TO_CLASS,
-			Direction.INCOMING, meta(), MetaModelRestriction.class );
+			graphDb(), node(), MetaModelRelTypes.META_RESTRICTION_TO_CLASS,
+			Direction.INCOMING, model(), MetaModelRestriction.class );
 	}
 	
 	/**
@@ -163,7 +163,7 @@ public class MetaModelClass extends MetaModelThing
 	 */
 	public Collection<MetaModelRestriction> getAllRestrictions()
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			HashSet<MetaModelRestriction> restrictions =
@@ -178,7 +178,7 @@ public class MetaModelClass extends MetaModelThing
 					Direction.OUTGOING ) )
 			{
 				restrictions.add(
-					new MetaModelRestriction( meta(), node ) );
+					new MetaModelRestriction( model(), node ) );
 			}
 			return Collections.unmodifiableSet( restrictions );
 		}
@@ -193,7 +193,7 @@ public class MetaModelClass extends MetaModelThing
 	 */
 	public Collection<Node> getInstances()
 	{
-		return new InstanceCollection( neo(), node(), meta() );
+		return new InstanceCollection( graphDb(), node(), model() );
 	}
 	
 	private class AllPropertiesRE implements ReturnableEvaluator

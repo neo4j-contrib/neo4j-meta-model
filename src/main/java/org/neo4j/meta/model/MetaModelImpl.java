@@ -10,7 +10,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.util.NeoUtil;
+import org.neo4j.util.GraphDatabaseUtil;
 
 /**
  * The access point of a meta model. Is given a root node where all the
@@ -18,46 +18,39 @@ import org.neo4j.util.NeoUtil;
  */
 public class MetaModelImpl implements MetaModel
 {
-	private GraphDatabaseService neo;
-	private NeoUtil neoUtil;
-	private DynamicMetaRelTypes dynamicRelTypes = new DynamicMetaRelTypes();
+	private GraphDatabaseService graphDb;
+	private GraphDatabaseUtil graphDbUtil;
 	
 	private Map<String, MetaModelNamespace> namespaceCache =
 		Collections.synchronizedMap(
 			new HashMap<String, MetaModelNamespace>() );
 	
 	/**
-	 * @param neo the {@link GraphDatabaseService} used for this meta model.
+	 * @param graphDB the {@link GraphDatabaseService} used for this meta model.
 	 */
-	public MetaModelImpl( GraphDatabaseService neo )
+	public MetaModelImpl( GraphDatabaseService graphDB )
 	{
-		this.neo = neo;
-		this.neoUtil = new NeoUtil( neo );
-		this.dynamicRelTypes = new DynamicMetaRelTypes();
+		this.graphDb = graphDB;
+		this.graphDbUtil = new GraphDatabaseUtil( graphDB );
 	}
 	
 	/**
 	 * @return the {@link GraphDatabaseService} given in the constructor.
 	 */
-	public GraphDatabaseService neo()
+	public GraphDatabaseService graphDb()
 	{
-		return this.neo;
+		return this.graphDb;
 	}
 	
-	protected NeoUtil neoUtil()
+	protected GraphDatabaseUtil graphDbUtil()
 	{
-		return this.neoUtil;
+		return this.graphDbUtil;
 	}
 	
 	protected Node rootNode()
 	{
-		return neoUtil().getOrCreateSubReferenceNode(
+		return graphDbUtil().getOrCreateSubReferenceNode(
 			MetaModelRelTypes.REF_TO_META_SUBREF );
-	}
-	
-	protected DynamicMetaRelTypes dynamicRelTypes()
-	{
-		return this.dynamicRelTypes;
 	}
 	
 	public MetaModelNamespace getNamespace( String name,
@@ -78,7 +71,7 @@ public class MetaModelImpl implements MetaModel
 		Collection<T> collection, String nameOrNullForGlobal,
 		boolean allowCreate, Class<T> theClass, Map<String, T> cacheOrNull )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			T foundItem = safeGetFromCache( cacheOrNull, nameOrNullForGlobal );
@@ -118,7 +111,7 @@ public class MetaModelImpl implements MetaModel
 			{
 				return null;
 			}
-			Node node = neo().createNode();
+			Node node = graphDb().createNode();
 			T item = null;
 			try
 			{
@@ -154,7 +147,7 @@ public class MetaModelImpl implements MetaModel
 			{
 				try
 				{
-					neo().getNodeById( result.node().getId() );
+					graphDb().getNodeById( result.node().getId() );
 				}
 				catch ( NotFoundException e )
 				{
@@ -169,7 +162,7 @@ public class MetaModelImpl implements MetaModel
 	public Collection<MetaModelNamespace> getNamespaces()
 	{
 		return new ObjectCollection<MetaModelNamespace>(
-			neo(), rootNode(), MetaModelRelTypes.META_NAMESPACE,
+			graphDb(), rootNode(), MetaModelRelTypes.META_NAMESPACE,
 			Direction.OUTGOING, this, MetaModelNamespace.class );
 	}
 	
@@ -180,7 +173,7 @@ public class MetaModelImpl implements MetaModel
 		// HEAVILY used. It's the main way of looking things up in the meta
 		// model, f.ex. validation and conversion of values a.s.o.
 		
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			T result = LookupUtil.lookup( property, finder, classes );

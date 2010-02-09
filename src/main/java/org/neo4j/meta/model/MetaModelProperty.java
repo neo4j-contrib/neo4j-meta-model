@@ -15,20 +15,20 @@ public class MetaModelProperty extends MetaModelThing
 	implements MetaModelRestrictable
 {
 	/**
-	 * @param meta the {@link MetaModel} instance.
+	 * @param model the {@link MetaModel} instance.
 	 * @param node the {@link Node} to wrap.
 	 */
-	public MetaModelProperty( MetaModel meta, Node node )
+	public MetaModelProperty( MetaModel model, Node node )
 	{
-		super( meta, node );
+		super( model, node );
 	}
 	
 	private Collection<MetaModelProperty> hierarchyCollection(
 		Direction direction )
 	{
-		return new ObjectCollection<MetaModelProperty>( neo(),
+		return new ObjectCollection<MetaModelProperty>( graphDb(),
 			node(), MetaModelRelTypes.META_IS_SUBPROPERTY_OF, direction,
-			meta(), MetaModelProperty.class );
+			model(), MetaModelProperty.class );
 	}
 	
 	@Override
@@ -55,9 +55,9 @@ public class MetaModelProperty extends MetaModelThing
 	 */
 	public Collection<MetaModelClass> associatedMetaClasses()
 	{
-		return new ObjectCollection<MetaModelClass>( neo(),
+		return new ObjectCollection<MetaModelClass>( graphDb(),
 			node(), MetaModelRelTypes.META_CLASS_HAS_PROPERTY,
-			Direction.INCOMING, meta(), MetaModelClass.class );
+			Direction.INCOMING, model(), MetaModelClass.class );
 	}
 
 	public void setRange( PropertyRange range )
@@ -92,7 +92,7 @@ public class MetaModelProperty extends MetaModelThing
 	
 	public void setCardinality( Integer cardinality )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			setMinCardinality( cardinality );
@@ -148,7 +148,7 @@ public class MetaModelProperty extends MetaModelThing
 	{
 		Relationship rel = getSingleRelationshipOrNull(
 			MetaModelRelTypes.META_IS_INVERSE_OF );
-		return rel == null ? null : new MetaModelProperty( meta(),
+		return rel == null ? null : new MetaModelProperty( model(),
 			rel.getOtherNode( node() ) );
 	}
 }

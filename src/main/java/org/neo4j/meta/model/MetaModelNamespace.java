@@ -22,12 +22,12 @@ public class MetaModelNamespace extends MetaModelObject
 			new HashMap<String, MetaModelProperty>() );
 	
 	/**
-	 * @param meta the {@link MetaModel} instance.
+	 * @param model the {@link MetaModel} instance.
 	 * @param node the {@link Node} to wrap.
 	 */
-	public MetaModelNamespace( MetaModel meta, Node node )
+	public MetaModelNamespace( MetaModel model, Node node )
 	{
-		super( meta, node );
+		super( model, node );
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public MetaModelClass getMetaClass( String name, boolean allowCreate )
 	{
-		return ( ( MetaModelImpl ) meta() ).findOrCreateInCollection(
+		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
 			getMetaClasses(), name, allowCreate, MetaModelClass.class,
 			classCache );
 	}
@@ -52,9 +52,9 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public Collection<MetaModelClass> getMetaClasses()
 	{
-		return new ObjectCollection<MetaModelClass>( neo(),
+		return new ObjectCollection<MetaModelClass>( graphDb(),
 			node(), MetaModelRelTypes.META_CLASS, Direction.OUTGOING,
-			meta(), MetaModelClass.class );
+			model(), MetaModelClass.class );
 	}
 	
 	/**
@@ -69,7 +69,7 @@ public class MetaModelNamespace extends MetaModelObject
 	public MetaModelProperty getMetaProperty( String name,
 		boolean allowCreate )
 	{
-		return ( ( MetaModelImpl ) meta() ).findOrCreateInCollection(
+		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
 			getMetaProperties(), name, allowCreate,
 			MetaModelProperty.class, propertyCache );
 	}
@@ -80,9 +80,9 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public Collection<MetaModelProperty> getMetaProperties()
 	{
-		return new ObjectCollection<MetaModelProperty>( neo(),
+		return new ObjectCollection<MetaModelProperty>( graphDb(),
 			node(), MetaModelRelTypes.META_PROPERTY, Direction.OUTGOING,
-			meta(), MetaModelProperty.class );
+			model(), MetaModelProperty.class );
 	}
 	
 	@Override

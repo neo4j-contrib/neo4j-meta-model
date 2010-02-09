@@ -5,26 +5,26 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.util.NeoRelationshipSet;
+import org.neo4j.util.RelationshipSet;
 
 class ObjectCollection<T extends MetaModelObject>
-	extends NeoRelationshipSet<T>
+	extends RelationshipSet<T>
 {
-	private MetaModel meta;
+	private MetaModel model;
 	private Class<T> cls;
 	
-	ObjectCollection( GraphDatabaseService neo, Node node,
+	ObjectCollection( GraphDatabaseService graphDb, Node node,
 		RelationshipType relType, Direction direction,
-		MetaModel meta, Class<T> cls )
+		MetaModel model, Class<T> cls )
 	{
-		super( neo, node, relType, direction );
-		this.meta = meta;
+		super( graphDb, node, relType, direction );
+		this.model = model;
 		this.cls = cls;
 	}
 	
-	protected MetaModel meta()
+	protected MetaModel model()
 	{
-		return this.meta;
+		return this.model;
 	}
 	
 	@Override
@@ -39,7 +39,7 @@ class ObjectCollection<T extends MetaModelObject>
 		try
 		{
 			return cls.getConstructor( MetaModel.class,
-				Node.class ).newInstance( meta(), node );
+				Node.class ).newInstance( model(), node );
 		}
 		catch ( Exception e )
 		{

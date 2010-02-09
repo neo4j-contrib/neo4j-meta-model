@@ -22,9 +22,9 @@ import org.neo4j.graphdb.Traverser;
  */
 public abstract class MetaModelThing extends MetaModelObject
 {
-	MetaModelThing( MetaModel meta, Node node )
+	MetaModelThing( MetaModel model, Node node )
 	{
-		super( meta, node );
+		super( model, node );
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public abstract class MetaModelThing extends MetaModelObject
 	 */
 	public <T extends MetaModelThing> boolean isSubOf( T thing )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			boolean found = false;
@@ -116,7 +116,7 @@ public abstract class MetaModelThing extends MetaModelObject
 	{
 	    Object value = getAdditionalProperty( key );
 	    return value != new Object[ 0 ] ?
-	        this.neoUtil().neoPropertyAsArray( key ) : null;
+	        this.graphDbUtil().propertyValueAsArray( key ) : null;
 	}
 	
 	@Override

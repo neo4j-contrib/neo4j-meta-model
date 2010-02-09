@@ -13,12 +13,12 @@ public class MetaModelRestriction extends MetaModelObject
 	implements MetaModelRestrictable
 {
 	/**
-	 * @param meta the {@link MetaModel} instance.
+	 * @param model the {@link MetaModel} instance.
 	 * @param node the root node.
 	 */
-	public MetaModelRestriction( MetaModel meta, Node node )
+	public MetaModelRestriction( MetaModel model, Node node )
 	{
-		super( meta, node );
+		super( model, node );
 	}
 	
 	/**
@@ -26,8 +26,8 @@ public class MetaModelRestriction extends MetaModelObject
 	 */
 	public MetaModelClass getMetaClass()
 	{
-		return new MetaModelClass( meta(),
-			neoUtil().getSingleOtherNode( node(),
+		return new MetaModelClass( model(),
+			graphDbUtil().getSingleOtherNode( node(),
 				MetaModelRelTypes.META_RESTRICTION_TO_CLASS,
 				Direction.OUTGOING ) );
 	}
@@ -37,8 +37,8 @@ public class MetaModelRestriction extends MetaModelObject
 	 */
 	public MetaModelProperty getMetaProperty()
 	{
-		return new MetaModelProperty( meta(),
-			neoUtil().getSingleOtherNode( node(),
+		return new MetaModelProperty( model(),
+			graphDbUtil().getSingleOtherNode( node(),
 				MetaModelRelTypes.META_RESTRICTION_TO_PROPERTY,
 				Direction.OUTGOING ) );
 	}
@@ -75,7 +75,7 @@ public class MetaModelRestriction extends MetaModelObject
 	
 	public void setCardinality( Integer cardinality )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			setMinCardinality( cardinality );

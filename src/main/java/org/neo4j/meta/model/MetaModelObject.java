@@ -5,7 +5,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.util.NeoUtil;
+import org.neo4j.util.GraphDatabaseUtil;
 
 /**
  * A super class for basically all meta structure objects which wraps a
@@ -35,7 +35,7 @@ public abstract class MetaModelObject
 	/**
 	 * @return the underlying {@link MetaModel}.
 	 */
-	public MetaModel meta()
+	public MetaModel model()
 	{
 		return this.meta;
 	}
@@ -43,14 +43,14 @@ public abstract class MetaModelObject
 	/**
 	 * @return the {@link GraphDatabaseService} instance used with this instance.
 	 */
-	public GraphDatabaseService neo()
+	public GraphDatabaseService graphDb()
 	{
-		return ( ( MetaModelImpl ) meta() ).neo();
+		return ( ( MetaModelImpl ) model() ).graphDb();
 	}
 	
-	protected NeoUtil neoUtil()
+	protected GraphDatabaseUtil graphDbUtil()
 	{
-		return ( ( MetaModelImpl ) meta() ).neoUtil();
+		return ( ( MetaModelImpl ) model() ).graphDbUtil();
 	}
 	
 	/**
@@ -76,7 +76,7 @@ public abstract class MetaModelObject
 	protected void setSingleRelationshipOrNull( Node node,
 		RelationshipType type )
 	{
-		Transaction tx = neo().beginTx();
+		Transaction tx = graphDb().beginTx();
 		try
 		{
 			Relationship relationship = getSingleRelationshipOrNull( type );
@@ -98,7 +98,7 @@ public abstract class MetaModelObject
 	
 	protected Relationship getSingleRelationshipOrNull( RelationshipType type )
 	{
-		return neoUtil().getSingleRelationship( node(), type );
+		return graphDbUtil().getSingleRelationship( node(), type );
 	}
 	
 	void setName( String name )

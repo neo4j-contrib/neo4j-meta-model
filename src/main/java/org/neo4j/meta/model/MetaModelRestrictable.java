@@ -19,7 +19,7 @@ public interface MetaModelRestrictable
 	/**
 	 * @return the underlying {@link MetaModel}.
 	 */
-	MetaModel meta();
+	MetaModel model();
 	
 	/**
 	 * @return the name of the object.

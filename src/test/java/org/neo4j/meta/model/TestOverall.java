@@ -1,9 +1,10 @@
-package org.neo4j.neometa.structure;
+package org.neo4j.meta.model;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.neo4j.graphdb.Node;
+import org.neo4j.meta.MetaTestCase;
 import org.neo4j.meta.model.ClassRange;
 import org.neo4j.meta.model.DataRange;
 import org.neo4j.meta.model.DatatypeClassRange;
@@ -16,7 +17,6 @@ import org.neo4j.meta.model.MetaModelProperty;
 import org.neo4j.meta.model.MetaModelRestrictable;
 import org.neo4j.meta.model.MetaModelRestriction;
 import org.neo4j.meta.model.RdfUtil;
-import org.neo4j.neometa.MetaTestCase;
 
 /**
  * Tests the meta structure.
@@ -28,7 +28,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testSome()
 	{
-		MetaModel structure = new MetaModelImpl( neo() );
+		MetaModel structure = new MetaModelImpl( graphDb() );
 		assertEquals( 0, structure.getNamespaces().size() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		assertNull( namespace.getName() );
@@ -103,8 +103,8 @@ public class TestOverall extends MetaTestCase
 		assertTrue( userClass.isSubOf( thingClass ) );
 		assertFalse( userClass.isSubOf( phoneClass ) );
 		
-		Node person1 = neo().createNode();
-		Node person2 = neo().createNode();
+		Node person1 = graphDb().createNode();
+		Node person2 = graphDb().createNode();
 		assertCollection( personClass.getInstances() );
 		personClass.getInstances().add( person1 );
 		assertCollection( personClass.getInstances(), person1 );
@@ -113,7 +113,7 @@ public class TestOverall extends MetaTestCase
 		
 		personClass.getInstances().remove( person2 );
 		assertCollection( personClass.getInstances(), person1 );
-		neo().getNodeById( person2.getId() );
+		graphDb().getNodeById( person2.getId() );
 		deleteMetaModel();
 	}
 	
@@ -122,7 +122,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testExtended()
 	{
-		MetaModel structure = new MetaModelImpl( neo() );
+		MetaModel structure = new MetaModelImpl( graphDb() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		MetaModelProperty maker = namespace.getMetaProperty(
 			"http://test.org/test#maker", true );
@@ -147,7 +147,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testRestrictions()
 	{
-		MetaModel structure = new MetaModelImpl( neo() );
+		MetaModel structure = new MetaModelImpl( graphDb() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		MetaModelClass thing = namespace.getMetaClass( "thing", true );
 		MetaModelClass person = namespace.getMetaClass( "person", true );
@@ -237,7 +237,7 @@ public class TestOverall extends MetaTestCase
 	 */
 	public void testLookup()
 	{
-		MetaModel meta = new MetaModelImpl( neo() );
+		MetaModel meta = new MetaModelImpl( graphDb() );
 		MetaModelNamespace namespace = meta.getGlobalNamespace();
 		
 		// The classes

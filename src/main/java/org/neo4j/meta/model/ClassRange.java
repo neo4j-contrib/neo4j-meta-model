@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.DynamicRelationshipType;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -48,8 +49,7 @@ public class ClassRange extends PropertyRange
 	 */
 	public RelationshipType getRelationshipTypeToUse()
 	{
-		return ( ( MetaModelImpl ) getOwner().meta() ).dynamicRelTypes().
-			getOrCreateType( getOwner().getName() );
+	    return DynamicRelationshipType.withName( getOwner().getName() );
 	}
 	
 	@Override
@@ -76,7 +76,7 @@ public class ClassRange extends PropertyRange
 		this.rangeClasses = new HashSet<MetaModelClass>();
 		for ( Relationship rel : getRelationships( owner ) )
 		{
-			this.rangeClasses.add( new MetaModelClass( owner.meta(),
+			this.rangeClasses.add( new MetaModelClass( owner.model(),
 				rel.getEndNode() ) );
 		}
 	}

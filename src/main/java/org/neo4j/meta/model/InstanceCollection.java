@@ -6,29 +6,29 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.util.NeoRelationshipSet;
+import org.neo4j.util.RelationshipSet;
 
 /**
  * An implementation of a {@link Collection} which handles {@link Node}s
  * representing instance which complies to a {@link MetaModelClass}.
  */
-public class InstanceCollection extends NeoRelationshipSet<Node>
+public class InstanceCollection extends RelationshipSet<Node>
 {
 	private static final String KEY_COUNT = "instance_count";
 	
-	private MetaModel meta;
+	private MetaModel model;
 	
 	/**
 	 * 
 	 * @param node the {@link Node} which holds the relationships.
-	 * @param meta the {@link MetaModel} instance.
+	 * @param model the {@link MetaModel} instance.
 	 */
-	public InstanceCollection( GraphDatabaseService neo,
-		Node node, MetaModel meta )
+	public InstanceCollection( GraphDatabaseService graphDb,
+		Node node, MetaModel model )
 	{
-		super( neo, node, MetaModelRelTypes.META_IS_INSTANCE_OF,
+		super( graphDb, node, MetaModelRelTypes.META_IS_INSTANCE_OF,
 			Direction.INCOMING );
-		this.meta = meta;
+		this.model = model;
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package org.neo4j.neometa;
+package org.neo4j.meta;
 
 import java.util.Collection;
 
@@ -18,26 +18,26 @@ import org.neo4j.util.EntireGraphDeletor;
  */
 public abstract class MetaTestCase extends TestCase
 {
-	private static GraphDatabaseService neo;
+	private static GraphDatabaseService graphDb;
 	
 	private Transaction tx;
 	
 	@Override
 	protected void setUp() throws Exception
 	{
-		if ( neo == null )
+		if ( graphDb == null )
 		{
-			neo = new EmbeddedGraphDatabase( "target/var/neo" );
+			graphDb = new EmbeddedGraphDatabase( "target/var/neo4j" );
 			Runtime.getRuntime().addShutdownHook( new Thread()
 			{
 				@Override
 				public void run()
 				{
-					neo.shutdown();
+					graphDb.shutdown();
 				}
 			} );
 		}
-		tx = neo().beginTx();
+		tx = graphDb().beginTx();
 	}
 	
 	@Override
@@ -48,9 +48,9 @@ public abstract class MetaTestCase extends TestCase
 		super.tearDown();
 	}
 	
-	protected GraphDatabaseService neo()
+	protected GraphDatabaseService graphDb()
 	{
-		return neo;
+		return graphDb;
 	}
 
 	protected <T> void assertCollection( Collection<T> collection, T... items )
@@ -65,7 +65,7 @@ public abstract class MetaTestCase extends TestCase
 	
 	protected void deleteMetaModel()
 	{
-		Relationship rel = neo().getReferenceNode().getSingleRelationship(
+		Relationship rel = graphDb().getReferenceNode().getSingleRelationship(
 			MetaModelRelTypes.REF_TO_META_SUBREF, Direction.OUTGOING );
 		Node node = rel.getEndNode();
 		rel.delete();
