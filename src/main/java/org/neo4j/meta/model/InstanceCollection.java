@@ -46,7 +46,7 @@ public class InstanceCollection extends RelationshipSet<Node>
 //	@Override
 //	public boolean add( Node item )
 //	{
-//		Transaction tx = meta.neo().beginTx();
+//		Transaction tx = meta.graphDb().beginTx();
 //		try
 //		{
 //			boolean result = super.add( item );
@@ -75,7 +75,7 @@ public class InstanceCollection extends RelationshipSet<Node>
 //	@Override
 //	public int size()
 //	{
-//		return ( ( Number ) meta.neoUtil().getProperty(
+//		return ( ( Number ) meta.graphDbUtil().getProperty(
 //			getUnderlyingNode(), KEY_COUNT, 0 ) ).intValue();
 //	}
 }

@@ -12,7 +12,7 @@ import org.neo4j.graphdb.Node;
 public interface MetaModelRestrictable
 {
 	/**
-	 * @return the underlying neo {@link Node}.
+	 * @return the underlying {@link Node}.
 	 */
 	Node node();
 	
