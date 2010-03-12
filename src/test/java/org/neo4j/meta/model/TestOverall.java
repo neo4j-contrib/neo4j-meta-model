@@ -103,17 +103,28 @@ public class TestOverall extends MetaTestCase
 		assertTrue( userClass.isSubOf( thingClass ) );
 		assertFalse( userClass.isSubOf( phoneClass ) );
 		
+		// Direct instances
 		Node person1 = graphDb().createNode();
 		Node person2 = graphDb().createNode();
-		assertCollection( personClass.getInstances() );
-		personClass.getInstances().add( person1 );
-		assertCollection( personClass.getInstances(), person1 );
-		personClass.getInstances().add( person2 );
-		assertCollection( personClass.getInstances(), person1, person2 );
+		assertCollection( personClass.getDirectInstances() );
+		personClass.getDirectInstances().add( person1 );
+		assertCollection( personClass.getDirectInstances(), person1 );
+		personClass.getDirectInstances().add( person2 );
+		assertCollection( personClass.getDirectInstances(), person1, person2 );
 		
-		personClass.getInstances().remove( person2 );
-		assertCollection( personClass.getInstances(), person1 );
+		personClass.getDirectInstances().remove( person2 );
+		assertCollection( personClass.getDirectInstances(), person1 );
 		graphDb().getNodeById( person2.getId() );
+		personClass.getDirectInstances().add( person2 );
+		
+		// All instances (recursive)
+		assertCollection( personClass.getAllInstances(), person1, person2 );
+		Node user1 = graphDb().createNode();
+		userClass.getDirectInstances().add( user1 );
+		assertCollection( personClass.getAllInstances(), person1, person2, user1 );
+		assertCollection( userClass.getDirectInstances(), user1 );
+        assertCollection( userClass.getAllInstances(), user1 );
+		
 		deleteMetaModel();
 	}
 	

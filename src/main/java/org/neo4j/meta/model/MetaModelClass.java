@@ -191,9 +191,17 @@ public class MetaModelClass extends MetaModelThing
 	/**
 	 * @return a modifiable collection of instances of this class.
 	 */
-	public Collection<Node> getInstances()
+	public Collection<Node> getDirectInstances()
 	{
 		return new InstanceCollection( graphDb(), node(), model() );
+	}
+	
+	/**
+	 * @return all instances of this class, including instances of subclasses
+	 */
+	public Iterable<Node> getAllInstances()
+	{
+	    return new RecursiveInstanceTraverser( graphDb(), node(), model() );
 	}
 	
 	private class AllPropertiesRE implements ReturnableEvaluator

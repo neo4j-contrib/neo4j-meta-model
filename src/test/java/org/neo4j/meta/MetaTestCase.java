@@ -1,5 +1,6 @@
 package org.neo4j.meta;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import junit.framework.TestCase;
@@ -53,6 +54,16 @@ public abstract class MetaTestCase extends TestCase
 		return graphDb;
 	}
 
+    protected <T> void assertCollection( Iterable<T> iterable, T... items )
+    {
+        Collection<T> collection = new ArrayList<T>();
+        for ( T item : iterable )
+        {
+            collection.add( item );
+        }
+        assertCollection( collection, items );
+    }
+    
 	protected <T> void assertCollection( Collection<T> collection, T... items )
 	{
 		String collectionString = join( ", ", collection.toArray() );
