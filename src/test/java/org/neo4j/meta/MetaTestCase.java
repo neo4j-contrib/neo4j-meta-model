@@ -1,10 +1,15 @@
 package org.neo4j.meta;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -17,39 +22,38 @@ import org.neo4j.util.EntireGraphDeletor;
 /**
  * Base class for the meta model tests.
  */
-public abstract class MetaTestCase extends TestCase
+public abstract class MetaTestCase
 {
 	private static GraphDatabaseService graphDb;
 	
 	private Transaction tx;
 	
-	@Override
-	protected void setUp() throws Exception
+	@BeforeClass
+	public static void setUpDb() throws Exception
 	{
-		if ( graphDb == null )
-		{
-			graphDb = new EmbeddedGraphDatabase( "target/var/neo4j" );
-			Runtime.getRuntime().addShutdownHook( new Thread()
-			{
-				@Override
-				public void run()
-				{
-					graphDb.shutdown();
-				}
-			} );
-		}
-		tx = graphDb().beginTx();
+		graphDb = new EmbeddedGraphDatabase( "target/var/neo4j" );
 	}
 	
-	@Override
-	protected void tearDown() throws Exception
+	@Before
+	public void setUpTest()
+	{
+        tx = graphDb().beginTx();
+	}
+	
+	@After
+	public void tearDownTest() throws Exception
 	{
 		tx.success();
 		tx.finish();
-		super.tearDown();
 	}
 	
-	protected GraphDatabaseService graphDb()
+	@AfterClass
+	public static void tearDownDb()
+	{
+	    graphDb.shutdown();
+	}
+	
+	protected static GraphDatabaseService graphDb()
 	{
 		return graphDb;
 	}

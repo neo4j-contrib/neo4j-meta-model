@@ -1,8 +1,15 @@
 package org.neo4j.meta.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.meta.MetaTestCase;
 import org.neo4j.meta.model.ClassRange;
@@ -18,14 +25,12 @@ import org.neo4j.meta.model.MetaModelRestrictable;
 import org.neo4j.meta.model.MetaModelRestriction;
 import org.neo4j.meta.model.RdfUtil;
 
-/**
- * Tests the meta structure.
- */
 public class TestOverall extends MetaTestCase
 {
-	/**
-	 * Some basic tests.
-	 */
+    /**
+     * Tests some basic stuff.
+     */
+    @Test
 	public void testSome()
 	{
 		MetaModel structure = new MetaModelImpl( graphDb() );
@@ -131,6 +136,7 @@ public class TestOverall extends MetaTestCase
 	/**
 	 * Tests extended functionality, like OWL constructs.
 	 */
+    @Test
 	public void testExtended()
 	{
 		MetaModel structure = new MetaModelImpl( graphDb() );
@@ -156,7 +162,8 @@ public class TestOverall extends MetaTestCase
 	/**
 	 * Tests restrictions.
 	 */
-	public void testRestrictions()
+    @Test
+    public void testRestrictions()
 	{
 		MetaModel structure = new MetaModelImpl( graphDb() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
@@ -246,7 +253,8 @@ public class TestOverall extends MetaTestCase
 	/**
 	 * Tests the "lookup" functionality.
 	 */
-	public void testLookup()
+	@Test
+    public void testLookup()
 	{
 		MetaModel meta = new MetaModelImpl( graphDb() );
 		MetaModelNamespace namespace = meta.getGlobalNamespace();
