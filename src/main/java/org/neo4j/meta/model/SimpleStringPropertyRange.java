@@ -9,27 +9,27 @@ public abstract class SimpleStringPropertyRange extends PropertyRange
 	private static final String KEY_RANGE_SPEC = "range_specification";
 	
 	protected abstract String toStringRepresentation(
-		MetaModelRestrictable owner );
+		MetaModelRestrictable<PropertyRange> owner );
 	
 	protected abstract void fromStringRepresentation(
-		MetaModelRestrictable owner, String stringRepresentation );
+		MetaModelRestrictable<PropertyRange> owner, String stringRepresentation );
 	
 	@Override
-	protected void internalStore( MetaModelRestrictable owner )
+	protected void internalStore( MetaModelRestrictable<PropertyRange> owner )
 	{
 		owner.node().setProperty( KEY_RANGE_SPEC,
 			toStringRepresentation( owner ) );
 	}
 	
 	@Override
-	protected void internalLoad( MetaModelRestrictable owner )
+	protected void internalLoad( MetaModelRestrictable<PropertyRange> owner )
 	{
 		fromStringRepresentation( owner,
 			( String ) owner.node().getProperty( KEY_RANGE_SPEC ) );
 	}
 	
 	@Override
-	protected void internalRemove( MetaModelRestrictable owner )
+	protected void internalRemove( MetaModelRestrictable<PropertyRange> owner )
 	{
 		owner.node().removeProperty( KEY_RANGE_SPEC );
 	}

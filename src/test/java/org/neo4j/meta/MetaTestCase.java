@@ -15,6 +15,8 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.index.IndexService;
+import org.neo4j.index.lucene.LuceneIndexService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.meta.model.MetaModelRelTypes;
 import org.neo4j.util.EntireGraphDeletor;
@@ -25,6 +27,7 @@ import org.neo4j.util.EntireGraphDeletor;
 public abstract class MetaTestCase
 {
 	private static GraphDatabaseService graphDb;
+	private static IndexService indexService;
 	
 	private Transaction tx;
 	
@@ -32,6 +35,7 @@ public abstract class MetaTestCase
 	public static void setUpDb() throws Exception
 	{
 		graphDb = new EmbeddedGraphDatabase( "target/var/neo4j" );
+		indexService = new LuceneIndexService(graphDb);
 	}
 	
 	@Before
@@ -50,6 +54,7 @@ public abstract class MetaTestCase
 	@AfterClass
 	public static void tearDownDb()
 	{
+		indexService.shutdown();
 	    graphDb.shutdown();
 	}
 	
@@ -58,6 +63,12 @@ public abstract class MetaTestCase
 		return graphDb;
 	}
 
+	protected static IndexService indexService()
+	{
+		return indexService;
+	}
+	
+	
     protected <T> void assertCollection( Iterable<T> iterable, T... items )
     {
         Collection<T> collection = new ArrayList<T>();
@@ -84,6 +95,12 @@ public abstract class MetaTestCase
 			MetaModelRelTypes.REF_TO_META_SUBREF, Direction.OUTGOING );
 		Node node = rel.getEndNode();
 		rel.delete();
+		for ( Node namedNode : graphDb().getAllNodes() ){
+			if ( namedNode.hasProperty("meta_mode_name") ){
+				Object name = namedNode.getProperty("meta_mode_name");
+				indexService.removeIndex(namedNode, "meta_mode_name", name);
+			}
+		}
 		new EntireGraphDeletor().delete( node );
 	}
 

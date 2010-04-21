@@ -17,8 +17,8 @@ import org.neo4j.graphdb.Traverser;
 //		rdfs:idDefinedBy
 
 /**
- * The super class of {@link MetaModelClass} and
- * {@link MetaModelProperty}. It contains hierarchial functionality.
+ * The super class of {@link MetaModelPropertyContainer} and
+ * {@link MetaModelProperty}. It contains hierarchical functionality.
  */
 public abstract class MetaModelThing extends MetaModelObject
 {
@@ -28,7 +28,6 @@ public abstract class MetaModelThing extends MetaModelObject
 	}
 	
 	/**
-	 * @return a modifiable {@link Collection} of directly connected
 	 * (non-recursive) sub "things" (class or property).
 	 */
 	public abstract Collection<? extends MetaModelThing> getDirectSubs();

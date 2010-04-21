@@ -31,7 +31,7 @@ public class RecursiveInstanceTraverser implements Iterable<Node>
             public boolean isReturnableNode( TraversalPosition position )
             {
                 if ( position.notStartNode() && position.lastRelationshipTraversed().isType(
-                        MetaModelRelTypes.META_IS_INSTANCE_OF ) )
+                        MetaModelRelTypes.META_HAS_INSTANCE ) )
                 {
                     return true;
                 }
@@ -40,7 +40,7 @@ public class RecursiveInstanceTraverser implements Iterable<Node>
         };
         
         return node.traverse( Order.BREADTH_FIRST, StopEvaluator.END_OF_GRAPH, eval,
-                MetaModelRelTypes.META_IS_INSTANCE_OF, Direction.INCOMING,
+                MetaModelRelTypes.META_HAS_INSTANCE, Direction.OUTGOING,
                 MetaModelRelTypes.META_IS_SUBCLASS_OF, Direction.INCOMING ).iterator();
     }
 }

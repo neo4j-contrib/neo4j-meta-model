@@ -42,7 +42,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalLoad( MetaModelRestrictable owner )
+	protected void internalLoad( MetaModelRestrictable<PropertyRange> owner )
 	{
 		super.internalLoad( owner );
 		String[] dataArray = ( String[] )
@@ -62,7 +62,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalStore( MetaModelRestrictable owner )
+	protected void internalStore( MetaModelRestrictable<PropertyRange> owner )
 	{
 		super.internalStore( owner );
 		String[] dataArray = new String[ this.values.size() ];
@@ -75,7 +75,7 @@ public class DataRange extends RdfDatatypeRange
 	}
 	
 	@Override
-	protected void internalRemove( MetaModelRestrictable owner )
+	protected void internalRemove( MetaModelRestrictable<PropertyRange> owner )
 	{
 		super.internalRemove( owner );
 		owner.node().removeProperty( KEY_DATA_ARRAY );

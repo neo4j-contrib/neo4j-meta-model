@@ -20,6 +20,9 @@ public class MetaModelNamespace extends MetaModelObject
 	private Map<String, MetaModelProperty> propertyCache =
 		Collections.synchronizedMap(
 			new HashMap<String, MetaModelProperty>() );
+	private Map<String, MetaModelRelationship> relationshipTypeCache =
+		Collections.synchronizedMap(
+			new HashMap<String, MetaModelRelationship>() );
 	
 	/**
 	 * @param model the {@link MetaModel} instance.
@@ -39,7 +42,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 * @return the {@link MetaModelClass} in this namespace with the given
 	 * {@code name}.
 	 */
-	public MetaModelClass getMetaClass( String name, boolean allowCreate )
+	public MetaModelClass getMetaClass( String name, boolean allowCreate ) throws DuplicateNameException
 	{
 		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
 			getMetaClasses(), name, allowCreate, MetaModelClass.class,
@@ -68,11 +71,31 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public MetaModelProperty getMetaProperty( String name,
 		boolean allowCreate )
+	throws DuplicateNameException
 	{
 		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
 			getMetaProperties(), name, allowCreate,
 			MetaModelProperty.class, propertyCache );
 	}
+
+	/**
+	 * Returns (and optionally creates) a {@link MetaModelRelationship} instance
+	 * (with underlying {@link Node}).
+	 * @param name the name of the property.
+	 * @param allowCreate if {@code true} and no property by the given
+	 * {@code name} exists then it is created.
+	 * @return the {@link MetaModelRelationship} in this namespace with the
+	 * given {@code name}.
+	 */
+	public MetaModelRelationship getMetaRelationshipType( String name,
+		boolean allowCreate )
+	throws DuplicateNameException
+	{
+		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
+			getMetaRelationshipTypes(), name, allowCreate,
+			MetaModelRelationship.class, relationshipTypeCache );
+	}
+	
 	
 	/**
 	 * @return a modifiable collection of all {@link MetaModelProperty}
@@ -83,6 +106,17 @@ public class MetaModelNamespace extends MetaModelObject
 		return new ObjectCollection<MetaModelProperty>( graphDb(),
 			node(), MetaModelRelTypes.META_PROPERTY, Direction.OUTGOING,
 			model(), MetaModelProperty.class );
+	}
+
+	/**
+	 * @return a modifiable collection of all {@link MetaModelRelationship}
+	 * instances for this namespace.
+	 */
+	public Collection<MetaModelRelationship> getMetaRelationshipTypes()
+	{
+		return new ObjectCollection<MetaModelRelationship>( graphDb(),
+			node(), MetaModelRelTypes.META_RELATIONSHIP, Direction.OUTGOING,
+			model(), MetaModelRelationship.class );
 	}
 	
 	@Override

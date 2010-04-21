@@ -2,8 +2,6 @@ package org.neo4j.meta.model;
 
 import java.text.ParseException;
 
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
 /**
@@ -11,23 +9,20 @@ import org.neo4j.graphdb.Transaction;
  * could be a String, an integer or a {@link MetaModelClass} (which
  * would refer to a {@link Node} which has a relationship to that class).
  */
-public abstract class PropertyRange
+public abstract class PropertyRange extends Range<PropertyRange>
 {
-	static final String KEY_RANGE_IMPL = "range_implementation_class";
 	
-	private MetaModelRestrictable owner;
-	
-	protected MetaModelRestrictable getOwner()
+	protected static void removeRange( MetaModelRestrictable<PropertyRange> owner )
 	{
-		return this.owner;
+		PropertyRange range = loadRange( owner );
+		if ( range != null )
+		{
+			owner.node().removeProperty( KEY_RANGE_IMPL );
+			range.internalRemove( owner );
+		}
 	}
 	
-	private static GraphDatabaseService graphDb( MetaModel meta )
-	{
-		return ( ( MetaModelImpl ) meta ).graphDb();
-	}
-	
-	protected void store( MetaModelRestrictable owner )
+	protected void store( MetaModelRestrictable<PropertyRange> owner )
 	{
 		// MP: This isn't very good, should be in the constructor, but we can't
 		// really trust the developer to supply the correct property instance.
@@ -48,24 +43,8 @@ public abstract class PropertyRange
 			tx.finish();
 		}
 	}
-	
-	protected static void removeRange( MetaModelRestrictable owner )
-	{
-		PropertyRange range = loadRange( owner );
-		if ( range != null )
-		{
-			owner.node().removeProperty( KEY_RANGE_IMPL );
-			range.internalRemove( owner );
-		}
-	}
-	
-	protected abstract void internalStore( MetaModelRestrictable owner );
-	
-	protected abstract void internalRemove( MetaModelRestrictable owner );
-	
-	protected abstract void internalLoad( MetaModelRestrictable owner );
-	
-	protected static PropertyRange loadRange( MetaModelRestrictable owner )
+
+	protected static PropertyRange loadRange( MetaModelRestrictable<PropertyRange> owner )
 	{
 		Transaction tx = graphDb( owner.model() ).beginTx();
 		try
@@ -93,7 +72,7 @@ public abstract class PropertyRange
 		}
 	}
 	
-	protected static void setOrRemoveRange( MetaModelRestrictable owner,
+	protected static void setOrRemoveRange( MetaModelRestrictable<PropertyRange> owner,
 		PropertyRange range )
 	{
 		Transaction tx = graphDb( owner.model() ).beginTx();

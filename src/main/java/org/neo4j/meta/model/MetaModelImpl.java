@@ -10,6 +10,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.NotFoundException;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.index.IndexService;
 import org.neo4j.util.GraphDatabaseUtil;
 
 /**
@@ -20,6 +21,7 @@ public class MetaModelImpl implements MetaModel
 {
 	private GraphDatabaseService graphDb;
 	private GraphDatabaseUtil graphDbUtil;
+	private IndexService indexService;
 	
 	private Map<String, MetaModelNamespace> namespaceCache =
 		Collections.synchronizedMap(
@@ -28,10 +30,11 @@ public class MetaModelImpl implements MetaModel
 	/**
 	 * @param graphDB the {@link GraphDatabaseService} used for this meta model.
 	 */
-	public MetaModelImpl( GraphDatabaseService graphDB )
+	public MetaModelImpl( GraphDatabaseService graphDB, IndexService indexService )
 	{
 		this.graphDb = graphDB;
 		this.graphDbUtil = new GraphDatabaseUtil( graphDB );
+		this.indexService = indexService;
 	}
 	
 	/**
@@ -40,6 +43,14 @@ public class MetaModelImpl implements MetaModel
 	public GraphDatabaseService graphDb()
 	{
 		return this.graphDb;
+	}
+
+	/**
+	 * @return the {@link IndexService} given in the constructor.
+	 */
+	public IndexService indexService()
+	{
+		return this.indexService;
 	}
 	
 	protected GraphDatabaseUtil graphDbUtil()
@@ -55,6 +66,7 @@ public class MetaModelImpl implements MetaModel
 	
 	public MetaModelNamespace getNamespace( String name,
 		boolean allowCreate )
+	throws DuplicateNameException
 	{
 		assert name != null;
 		return findOrCreateInCollection( getNamespaces(), name, allowCreate,
@@ -63,13 +75,20 @@ public class MetaModelImpl implements MetaModel
 	
 	public MetaModelNamespace getGlobalNamespace()
 	{
-		return findOrCreateInCollection( getNamespaces(), null, true,
-			MetaModelNamespace.class, namespaceCache );
+		MetaModelNamespace ns = null;
+		try{
+			ns = findOrCreateInCollection( getNamespaces(), null, true,
+					MetaModelNamespace.class, namespaceCache );
+		}catch(DuplicateNameException dne){
+			//Do nothing. Global namesepace has no name, so no duplication can occur
+		}
+		return ns;
 	}
 	
 	protected <T extends MetaModelObject> T findOrCreateInCollection(
 		Collection<T> collection, String nameOrNullForGlobal,
 		boolean allowCreate, Class<T> theClass, Map<String, T> cacheOrNull )
+	throws DuplicateNameException
 	{
 		Transaction tx = graphDb().beginTx();
 		try
@@ -166,7 +185,7 @@ public class MetaModelImpl implements MetaModel
 			Direction.OUTGOING, this, MetaModelNamespace.class );
 	}
 	
-	public <T> T lookup( MetaModelProperty property, LookerUpper<T> finder,
+	public <T> T lookup( MetaModelProperty property, PropertyLookerUpper<T> finder,
 		MetaModelClass... classes )
 	{
 		// TODO Maybe add some form of caching here since this method will be
@@ -185,4 +204,24 @@ public class MetaModelImpl implements MetaModel
 			tx.finish();
 		}
 	}
+	public <T> T lookup( MetaModelRelationship relationshipType, RelationshipLookerUpper<T> finder,
+			MetaModelClass... classes )
+	{
+		// TODO Maybe add some form of caching here since this method will be
+		// HEAVILY used. It's the main way of looking things up in the meta
+		// model, f.ex. validation and conversion of values a.s.o.
+		
+		Transaction tx = graphDb().beginTx();
+		try
+		{
+			T result = LookupUtil.lookup( relationshipType, finder, classes );
+			tx.success();
+			return result;
+		}
+		finally
+		{
+			tx.finish();
+		}
+	}
+
 }

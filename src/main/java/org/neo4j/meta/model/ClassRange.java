@@ -10,10 +10,10 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
- * An implementation of {@link PropertyRange} for values which are instances
+ * An implementation of {@link RelationshipRange} for values which are instances
  * of {@link MetaModelClass}.
  */
-public class ClassRange extends PropertyRange
+public class ClassRange extends RelationshipRange
 {
 	private Set<MetaModelClass> rangeClasses;
 	
@@ -53,25 +53,25 @@ public class ClassRange extends PropertyRange
 	}
 	
 	@Override
-	protected void internalStore( MetaModelRestrictable owner )
+	protected void internalStore( MetaModelRestrictable<RelationshipRange> owner )
 	{
 		for ( MetaModelClass cls : this.rangeClasses )
 		{
 			owner.node().createRelationshipTo( cls.node(),
-				MetaModelRelTypes.META_PROPERTY_HAS_RANGE );
+				MetaModelRelTypes.META_RELATIONSHIP_HAS_RANGE );
 		}
 	}
 	
 	private Iterable<Relationship> getRelationships(
-		MetaModelRestrictable owner )
+		MetaModelRestrictable<RelationshipRange> owner )
 	{
 		return owner.node().getRelationships(
-			MetaModelRelTypes.META_PROPERTY_HAS_RANGE,
+			MetaModelRelTypes.META_RELATIONSHIP_HAS_RANGE,
 			Direction.OUTGOING );
 	}
 	
 	@Override
-	protected void internalLoad( MetaModelRestrictable owner )
+	protected void internalLoad( MetaModelRestrictable<RelationshipRange> owner )
 	{
 		this.rangeClasses = new HashSet<MetaModelClass>();
 		for ( Relationship rel : getRelationships( owner ) )
@@ -82,7 +82,7 @@ public class ClassRange extends PropertyRange
 	}
 	
 	@Override
-	protected void internalRemove( MetaModelRestrictable owner )
+	protected void internalRemove( MetaModelRestrictable<RelationshipRange> owner )
 	{
 		for ( Relationship rel : getRelationships( owner ) )
 		{
@@ -90,24 +90,6 @@ public class ClassRange extends PropertyRange
 		}
 	}
 
-	@Override
-	public Object rdfLiteralToJavaObject( String value )
-	{
-		throw new UnsupportedOperationException( "Should never be called" );
-	}
-	
-	@Override
-	public String javaObjectToRdfLiteral( Object value )
-	{
-		throw new UnsupportedOperationException( "Should never be called" );
-	}
-	
-	@Override
-	public boolean isDatatype()
-	{
-		return false;
-	}
-	
 	@Override
 	public String toString()
 	{

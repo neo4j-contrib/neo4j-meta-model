@@ -5,6 +5,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.index.IndexService;
 import org.neo4j.util.GraphDatabaseUtil;
 
 /**
@@ -21,14 +22,14 @@ public abstract class MetaModelObject
 	/**
 	 * The node property for a meta structure objects name.
 	 */
-	public static final String KEY_NAME = "name";
+	public static final String KEY_NAME = "meta_model_name";
 	
-	private MetaModel meta;
+	private MetaModel model;
 	private Node node;
 	
-	MetaModelObject( MetaModel meta, Node node )
+	MetaModelObject( MetaModel model, Node node )
 	{
-		this.meta = meta;
+		this.model = model;
 		this.node = node;
 	}
 	
@@ -37,7 +38,7 @@ public abstract class MetaModelObject
 	 */
 	public MetaModel model()
 	{
-		return this.meta;
+		return this.model;
 	}
 	
 	/**
@@ -52,6 +53,12 @@ public abstract class MetaModelObject
 	{
 		return ( ( MetaModelImpl ) model() ).graphDbUtil();
 	}
+
+	protected IndexService indexService()
+	{
+		return ( ( MetaModelImpl ) model() ).indexService();
+	}
+
 	
 	/**
 	 * @return the {@link Node} which this object wraps.
@@ -61,7 +68,7 @@ public abstract class MetaModelObject
 		return this.node;
 	}
 	
-	protected void setOrRemoteProperty( String key, Object value )
+	protected void setOrRemoveProperty( String key, Object value )
 	{
 		if ( value == null )
 		{
@@ -101,9 +108,14 @@ public abstract class MetaModelObject
 		return graphDbUtil().getSingleRelationship( node(), type );
 	}
 	
-	void setName( String name )
+	void setName( String name ) throws DuplicateNameException
 	{
 		node().setProperty( KEY_NAME, name );
+		if(indexService().getSingleNode(KEY_NAME, name) != null){
+			throw new DuplicateNameException();
+		}else{
+			indexService().index(node(), KEY_NAME, name);
+		}
 	}
 	
 	/**

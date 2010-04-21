@@ -9,14 +9,14 @@ import org.neo4j.graphdb.Transaction;
 /**
  * Represents a restriction a class has on a property.
  */
-public class MetaModelRestriction extends MetaModelObject
-	implements MetaModelRestrictable
+public class MetaModelPropertyRestriction extends MetaModelObject
+	implements MetaModelRestrictable<PropertyRange>
 {
 	/**
 	 * @param model the {@link MetaModel} instance.
 	 * @param node the root node.
 	 */
-	public MetaModelRestriction( MetaModel model, Node node )
+	public MetaModelPropertyRestriction( MetaModel model, Node node )
 	{
 		super( model, node );
 	}
@@ -24,14 +24,14 @@ public class MetaModelRestriction extends MetaModelObject
 	/**
 	 * @return the class which this restriction applies to.
 	 */
-	public MetaModelClass getMetaClass()
+	public MetaModelClass getMetaPropertyContainer()
 	{
 		return new MetaModelClass( model(),
 			graphDbUtil().getSingleOtherNode( node(),
-				MetaModelRelTypes.META_RESTRICTION_TO_CLASS,
+				MetaModelRelTypes.META_PROPERTY_RESTRICTION_TO_PROPERTYCONTAINER,
 				Direction.OUTGOING ) );
 	}
-	
+
 	/**
 	 * @return the property which this restriction applies to.
 	 */
@@ -55,7 +55,7 @@ public class MetaModelRestriction extends MetaModelObject
 	
 	public void setMinCardinality( Integer cardinalityOrNull )
 	{
-		setOrRemoteProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
+		setOrRemoveProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
 	}
 	
 	public Integer getMinCardinality()
@@ -65,7 +65,7 @@ public class MetaModelRestriction extends MetaModelObject
 	
 	public void setMaxCardinality( Integer cardinalityOrNull )
 	{
-		setOrRemoteProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
+		setOrRemoveProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
 	}
 	
 	public Integer getMaxCardinality()
@@ -91,7 +91,7 @@ public class MetaModelRestriction extends MetaModelObject
 	public void setCollectionBehaviourClass(
 		Class<? extends Collection> collectionClassOrNull )
 	{
-		setOrRemoteProperty( KEY_COLLECTION_CLASS,
+		setOrRemoveProperty( KEY_COLLECTION_CLASS,
 			collectionClassOrNull == null ? null :
 			collectionClassOrNull.getName() );
 	}

@@ -7,9 +7,9 @@ import java.util.Set;
 import org.neo4j.graphdb.Node;
 
 /**
- * Common functionality for restrictions (f.ex. cardinality and values).
+ * Common functionality for properties and property restrictions (f.ex. cardinality and values).
  */
-public interface MetaModelRestrictable
+public interface MetaModelRestrictable<T>
 {
 	/**
 	 * @return the underlying {@link Node}.
@@ -63,14 +63,14 @@ public interface MetaModelRestrictable
 	 * a string, a number or a an instance of a {@link MetaModelClass}.
 	 * @param range the property range.
 	 */
-	void setRange( PropertyRange range );
+	void setRange(T  range );
 	
 	/**
 	 * @return the {@link PropertyRange} set with
 	 * {@link #setRange(PropertyRange)} or {@code null} if no range is
 	 * specifically set for this object.
 	 */
-	PropertyRange getRange();
+	T getRange();
 	
 	/**
 	 * If cardinality is >1 then this will decide the rules of the collection.

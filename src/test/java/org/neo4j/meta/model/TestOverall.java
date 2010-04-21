@@ -15,14 +15,14 @@ import org.neo4j.meta.MetaTestCase;
 import org.neo4j.meta.model.ClassRange;
 import org.neo4j.meta.model.DataRange;
 import org.neo4j.meta.model.DatatypeClassRange;
-import org.neo4j.meta.model.LookerUpper;
+import org.neo4j.meta.model.PropertyLookerUpper;
 import org.neo4j.meta.model.MetaModel;
 import org.neo4j.meta.model.MetaModelClass;
 import org.neo4j.meta.model.MetaModelImpl;
 import org.neo4j.meta.model.MetaModelNamespace;
 import org.neo4j.meta.model.MetaModelProperty;
 import org.neo4j.meta.model.MetaModelRestrictable;
-import org.neo4j.meta.model.MetaModelRestriction;
+import org.neo4j.meta.model.MetaModelPropertyRestriction;
 import org.neo4j.meta.model.RdfUtil;
 
 public class TestOverall extends MetaTestCase
@@ -33,7 +33,7 @@ public class TestOverall extends MetaTestCase
     @Test
 	public void testSome()
 	{
-		MetaModel structure = new MetaModelImpl( graphDb() );
+		MetaModel structure = new MetaModelImpl( graphDb(), indexService() );
 		assertEquals( 0, structure.getNamespaces().size() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		assertNull( namespace.getName() );
@@ -68,7 +68,7 @@ public class TestOverall extends MetaTestCase
 			getValues(), "home", "work", "cell" );
 		assertEquals( 1, namespace.getMetaProperties().size() );
 		phoneClass.getDirectProperties().add( phoneTypeProperty );
-		assertCollection( phoneTypeProperty.associatedMetaClasses(),
+		assertCollection( phoneTypeProperty.associatedMetaPropertyContainers(),
 			phoneClass );
 		
 		MetaModelProperty phoneNumberProperty =
@@ -89,12 +89,12 @@ public class TestOverall extends MetaTestCase
 		MetaModelProperty givenNameProperty =
 			namespace.getMetaProperty( "http://test#givenName", true );
 		nameProperty.getDirectSubs().add( givenNameProperty );
-		MetaModelProperty phoneProperty =
-			namespace.getMetaProperty( "http://test#phone", true );
+		MetaModelRelationship phoneProperty =
+			namespace.getMetaRelationshipType( "http://test#phone", true );
 		phoneProperty.setRange( new ClassRange( phoneClass ) );
 		assertEquals( phoneProperty.getName(), ( ( ClassRange )
 			phoneProperty.getRange() ).getRelationshipTypeToUse().name() );
-		doTestRestrictable( structure, phoneProperty );
+		doTestRelationshipTypeRestrictable( structure, phoneProperty );
 		personClass.getDirectProperties().add( givenNameProperty );
 		
 		MetaModelClass userClass =
@@ -129,7 +129,17 @@ public class TestOverall extends MetaTestCase
 		assertCollection( personClass.getAllInstances(), person1, person2, user1 );
 		assertCollection( userClass.getDirectInstances(), user1 );
         assertCollection( userClass.getAllInstances(), user1 );
-		
+
+        //Instance range
+		MetaModelClass adminClass =
+			namespace.getMetaClass( "http://test#Admin", true );
+		userClass.getDirectSubs().add( adminClass );
+		Node admin1 = graphDb().createNode();
+		Node admin2 = graphDb().createNode();
+		InstanceRange iRange = new InstanceEnumerationRange(admin1, admin2); 
+        adminClass.setRange(iRange);
+        assertCollection( adminClass.getAllInstances(), admin1, admin2);		
+        
 		deleteMetaModel();
 	}
 	
@@ -139,7 +149,7 @@ public class TestOverall extends MetaTestCase
     @Test
 	public void testExtended()
 	{
-		MetaModel structure = new MetaModelImpl( graphDb() );
+		MetaModel structure = new MetaModelImpl( graphDb(), indexService() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		MetaModelProperty maker = namespace.getMetaProperty(
 			"http://test.org/test#maker", true );
@@ -165,7 +175,7 @@ public class TestOverall extends MetaTestCase
     @Test
     public void testRestrictions()
 	{
-		MetaModel structure = new MetaModelImpl( graphDb() );
+		MetaModel structure = new MetaModelImpl( graphDb(), indexService() );
 		MetaModelNamespace namespace = structure.getGlobalNamespace();
 		MetaModelClass thing = namespace.getMetaClass( "thing", true );
 		MetaModelClass person = namespace.getMetaClass( "person", true );
@@ -177,48 +187,48 @@ public class TestOverall extends MetaTestCase
 		MetaModelProperty nickName =
 			namespace.getMetaProperty( "nickname", true );
 		nickName.getDirectSupers().add( name );
-		MetaModelRestriction personNickNameRestriction =
+		MetaModelPropertyRestriction personNickNameRestriction =
 		    person.getRestriction( nickName, true );
-		assertCollection( thing.getDirectRestrictions() );
-		assertCollection( thing.getAllRestrictions() );
-		assertCollection( person.getDirectRestrictions(),
+		assertCollection( thing.getDirectPropertyRestrictions() );
+		assertCollection( thing.getAllPropertyRestrictions() );
+		assertCollection( person.getDirectPropertyRestrictions(),
 		    personNickNameRestriction );
-		assertCollection( person.getAllRestrictions(),
+		assertCollection( person.getAllPropertyRestrictions(),
 		    personNickNameRestriction );
-		assertCollection( user.getDirectRestrictions() );
-		assertCollection( user.getAllRestrictions(),
+		assertCollection( user.getDirectPropertyRestrictions() );
+		assertCollection( user.getAllPropertyRestrictions(),
 		    personNickNameRestriction );
 		person.getDirectProperties().add( name );
-		MetaModelRestriction personNameRestriction =
+		MetaModelPropertyRestriction personNameRestriction =
 			person.getRestriction( name, true );
 		assertNotNull( personNameRestriction );
-		assertCollection( person.getDirectRestrictions(),
+		assertCollection( person.getDirectPropertyRestrictions(),
 			personNameRestriction, personNickNameRestriction );
-		assertCollection( person.getAllRestrictions(),
+		assertCollection( person.getAllPropertyRestrictions(),
 			personNameRestriction, personNickNameRestriction );
-		assertCollection( user.getDirectRestrictions() );
-		assertCollection( user.getAllRestrictions(), personNameRestriction,
+		assertCollection( user.getDirectPropertyRestrictions() );
+		assertCollection( user.getAllPropertyRestrictions(), personNameRestriction,
 		    personNickNameRestriction );
-		MetaModelRestriction userNameRestriction =
+		MetaModelPropertyRestriction userNameRestriction =
 			user.getRestriction( name, true );
 		assertNotNull( userNameRestriction );
-		assertCollection( user.getDirectRestrictions(), userNameRestriction );
-		assertCollection( user.getAllRestrictions(), personNameRestriction,
+		assertCollection( user.getDirectPropertyRestrictions(), userNameRestriction );
+		assertCollection( user.getAllPropertyRestrictions(), personNameRestriction,
 			userNameRestriction, personNickNameRestriction );
-		MetaModelRestriction userNickNameRestriction =
+		MetaModelPropertyRestriction userNickNameRestriction =
 			user.getRestriction( nickName, true );
 		assertNotNull( userNickNameRestriction );
-		assertCollection( user.getDirectRestrictions(), userNameRestriction,
+		assertCollection( user.getDirectPropertyRestrictions(), userNameRestriction,
 			userNickNameRestriction );
-		assertCollection( user.getAllRestrictions(), personNameRestriction,
+		assertCollection( user.getAllPropertyRestrictions(), personNameRestriction,
 			userNameRestriction, userNickNameRestriction,
 			personNickNameRestriction );
-		doTestRestrictable( structure, userNameRestriction );
+		doTestPropertyTypeRestrictable( structure, userNameRestriction );
 		deleteMetaModel();
 	}
 	
-	private void doTestRestrictable( MetaModel structure,
-		MetaModelRestrictable restrictable )
+	private void doTestRelationshipTypeRestrictable( MetaModel structure,
+		MetaModelRestrictable<RelationshipRange> restrictable )
 	{
 		assertNull( restrictable.getMaxCardinality() );
 		assertNull( restrictable.getMinCardinality() );
@@ -239,16 +249,42 @@ public class TestOverall extends MetaTestCase
 		assertNull( restrictable.getMaxCardinality() );
 		assertNull( restrictable.getMinCardinality() );
 		
-		restrictable.setRange(
-			new DatatypeClassRange( Float.class ) );
-		assertEquals( Float.class, ( ( DatatypeClassRange )
-			restrictable.getRange() ).getRangeClass() );
 		MetaModelClass testClass = structure.getGlobalNamespace().
 			getMetaClass( "rangeTestClass", true );
 		restrictable.setRange( new ClassRange( testClass ) );
 		assertCollection( Arrays.asList( ( ( ClassRange )
 			restrictable.getRange() ).getRangeClasses() ), testClass );
 	}
+
+	
+	private void doTestPropertyTypeRestrictable( MetaModel structure,
+			MetaModelRestrictable<PropertyRange> restrictable )
+		{
+			assertNull( restrictable.getMaxCardinality() );
+			assertNull( restrictable.getMinCardinality() );
+			restrictable.setMinCardinality( null );
+			restrictable.setMaxCardinality( 10 );
+			assertNull( restrictable.getMinCardinality() );
+			assertEquals( 10, ( int ) restrictable.getMaxCardinality() );
+			restrictable.setMinCardinality( 5 );
+			assertEquals( 5, ( int ) restrictable.getMinCardinality() );
+			assertNull( restrictable.getCollectionBehaviourClass() );
+			restrictable.setCollectionBehaviourClass( List.class );
+			assertEquals( List.class,
+				restrictable.getCollectionBehaviourClass() );
+			restrictable.setCollectionBehaviourClass( null );
+			assertNull( restrictable.getCollectionBehaviourClass() );
+			restrictable.setMinCardinality( null );
+			restrictable.setMaxCardinality( null );
+			assertNull( restrictable.getMaxCardinality() );
+			assertNull( restrictable.getMinCardinality() );
+			
+			restrictable.setRange(
+				new DatatypeClassRange( Float.class ) );
+			assertEquals( Float.class, ( ( DatatypeClassRange )
+				restrictable.getRange() ).getRangeClass() );
+		}
+	
 	
 	/**
 	 * Tests the "lookup" functionality.
@@ -256,7 +292,7 @@ public class TestOverall extends MetaTestCase
 	@Test
     public void testLookup()
 	{
-		MetaModel meta = new MetaModelImpl( graphDb() );
+		MetaModel meta = new MetaModelImpl( graphDb(), indexService() );
 		MetaModelNamespace namespace = meta.getGlobalNamespace();
 		
 		// The classes
@@ -286,8 +322,8 @@ public class TestOverall extends MetaTestCase
 			namespace.getMetaProperty( "nickname", true );
 		MetaModelProperty login =
 			namespace.getMetaProperty( "login", true );
-		MetaModelProperty likes =
-			namespace.getMetaProperty( "likes", true );
+		MetaModelRelationship likes =
+			namespace.getMetaRelationshipType( "likes", true );
 		likes.setRange( new ClassRange( thing ) );
 		
 		// Property hierarchy
@@ -298,7 +334,7 @@ public class TestOverall extends MetaTestCase
 		thing.getDirectProperties().add( size );
 		organism.getDirectProperties().add( age );
 		person.getDirectProperties().add( nickName );
-		person.getDirectProperties().add( likes );
+		person.getDirectRelationshipTypes().add( likes );
 		user.getDirectProperties().add( login );
 		age.setCardinality( 1 );
 		
@@ -311,27 +347,27 @@ public class TestOverall extends MetaTestCase
 			new ClassRange( song ) );
 		
 		// Verify
-		assertLookup( meta, size, MetaModel.LOOKUP_MIN_CARDINALITY, null,
+		assertLookup( meta, size, MetaModel.LOOKUP_PROPERTY_MIN_CARDINALITY, null,
 			thing );
-		assertLookup( meta, size, MetaModel.LOOKUP_MIN_CARDINALITY, 1,
+		assertLookup( meta, size, MetaModel.LOOKUP_PROPERTY_MIN_CARDINALITY, 1,
 			organism );
-		assertLookup( meta, age, MetaModel.LOOKUP_MAX_CARDINALITY, 1,
+		assertLookup( meta, age, MetaModel.LOOKUP_PROPERTY_MAX_CARDINALITY, 1,
 			thing, organism, person, user, musicListener, song );
 		assertEquals( String.class, ( ( DatatypeClassRange ) meta.lookup(
 			nickName, MetaModel.LOOKUP_PROPERTY_RANGE,
 			user ) ).getRangeClass() );
-		assertCollection( Arrays.asList( ( ( ClassRange )
-			meta.lookup( likes, MetaModel.LOOKUP_PROPERTY_RANGE,
+		assertCollection( Arrays.asList( ( ( ClassRange )			
+			meta.lookup( likes, MetaModel.LOOKUP_RELATIONSHIPTYPE_RANGE,
 			musicListener ) ).getRangeClasses() ), song );
 		assertCollection( Arrays.asList( ( ( ClassRange )
-			meta.lookup( likes, MetaModel.LOOKUP_PROPERTY_RANGE,
+			meta.lookup( likes, MetaModel.LOOKUP_RELATIONSHIPTYPE_RANGE,
 			person ) ).getRangeClasses() ), thing );
 		
 		deleteMetaModel();
 	}
 	
 	private <T> void assertLookup( MetaModel meta,
-		MetaModelProperty property, LookerUpper<T> finder, T expectedValue,
+		MetaModelProperty property, PropertyLookerUpper<T> finder, T expectedValue,
 		MetaModelClass... classes )
 	{
 		T value = meta.lookup( property, finder, classes );
@@ -344,4 +380,20 @@ public class TestOverall extends MetaTestCase
 			assertEquals( expectedValue, value );
 		}
 	}
+
+	private <T> void assertLookup( MetaModel meta,
+			MetaModelRelationship relationshipType, RelationshipLookerUpper<T> finder, T expectedValue,
+			MetaModelClass... classes )
+		{
+			T value = meta.lookup( relationshipType, finder, classes );
+			if ( expectedValue == null )
+			{
+				assertNull( value );
+			}
+			else
+			{
+				assertEquals( expectedValue, value );
+			}
+		}
+	
 }

@@ -31,6 +31,11 @@ import java.util.TimeZone;
  */
 public class XmlSchemaDateFormat extends DateFormat
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6706720726042964472L;
+	
 	private static final DateFormat DATEFORMAT_XSD_ZULU = new SimpleDateFormat(
 	    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'" );
 	

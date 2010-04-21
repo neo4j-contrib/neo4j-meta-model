@@ -19,7 +19,7 @@ public interface MetaModel
 	 * @return the {@link MetaModelNamespace} in this namespace with the
 	 * given {@code name}.
 	 */
-	MetaModelNamespace getNamespace( String name, boolean allowCreate );
+	MetaModelNamespace getNamespace( String name, boolean allowCreate ) throws DuplicateNameException;
 
 	/**
 	 * @return the global namespace (without a name) which always exists.
@@ -45,16 +45,19 @@ public interface MetaModel
 	 * @param classes the classes to look in.
 	 * @return the found value or {@code null} if no value was found.
 	 */
-	<T> T lookup( MetaModelProperty property, LookerUpper<T> finder,
+	<T> T lookup( MetaModelProperty property, PropertyLookerUpper<T> finder,
+		MetaModelClass... classes );
+
+	<T> T lookup( MetaModelRelationship relationshipType, RelationshipLookerUpper<T> finder,
 		MetaModelClass... classes );
 
 	/**
 	 * Looks up the min cardinality property.
 	 */
-	public static LookerUpper<Integer> LOOKUP_MIN_CARDINALITY =
-		new LookerUpper<Integer>()
+	public static PropertyLookerUpper<Integer> LOOKUP_PROPERTY_MIN_CARDINALITY =
+		new PropertyLookerUpper<Integer>()
 	{
-		public Integer get( MetaModelRestrictable restrictable )
+		public Integer get( MetaModelRestrictable<PropertyRange> restrictable )
 		{
 			return restrictable.getMinCardinality();
 		}
@@ -63,10 +66,10 @@ public interface MetaModel
 	/**
 	 * Looks up the max cardinality property.
 	 */
-	public static LookerUpper<Integer> LOOKUP_MAX_CARDINALITY =
-		new LookerUpper<Integer>()
+	public static PropertyLookerUpper<Integer> LOOKUP_PROPERTY_MAX_CARDINALITY =
+		new PropertyLookerUpper<Integer>()
 	{
-		public Integer get( MetaModelRestrictable restrictable )
+		public Integer get( MetaModelRestrictable<PropertyRange> restrictable )
 		{
 			return restrictable.getMaxCardinality();
 		}
@@ -75,12 +78,50 @@ public interface MetaModel
 	/**
 	 * Looks up the property range property.
 	 */
-	public static LookerUpper<PropertyRange> LOOKUP_PROPERTY_RANGE =
-		new LookerUpper<PropertyRange>()
+	public static PropertyLookerUpper<PropertyRange> LOOKUP_PROPERTY_RANGE =
+		new PropertyLookerUpper<PropertyRange>()
 	{
-		public PropertyRange get( MetaModelRestrictable restrictable )
+		public PropertyRange get( MetaModelRestrictable<PropertyRange> restrictable )
 		{
 			return restrictable.getRange();
 		}
 	};
+
+	/**
+	 * Looks up the min cardinality property.
+	 */
+	public static RelationshipLookerUpper<Integer> LOOKUP_RELATIONSHIPTYPE_MIN_CARDINALITY =
+		new RelationshipLookerUpper<Integer>()
+	{
+		public Integer get( MetaModelRestrictable<RelationshipRange> restrictable )
+		{
+			return restrictable.getMinCardinality();
+		}
+	};
+
+	
+	/**
+	 * Looks up the max cardinality.
+	 */
+	public static RelationshipLookerUpper<Integer> LOOKUP_RELATIONSHIP_MAX_CARDINALITY =
+		new RelationshipLookerUpper<Integer>()
+	{
+		public Integer get( MetaModelRestrictable<RelationshipRange> restrictable )
+		{
+			return restrictable.getMaxCardinality();
+		}
+	};
+
+	/**
+	 * Looks up the class range of a relationshiptype.
+	 */
+	public static RelationshipLookerUpper<RelationshipRange> LOOKUP_RELATIONSHIPTYPE_RANGE =
+		new RelationshipLookerUpper<RelationshipRange>()
+	{
+		public RelationshipRange get( MetaModelRestrictable<RelationshipRange> restrictable )
+		{
+			return restrictable.getRange();
+		}
+	};
+
 }

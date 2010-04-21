@@ -26,8 +26,8 @@ public class InstanceCollection extends RelationshipSet<Node>
 	public InstanceCollection( GraphDatabaseService graphDb,
 		Node node, MetaModel model )
 	{
-		super( graphDb, node, MetaModelRelTypes.META_IS_INSTANCE_OF,
-			Direction.INCOMING );
+		super( graphDb, node, MetaModelRelTypes.META_HAS_INSTANCE,
+			Direction.OUTGOING );
 		this.model = model;
 	}
 	

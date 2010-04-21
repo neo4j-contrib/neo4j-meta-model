@@ -14,18 +14,18 @@ public class ResourceRange extends PropertyRange
     }
     
     @Override
-    protected void internalLoad( MetaModelRestrictable owner )
+    protected void internalLoad( MetaModelRestrictable<PropertyRange> owner )
     {
         resourceId = ( String ) owner.node().getProperty( KEY_RESOURCE_ID );
     }
 
     @Override
-    protected void internalRemove( MetaModelRestrictable owner )
+    protected void internalRemove( MetaModelRestrictable<PropertyRange> owner )
     {
     }
 
     @Override
-    protected void internalStore( MetaModelRestrictable owner )
+    protected void internalStore( MetaModelRestrictable<PropertyRange> owner )
     {
         owner.node().setProperty( KEY_RESOURCE_ID, resourceId );
     }

@@ -12,7 +12,7 @@ import org.neo4j.graphdb.Transaction;
  * Represents a property which may be in one or more class' domain.
  */
 public class MetaModelProperty extends MetaModelThing
-	implements MetaModelRestrictable
+	implements MetaModelRestrictable<PropertyRange>
 {
 	/**
 	 * @param model the {@link MetaModel} instance.
@@ -50,13 +50,13 @@ public class MetaModelProperty extends MetaModelThing
 	}
 	
 	/**
-	 * @return a modifiable {@link Collection} of {@link MetaModelClass}
+	 * @return a modifiable {@link Collection} of {@link MetaModelPropertyContainer}
 	 * instances which this property has as domain.
 	 */
-	public Collection<MetaModelClass> associatedMetaClasses()
+	public Collection<MetaModelClass> associatedMetaPropertyContainers()
 	{
 		return new ObjectCollection<MetaModelClass>( graphDb(),
-			node(), MetaModelRelTypes.META_CLASS_HAS_PROPERTY,
+			node(), MetaModelRelTypes.META_HAS_PROPERTY,
 			Direction.INCOMING, model(), MetaModelClass.class );
 	}
 
@@ -72,7 +72,7 @@ public class MetaModelProperty extends MetaModelThing
 	
 	public void setMinCardinality( Integer cardinalityOrNull )
 	{
-		setOrRemoteProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
+		setOrRemoveProperty( KEY_MIN_CARDINALITY, cardinalityOrNull );
 	}
 	
 	public Integer getMinCardinality()
@@ -82,7 +82,7 @@ public class MetaModelProperty extends MetaModelThing
 	
 	public void setMaxCardinality( Integer cardinalityOrNull )
 	{
-		setOrRemoteProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
+		setOrRemoveProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
 	}
 	
 	public Integer getMaxCardinality()
@@ -108,7 +108,7 @@ public class MetaModelProperty extends MetaModelThing
 	public void setCollectionBehaviourClass(
 		Class<? extends Collection> collectionClassOrNull )
 	{
-		setOrRemoteProperty( KEY_COLLECTION_CLASS,
+		setOrRemoveProperty( KEY_COLLECTION_CLASS,
 			collectionClassOrNull == null ? null :
 			collectionClassOrNull.getName() );
 	}
