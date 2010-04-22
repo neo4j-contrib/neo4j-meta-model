@@ -66,8 +66,8 @@ public interface MetaModelRestrictable<T>
 	void setRange(T  range );
 	
 	/**
-	 * @return the {@link PropertyRange} set with
-	 * {@link #setRange(PropertyRange)} or {@code null} if no range is
+	 * @return the {@link Range} set with
+	 * {@link #setRange(Range)} or {@code null} if no range is
 	 * specifically set for this object.
 	 */
 	T getRange();

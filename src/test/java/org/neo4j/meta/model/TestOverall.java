@@ -90,7 +90,7 @@ public class TestOverall extends MetaTestCase
 			namespace.getMetaProperty( "http://test#givenName", true );
 		nameProperty.getDirectSubs().add( givenNameProperty );
 		MetaModelRelationship phoneProperty =
-			namespace.getMetaRelationshipType( "http://test#phone", true );
+			namespace.getMetaRelationship( "http://test#phone", true );
 		phoneProperty.setRange( new ClassRange( phoneClass ) );
 		assertEquals( phoneProperty.getName(), ( ( ClassRange )
 			phoneProperty.getRange() ).getRelationshipTypeToUse().name() );
@@ -323,7 +323,7 @@ public class TestOverall extends MetaTestCase
 		MetaModelProperty login =
 			namespace.getMetaProperty( "login", true );
 		MetaModelRelationship likes =
-			namespace.getMetaRelationshipType( "likes", true );
+			namespace.getMetaRelationship( "likes", true );
 		likes.setRange( new ClassRange( thing ) );
 		
 		// Property hierarchy

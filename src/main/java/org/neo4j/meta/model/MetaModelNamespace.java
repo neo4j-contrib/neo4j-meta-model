@@ -87,12 +87,12 @@ public class MetaModelNamespace extends MetaModelObject
 	 * @return the {@link MetaModelRelationship} in this namespace with the
 	 * given {@code name}.
 	 */
-	public MetaModelRelationship getMetaRelationshipType( String name,
+	public MetaModelRelationship getMetaRelationship( String name,
 		boolean allowCreate )
 	throws DuplicateNameException
 	{
 		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
-			getMetaRelationshipTypes(), name, allowCreate,
+			getMetaRelationship(), name, allowCreate,
 			MetaModelRelationship.class, relationshipTypeCache );
 	}
 	
@@ -112,7 +112,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 * @return a modifiable collection of all {@link MetaModelRelationship}
 	 * instances for this namespace.
 	 */
-	public Collection<MetaModelRelationship> getMetaRelationshipTypes()
+	public Collection<MetaModelRelationship> getMetaRelationship()
 	{
 		return new ObjectCollection<MetaModelRelationship>( graphDb(),
 			node(), MetaModelRelTypes.META_RELATIONSHIP, Direction.OUTGOING,

@@ -2,7 +2,7 @@ package org.neo4j.meta.model;
 
 /**
  * A hook for retreiving a specific value from a
- * {@link MetaModelPropertyRestrictable}.
+ * {@link MetaModelRestrictable}.
  * @param <T> the type of the returned value.
  */
 public interface PropertyLookerUpper<T>
