@@ -92,7 +92,7 @@ public class MetaModelNamespace extends MetaModelObject
 	throws DuplicateNameException
 	{
 		return ( ( MetaModelImpl ) model() ).findOrCreateInCollection(
-			getMetaRelationship(), name, allowCreate,
+			getMetaRelationships(), name, allowCreate,
 			MetaModelRelationship.class, relationshipTypeCache );
 	}
 	
@@ -112,7 +112,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 * @return a modifiable collection of all {@link MetaModelRelationship}
 	 * instances for this namespace.
 	 */
-	public Collection<MetaModelRelationship> getMetaRelationship()
+	public Collection<MetaModelRelationship> getMetaRelationships()
 	{
 		return new ObjectCollection<MetaModelRelationship>( graphDb(),
 			node(), MetaModelRelTypes.META_RELATIONSHIP, Direction.OUTGOING,
