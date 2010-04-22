@@ -334,7 +334,7 @@ public class TestOverall extends MetaTestCase
 		thing.getDirectProperties().add( size );
 		organism.getDirectProperties().add( age );
 		person.getDirectProperties().add( nickName );
-		person.getDirectRelationshipTypes().add( likes );
+		person.getDirectRelationships().add( likes );
 		user.getDirectProperties().add( login );
 		age.setCardinality( 1 );
 		

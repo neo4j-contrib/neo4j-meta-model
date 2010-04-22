@@ -59,7 +59,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	 * @return a modifiable collection of RelationshipTypes directly related to
 	 * this class.
 	 */
-	public Collection<MetaModelRelationship> getDirectRelationshipTypes()
+	public Collection<MetaModelRelationship> getDirectRelationships()
 	{
 		return new ObjectCollection<MetaModelRelationship>( graphDb(),
 			node(), MetaModelRelTypes.META_CLASS_HAS_RELATIONSHIP,
@@ -115,7 +115,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 		try
 		{
 			Collection<MetaModelRelationshipRestriction> restrictions =
-				getDirectRelationshipTypeRestrictions();
+				getDirectRelationshipRestrictions();
 			for ( MetaModelRelationshipRestriction restriction : restrictions )
 			{
 				if ( restriction.getMetaRelationshipType().equals( relationshipType ) )
@@ -147,7 +147,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	/**
 	 * @return the restrictions for this class.
 	 */
-	public Collection<MetaModelRelationshipRestriction> getDirectRelationshipTypeRestrictions()
+	public Collection<MetaModelRelationshipRestriction> getDirectRelationshipRestrictions()
 	{
 		return new ObjectCollection<MetaModelRelationshipRestriction>(
 			graphDb(), node(), MetaModelRelTypes.META_RELATIONSHIP_RESTRICTION_TO_CLASS,
@@ -163,7 +163,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	 * @return an unmodifiable collection of all direct restrictions as well
 	 * as restrictions for super classes.
 	 */
-	public Collection<MetaModelRelationshipRestriction> getAllRelationshipTypeRestrictions()
+	public Collection<MetaModelRelationshipRestriction> getAllRelationshipRestrictions()
 	{
 		Transaction tx = graphDb().beginTx();
 		try
