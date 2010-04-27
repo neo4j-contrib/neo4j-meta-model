@@ -3,6 +3,7 @@ package org.neo4j.meta;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -34,7 +35,9 @@ public abstract class MetaTestCase
 	@BeforeClass
 	public static void setUpDb() throws Exception
 	{
-		graphDb = new EmbeddedGraphDatabase( "target/var/neo4j" );
+	    String path = "target/var/neo4j";
+	    deleteFileOrDirectory( new File( path ) );
+		graphDb = new EmbeddedGraphDatabase( path );
 		indexService = new LuceneIndexService(graphDb);
 	}
 	
@@ -58,6 +61,26 @@ public abstract class MetaTestCase
 	    graphDb.shutdown();
 	}
 	
+    public static void deleteFileOrDirectory( File file )
+    {
+        if ( !file.exists() )
+        {
+            return;
+        }
+        
+        if ( file.isDirectory() )
+        {
+            for ( File child : file.listFiles() )
+            {
+                deleteFileOrDirectory( child );
+            }
+        }
+        else
+        {
+            file.delete();
+        }
+    }
+    
 	protected static GraphDatabaseService graphDb()
 	{
 		return graphDb;

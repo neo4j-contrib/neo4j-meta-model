@@ -1,5 +1,6 @@
 package org.neo4j.meta.model;
 
+import org.neo4j.commons.iterator.IteratorUtil;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -105,7 +106,8 @@ public abstract class MetaModelObject
 	
 	protected Relationship getSingleRelationshipOrNull( RelationshipType type )
 	{
-		return graphDbUtil().getSingleRelationship( node(), type );
+		return IteratorUtil.singleValueOrNull(
+		        node().getRelationships( type ).iterator() );
 	}
 	
 	void setName( String name ) throws DuplicateNameException
