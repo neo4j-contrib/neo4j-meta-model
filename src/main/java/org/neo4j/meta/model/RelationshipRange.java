@@ -1,13 +1,12 @@
 package org.neo4j.meta.model;
 
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Transaction;
 
 /**
  * The range of a relationshiptype. i.e. a set of classes that
  * can have a relationship with a given {@link MetaModelClass}).
  */
-public abstract class RelationshipRange
+public abstract class RelationshipRange extends Range<RelationshipRange>
 {
 	static final String KEY_RANGE_IMPL = "range_implementation_class";
 	
@@ -16,11 +15,6 @@ public abstract class RelationshipRange
 	protected MetaModelRestrictable<RelationshipRange> getOwner()
 	{
 		return this.owner;
-	}
-	
-	private static GraphDatabaseService graphDb( MetaModel meta )
-	{
-		return ( ( MetaModelImpl ) meta ).graphDb();
 	}
 	
 	protected void store( MetaModelRestrictable<RelationshipRange> owner )
@@ -54,12 +48,6 @@ public abstract class RelationshipRange
 			range.internalRemove( owner );
 		}
 	}
-	
-	protected abstract void internalStore( MetaModelRestrictable<RelationshipRange> owner );
-	
-	protected abstract void internalRemove( MetaModelRestrictable<RelationshipRange> owner );
-	
-	protected abstract void internalLoad( MetaModelRestrictable<RelationshipRange> owner );
 	
 	protected static RelationshipRange loadRange( MetaModelRestrictable<RelationshipRange> owner )
 	{
