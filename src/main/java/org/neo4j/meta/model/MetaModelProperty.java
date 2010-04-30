@@ -14,6 +14,8 @@ import org.neo4j.graphdb.Transaction;
 public class MetaModelProperty extends MetaModelThing
 	implements MetaModelRestrictable<PropertyRange>
 {
+	
+	public static final String INDEXING_MODE = "indexing_mode";
 	/**
 	 * @param model the {@link MetaModel} instance.
 	 * @param node the {@link Node} to wrap.
@@ -84,7 +86,7 @@ public class MetaModelProperty extends MetaModelThing
 	{
 		setOrRemoveProperty( KEY_MAX_CARDINALITY, cardinalityOrNull );
 	}
-	
+
 	public Integer getMaxCardinality()
 	{
 	    return ( Integer ) node().getProperty( KEY_MAX_CARDINALITY, null );
@@ -105,6 +107,17 @@ public class MetaModelProperty extends MetaModelThing
 		}
 	}
 
+	public void setIndexingMode( IndexingModeTypes indexingMode )
+	{
+		setOrRemoveProperty( INDEXING_MODE, indexingMode.name() );
+	}
+
+	public IndexingModeTypes getIndexingMode()
+	{
+	    return Enum.valueOf(IndexingModeTypes.class, ( String ) node().getProperty( INDEXING_MODE, IndexingModeTypes.NO_INDEX.name() ));
+	}
+	
+	
 	public void setCollectionBehaviourClass(
 		Class<? extends Collection> collectionClassOrNull )
 	{
