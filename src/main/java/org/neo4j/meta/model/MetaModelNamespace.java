@@ -55,7 +55,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public Collection<MetaModelClass> getMetaClasses()
 	{
-		return new ObjectCollection<MetaModelClass>( graphDb(),
+		return new ObjectCollection<MetaModelClass>(
 			node(), MetaModelRelTypes.META_CLASS, Direction.OUTGOING,
 			model(), MetaModelClass.class );
 	}
@@ -103,7 +103,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public Collection<MetaModelProperty> getMetaProperties()
 	{
-		return new ObjectCollection<MetaModelProperty>( graphDb(),
+		return new ObjectCollection<MetaModelProperty>(
 			node(), MetaModelRelTypes.META_PROPERTY, Direction.OUTGOING,
 			model(), MetaModelProperty.class );
 	}
@@ -114,7 +114,7 @@ public class MetaModelNamespace extends MetaModelObject
 	 */
 	public Collection<MetaModelRelationship> getMetaRelationships()
 	{
-		return new ObjectCollection<MetaModelRelationship>( graphDb(),
+		return new ObjectCollection<MetaModelRelationship>( 
 			node(), MetaModelRelTypes.META_RELATIONSHIP, Direction.OUTGOING,
 			model(), MetaModelRelationship.class );
 	}

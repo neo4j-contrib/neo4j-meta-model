@@ -25,7 +25,7 @@ public class MetaModelRelationship extends MetaModelPropertyContainer
 	private Collection<MetaModelRelationship> hierarchyCollection(
 		Direction direction )
 	{
-		return new ObjectCollection<MetaModelRelationship>( graphDb(),
+		return new ObjectCollection<MetaModelRelationship>(
 			node(), MetaModelRelTypes.META_IS_SUBRELATIONSHIP_OF, direction,
 			model(), MetaModelRelationship.class );
 	}
@@ -56,7 +56,7 @@ public class MetaModelRelationship extends MetaModelPropertyContainer
 	 */
 	public Collection<MetaModelClass> associatedMetaClasses()
 	{
-		return new ObjectCollection<MetaModelClass>( graphDb(),
+		return new ObjectCollection<MetaModelClass>(
 			node(), MetaModelRelTypes.META_CLASS_HAS_RELATIONSHIP,
 			Direction.INCOMING, model(), MetaModelClass.class );
 	}

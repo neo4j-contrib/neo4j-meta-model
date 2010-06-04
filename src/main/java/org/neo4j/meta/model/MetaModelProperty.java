@@ -28,7 +28,7 @@ public class MetaModelProperty extends MetaModelThing
 	private Collection<MetaModelProperty> hierarchyCollection(
 		Direction direction )
 	{
-		return new ObjectCollection<MetaModelProperty>( graphDb(),
+		return new ObjectCollection<MetaModelProperty>(
 			node(), MetaModelRelTypes.META_IS_SUBPROPERTY_OF, direction,
 			model(), MetaModelProperty.class );
 	}
@@ -57,7 +57,7 @@ public class MetaModelProperty extends MetaModelThing
 	 */
 	public Collection<MetaModelClass> associatedMetaPropertyContainers()
 	{
-		return new ObjectCollection<MetaModelClass>( graphDb(),
+		return new ObjectCollection<MetaModelClass>( 
 			node(), MetaModelRelTypes.META_HAS_PROPERTY,
 			Direction.INCOMING, model(), MetaModelClass.class );
 	}

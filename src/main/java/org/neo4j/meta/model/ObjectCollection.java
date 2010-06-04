@@ -1,7 +1,6 @@
 package org.neo4j.meta.model;
 
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -13,11 +12,11 @@ class ObjectCollection<T extends MetaModelObject>
 	private MetaModel model;
 	private Class<T> cls;
 	
-	ObjectCollection( GraphDatabaseService graphDb, Node node,
+	ObjectCollection( Node node,
 		RelationshipType relType, Direction direction,
 		MetaModel model, Class<T> cls )
 	{
-		super( graphDb, node, relType, direction );
+		super( node, relType, direction );
 		this.model = model;
 		this.cls = cls;
 	}

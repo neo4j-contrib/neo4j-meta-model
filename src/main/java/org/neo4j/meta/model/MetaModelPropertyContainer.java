@@ -64,7 +64,7 @@ public abstract class MetaModelPropertyContainer extends MetaModelThing{
 	 */
 	public Collection<MetaModelProperty> getDirectProperties()
 	{
-		return new ObjectCollection<MetaModelProperty>( graphDb(),
+		return new ObjectCollection<MetaModelProperty>(
 			node(), MetaModelRelTypes.META_HAS_PROPERTY,
 			Direction.OUTGOING, model(), MetaModelProperty.class );
 	}
@@ -110,7 +110,7 @@ public abstract class MetaModelPropertyContainer extends MetaModelThing{
 	public Collection<MetaModelPropertyRestriction> getDirectPropertyRestrictions()
 	{
 		return new ObjectCollection<MetaModelPropertyRestriction>(
-			graphDb(), node(), MetaModelRelTypes.META_PROPERTY_RESTRICTION_TO_PROPERTYCONTAINER,
+			node(), MetaModelRelTypes.META_PROPERTY_RESTRICTION_TO_PROPERTYCONTAINER,
 			Direction.INCOMING, model(), MetaModelPropertyRestriction.class );
 	}
 	

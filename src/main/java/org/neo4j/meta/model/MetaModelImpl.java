@@ -181,7 +181,7 @@ public class MetaModelImpl implements MetaModel
 	public Collection<MetaModelNamespace> getNamespaces()
 	{
 		return new ObjectCollection<MetaModelNamespace>(
-			graphDb(), rootNode(), MetaModelRelTypes.META_NAMESPACE,
+			rootNode(), MetaModelRelTypes.META_NAMESPACE,
 			Direction.OUTGOING, this, MetaModelNamespace.class );
 	}
 	

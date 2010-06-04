@@ -3,7 +3,6 @@ package org.neo4j.meta.model;
 import java.util.Collection;
 
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.util.RelationshipSet;
@@ -23,10 +22,9 @@ public class InstanceCollection extends RelationshipSet<Node>
 	 * @param node the {@link Node} which holds the relationships.
 	 * @param model the {@link MetaModel} instance.
 	 */
-	public InstanceCollection( GraphDatabaseService graphDb,
-		Node node, MetaModel model )
+	public InstanceCollection( Node node, MetaModel model )
 	{
-		super( graphDb, node, MetaModelRelTypes.META_HAS_INSTANCE,
+		super( node, MetaModelRelTypes.META_HAS_INSTANCE,
 			Direction.OUTGOING );
 		this.model = model;
 	}

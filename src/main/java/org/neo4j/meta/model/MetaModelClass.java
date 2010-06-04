@@ -32,7 +32,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	private Collection<MetaModelClass> hierarchyCollection(
 		Direction direction )
 	{
-		return new ObjectCollection<MetaModelClass>( graphDb(),
+		return new ObjectCollection<MetaModelClass>( 
 			node(), MetaModelRelTypes.META_IS_SUBCLASS_OF, direction,
 			model(), MetaModelClass.class );
 	}
@@ -61,7 +61,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	 */
 	public Collection<MetaModelRelationship> getDirectRelationships()
 	{
-		return new ObjectCollection<MetaModelRelationship>( graphDb(),
+		return new ObjectCollection<MetaModelRelationship>(
 			node(), MetaModelRelTypes.META_CLASS_HAS_RELATIONSHIP,
 			Direction.OUTGOING, model(), MetaModelRelationship.class );
 	}
@@ -150,7 +150,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	public Collection<MetaModelRelationshipRestriction> getDirectRelationshipRestrictions()
 	{
 		return new ObjectCollection<MetaModelRelationshipRestriction>(
-			graphDb(), node(), MetaModelRelTypes.META_RELATIONSHIP_RESTRICTION_TO_CLASS,
+			node(), MetaModelRelTypes.META_RELATIONSHIP_RESTRICTION_TO_CLASS,
 			Direction.INCOMING, model(), MetaModelRelationshipRestriction.class );
 	}
 	
@@ -196,7 +196,7 @@ public class MetaModelClass extends MetaModelPropertyContainer implements MetaMo
 	 */
 	public Collection<Node> getDirectInstances()
 	{
-		return new InstanceCollection( graphDb(), node(), model() );
+		return new InstanceCollection( node(), model() );
 	}
 	
 	/**
