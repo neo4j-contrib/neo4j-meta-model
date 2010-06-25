@@ -27,4 +27,14 @@ public enum IndexingModeTypes
 	 */
 	FULL_TEXT_INDEX,
 
+	/**
+	 * Indicates that property has a regular and a full text index
+	 */
+	INDEX_AND_FULL_TEXT_INDEX,
+
+	/**
+	 * Indicates that property has a unique and a full text index
+	 */
+	UNIQUE_INDEX_AND_FULL_TEXT_INDEX,
+
 }
