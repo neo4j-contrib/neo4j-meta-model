@@ -136,6 +136,8 @@ public class MetaModelNamespace extends MetaModelObject
         Node metaObjectNode = indexService().getSingleNode( KEY_NAME, name );
         if ( forced )
         {
+            classCache.remove( name );
+            
             for ( Relationship rel : metaObjectNode.getRelationships() )
             {
                 rel.delete();
@@ -155,6 +157,8 @@ public class MetaModelNamespace extends MetaModelObject
             }
             else
             {
+                classCache.remove( name );
+                
                 for ( String key : metaObjectNode.getPropertyKeys() )
                 {
                     metaObjectNode.removeProperty( key );
