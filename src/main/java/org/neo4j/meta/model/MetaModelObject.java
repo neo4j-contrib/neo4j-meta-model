@@ -1,11 +1,11 @@
 package org.neo4j.meta.model;
 
-import org.neo4j.commons.iterator.IteratorUtil;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.helpers.collection.IteratorUtil;
 import org.neo4j.index.IndexService;
 import org.neo4j.util.GraphDatabaseUtil;
 
