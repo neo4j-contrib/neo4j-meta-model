@@ -22,19 +22,33 @@ MetaModel and its building blocks
 	those problems.
 
 ---
-    MetaModel model = new MetaModelImpl( graphDb );
-    MetaModelNamespace namespace = model.getGlobalNamespace();
+    IndexService index = new LuceneIndexService( neo );
+    MetaModel model = new MetaModelImpl( graphDb, index );
+    Transaction tx = neo.beginTx();
+    try
+    {
+        MetaModelNamespace namespace = model.getGlobalNamespace();
+
+       // Create a class, use ", true" for "create it if it doesn't exist".
+       MetaModelClass personClass = namespace.getMetaClass(
+         "http://metaexample.org/meta#Person", true );
     
-    // Create a class, use ", true" for "create it if it doesn't exist".
-    MetaModelClass personClass = namespace.getMetaClass(
-        "http://metaexample.org/meta#Person", true );
-        
-    // Create a property in a similar way.
-    MetaModelProperty nameProperty = namespace.getMetaProperty(
-        "http://metaexample.org/meta#name", true );
-        
-    // Tell the meta model that persons can have name properties.
-    personClass.getDirectProperties().add( nameProperty );
+       // Create a property in a similar way.
+       MetaModelProperty nameProperty = namespace.getMetaProperty(
+         "http://metaexample.org/meta#name", true );
+    
+       // Tell the meta model that persons can have name properties.
+       personClass.getDirectProperties().add( nameProperty );
+       tx.success();
+    }
+    catch ( Exception e )
+    {
+       tx.failure();
+    }
+    finally
+    {
+       tx.finish();
+    }
 ---
 
 Hierarchy
