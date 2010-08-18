@@ -43,22 +43,7 @@ Restrictions
 	the same information (data type and cardinality), but for a property AND
 	for a specific class. The concept derives from {{{http://www.w3.org/TR/2004/REC-owl-guide-20040210/#PropertyRestrictions}OWL}}.
 	
----
-    MetaModelClass artist = ...;
-    MetaModelProperty plays = ...;
-    MetaModelClass drummer = ...;
-    MetaModelClass instrument = ...;
-    MetaModelClass drums = ...;
-    
-    drummer.getDirectSupers().add( artist );
-    drums.getDirectSupers().add( instrument );
-    
-    plays.setRange( new ClassRange( instrument ) );
-    MetaModelRestriction playsRestriction =
-    	drummer.getRestriction( plays, true );
-    playsRestriction.setRange( new MetaModelClassRange( drums ) );
-    playsRestriction.setCardinality( 1 );
----
+%{source-code|snippet=restrictions|file=src/test/java/examples/SiteExamples.java}
 
     So it can generally be said that an Artist plays an Instrument, but
     Drummers in particular plays the Drums. That is an example of a restriction
