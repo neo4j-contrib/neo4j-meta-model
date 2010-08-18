@@ -8,14 +8,13 @@ import org.neo4j.index.IndexService;
 import org.neo4j.index.lucene.LuceneIndexService;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.neo4j.meta.model.ClassRange;
-import org.neo4j.meta.model.InstanceEnumerationRange;
-import org.neo4j.meta.model.InstanceRange;
 import org.neo4j.meta.model.MetaModel;
 import org.neo4j.meta.model.MetaModelClass;
 import org.neo4j.meta.model.MetaModelImpl;
 import org.neo4j.meta.model.MetaModelNamespace;
 import org.neo4j.meta.model.MetaModelProperty;
-import org.neo4j.meta.model.MetaModelPropertyRestriction;
+import org.neo4j.meta.model.MetaModelRelationship;
+import org.neo4j.meta.model.MetaModelRelationshipRestriction;
 
 public class SiteExamples
 {
@@ -113,18 +112,21 @@ public class SiteExamples
         {
             MetaModelNamespace namespace = meta.getGlobalNamespace();
             MetaModelClass artist = namespace.getMetaClass( "artist", true );
-            MetaModelClass plays = namespace.getMetaClass( "plays", true );
+            MetaModelRelationship plays = namespace.getMetaRelationship( "plays", true );
             MetaModelClass drummer = namespace.getMetaClass( "drummer", true );
             MetaModelClass instrument = namespace.getMetaClass( "instrument", true );
             MetaModelClass drums = namespace.getMetaClass( "drums", true );
             drummer.getDirectSupers().add( artist );
             drums.getDirectSupers().add( instrument );
-            //TODO: make this work
-//            plays.setRange( new ClassRange( instrument ) );
-//            MetaModelPropertyRestriction playsRestriction =
-//                drummer.getRestriction( plays, true );
-//            playsRestriction.setRange( new MetaModelClassRange( drums ) );
-//            playsRestriction.setCardinality( 1 );
+            
+            // Set generic range, so that a subject 'plays' an 'instrument'
+            plays.setRange( new ClassRange( instrument ) );
+            
+            // Set specific range for drummer, so that a 'drummer' plays 'drums'
+            MetaModelRelationshipRestriction drummerPlaysRestriction =
+                drummer.getRestriction( plays, true );
+            drummerPlaysRestriction.setRange( new ClassRange( drums ) );
+            drummerPlaysRestriction.setCardinality( 1 );
             tx.success();
         }
         catch ( Exception e )
