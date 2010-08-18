@@ -21,51 +21,17 @@ MetaModel and its building blocks
 	of usage. The API in <<org.neo4j.meta.model>> uses namespaces to solve
 	those problems.
 
----
-    IndexService index = new LuceneIndexService( neo );
-    MetaModel model = new MetaModelImpl( graphDb, index );
-    Transaction tx = neo.beginTx();
-    try
-    {
-        MetaModelNamespace namespace = model.getGlobalNamespace();
 
-       // Create a class, use ", true" for "create it if it doesn't exist".
-       MetaModelClass personClass = namespace.getMetaClass(
-         "http://metaexample.org/meta#Person", true );
-    
-       // Create a property in a similar way.
-       MetaModelProperty nameProperty = namespace.getMetaProperty(
-         "http://metaexample.org/meta#name", true );
-    
-       // Tell the meta model that persons can have name properties.
-       personClass.getDirectProperties().add( nameProperty );
-       tx.success();
-    }
-    catch ( Exception e )
-    {
-       tx.failure();
-    }
-    finally
-    {
-       tx.finish();
-    }
----
+%{source-code|snippet=create-simple-metamodel|file=src/test/java/examples/SiteExamples.java}
+
 
 Hierarchy
 
 	Just like in object oriented programming languages heiritage on classes
-	is supported, but also like RDF Schema/OWL heiratage on properties is
+	is supported, but also like RDF Schema/OWL heritage on properties is
 	supported as well.
 	
----
-    MetaModelClass thing = namespace.getMetaClass( "thing", true );
-    MetaModelClass person = namespace.getMetaClass( "person", true );
-    thing.getDirectSubs().add( person );
-
-    MetaModelProperty name = namespace.getMetaProperty( "name", true );
-    MetaModelProperty nickName = namespace.getMetaProperty( "nickName", true );
-    name.getDirectSubs().add( nickName );
----
+%{source-code|snippet=hierarchy|file=src/test/java/examples/SiteExamples.java}
 
 Restrictions
 
