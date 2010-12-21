@@ -11,9 +11,9 @@
   <groupId>org.neo4j</groupId>
   <artifactId>neo4j-meta-model</artifactId>
   <version>0.9-SNAPSHOT</version>
-  <name>Neo4j - meta model</name>
+  <name>Neo4j - Meta Model</name>
   <description>An experimental meta model for Neo.</description>
-  <url>http://components.neo4j.org/${project.artifactId}/</url>
+  <url>http://components.neo4j.org/${project.artifactId}/${project.version}</url>
 
   <properties>
     <bundle.namespace>org.neo4j.meta.model</bundle.namespace>
@@ -82,4 +82,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <distributionManagement>
+    <site>
+      <id>neo4j-site</id>
+      <url>scpexe://components.neo4j.org/home/neo/components/${project.artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
+
 </project>
+
